@@ -1,0 +1,322 @@
+\documentclass{article}
+\usepackage{cmbright} % for digital version
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{amsbsy}
+\usepackage{parskip}
+\usepackage{hyperref}
+\usepackage{todonotes}
+%\usepackage{tikz}
+%\usepackage{pgfplots}
+
+%\pgfplotsset{width=7cm,compat=1.16}
+\hypersetup{colorlinks=true,allcolors=black}
+
+\theoremstyle{plain}
+\begingroup
+\newtheorem{teo}{Theorem}[section]
+\newtheorem{prop}[teo]{Proposition}
+\newtheorem{cor}[teo]{Corollary}
+\newtheorem{lem}[teo]{Lemma}
+\endgroup
+
+\theoremstyle{definition}
+\begingroup
+\newtheorem{defin}[teo]{Definition}
+\newtheorem{oss}[teo]{Remark}
+\newtheorem{exam}[teo]{Example}
+\newtheorem{claim}{Claim}
+\endgroup
+
+\newcommand{\N}{\ensuremath{\mathbb{N}}}
+\newcommand{\Z}{\ensuremath{\mathbb{Z}}}
+\newcommand{\R}{\ensuremath{\mathbb{R}}}
+\newcommand{\g}{\ensuremath{\textsl{g}}}
+\newcommand{\Alt}{\ensuremath{\mathrm{Alt}}}
+\newcommand{\Diff}{\ensuremath{\mathrm{Diff}}}
+\newcommand{\Met}{\ensuremath{\mathrm{Met}}}
+\newcommand{\Div}{\ensuremath{\mathrm{div}}}
+\newcommand{\Vect}{\ensuremath{\mathrm{Vect}}}
+\newcommand{\lie}{\ensuremath{\mathcal{L}}}
+\newcommand{\Ad}{\ensuremath{\mathrm{Ad}}}
+\newcommand{\ad}{\ensuremath{\mathrm{ad}}}
+\newcommand{\tr}{\ensuremath{\mathrm{tr}}}
+\newcommand{\mf}{\ensuremath{\mathfrak}}
+
+\title{Gradient Flows on Riemannian Manifolds}
+\begin{document}
+\maketitle 
+\tableofcontents
+
+\section{Intro}
+Assume that we have a collection of ``shapes'' which are measurable functions defined on a compact Riemannian manifold $M$ without boundary. For instance, periodic images correspond to functions on the 2-torus $M=\R^2/\Z^2$ that maps into $\R$ if those images are gray-scale.
+
+
+
+\section{Theory}
+\textit{Fréchet spaces} are complete locally convex Hausdorff metrizable vector spaces, and a \textit{Fréchet manifold} is a Hausdorff space with a coordinate atlas taking values in a Fréchet space such that all transition functions are smooth maps. Vector fields, tangent spaces, differential forms, principal bundles, and the like on a Fréchet manifold can be defined in the same way as for finite-dimensional manifolds. For example, a tangent vector at some point $p$ on a manifold $M$ is defined as an equivalence class of smooth parametrized curves $a:\R\to M$ such that $a(0)=p$. The collection of a such equivalence classes at $p$ is the tangent space at $p$, $T_pM$, and the union of the tangent spaces
+\[
+TM:=\bigcup_{p\in M}T_pM,
+\]
+the \textit{tangent bundle} of $M$, can be given the structure of a Fréchet manifold. The dual of a Fréchet space need not be a Fréchet space. Thus, we define 1-forms in the Fréchet setting as smooth maps $\alpha: TM\to\R$ such that the restriction $\alpha|_{T_pM}:T_pM\to\R$ is a smooth map. Differential forms of higher degree are defined analogously.
+
+Vector fields act on real-valued functions on $M$ via the directional derivative:
+\[
+  X(f)=\left.\frac{d}{dt}\right|_{t=0} f(a(t)).
+\]
+Conversely, the \textit{differential} of $f$, $df$, is the map $TM\to \R$ defined by $X\mapsto X(f)$.
+
+Formally for $\phi: U\to V$ and any $\omega\in \Omega^p(V)$ we define the \textit{pullback} $\phi^*$ as
+\[
+ \phi^*(\omega)_x(\xi_1,...,\xi_p)=\omega_{\phi(x)}\left(D_x\phi(\xi_1),...,D_x\phi(\xi_p)\right).
+\]
+
+
+\begin{defin}
+	The \textit{exterior differential} $d:\Omega^k(M)\to \Omega^{k+1}(M)$ can be defined via local parametrizations $g:W\to N$ as follows: If $\omega$ is a smooth $k$-form on $M$ then
+	\[
+	d_{g(x)}\omega= \Alt^{k+1}\left((D_xg)^{-1}\right)\circ d_x(g^*\omega).
+	\]
+	Alternatively, define $d$ as the unique (for each $k=0,1,2,...$) linear map satisfying
+	\begin{align*}
+	(i)\qquad & df(X)=X(f),\quad f\in\Omega^0(M)\\
+	(ii)\qquad & d(\omega\wedge \eta)=d\omega\wedge \eta + (-1)^k\omega\wedge d\eta,\quad \omega\in\Omega^k(M),\ \eta\in\Omega^l(M)\\
+	(iii)\qquad & d\circ d=0
+	\end{align*}
+\end{defin}
+
+
+\begin{defin}
+	Let $M$ be a smooth $n$-manifold. For an $n$-form $\omega$ with compact support in the domain of a single oriented smooth coordinate chart $(U,h)$ the \textit{integral} is defined as 
+	\[
+	\int_M\omega = \int_{h(U)}\left(h^{-1}\right)^*\omega.
+	\] 
+\end{defin}
+
+Introduce Riemannian metric $\g$ as the inner product that for each pair $X,Y\in TM$, $\g(X,T)$ is smooth on $M$. We usually write only $(\cdot,\cdot)$ to denote the metric.
+
+\begin{defin}
+	The \textit{gradient} of a function $f:M\to \R$ is the vector field $\nabla f$ corresponding to the differential $\omega_{\nabla f}^1$, i.e., 
+	\[
+	(\nabla f,X)=df(X)\qquad \forall X\in TM.
+	\]
+\end{defin}
+
+\subsection{Lie groups}
+If $G$ is a group and $M$ is a set, a \textit{left action} of $G$ on $M$ is a map $G\times M\to M$, often written as $\theta: (g,p)\mapsto g.p$, that satisfies $g_1.(g_2.p)=(g_1g_2).p$ for all $g_1$ and $g_2$ in $G$ and all $p$ in $M$ and $\exists e\in G: e.p=p$ for all $p$ in $M$. For any $p\in M$, we define the \textit{orbit} of $p$ under the group action $\theta$ of $G$ as the set 
+\[
+   G.p = \mathrm{Image}_p(\theta)= \{g.p:g\in G\}.
+\]
+A \textit{Lie group} is a smooth manifold $G$ such that its group operations are smooth maps. A \textit{Lie algebra} is a vector space $\mf g$, together with a bilinear skewsymmetric operation $\mf g \times \mf g \to\mf g$  which satisfies the Jacobi identity. 
+
+
+\begin{defin}
+	A \textit{global flow} on a smooth manifold $M$ is a left action $a:\R\times M\to M$ satisfying
+	\[
+	  a(t,a(s,p))=a(t+s,p)
+	\]
+	for all $s,t\in\R$ and $p\in M$. 
+\end{defin}
+
+At any $p\in M$, we may define the curve $a^p:\R\to M$ by $a^p(t)=a(t,p)$, and for each $t\in\R$, $a_t:M\to M$ satisfies the group laws $a_s\circ a_t=a_{s+t}$.
+
+\begin{prop}
+	Let $a:\R\times M\to M$ be a smooth global flow. The infinitesimal generator $X$ of $a$ is a smooth vector field on $M$ and each curve $a^p$ is an integral curve of $X$.
+\end{prop}
+
+The \textit{Lie exponential} of a vector field $X$ is the value of the flow $a$ generated by $X$ at $(1,p)$, i.e, $\exp X=a^p(1)$. 
+
+Not all vector field generate global flows, but on compact manifolds, all vector fields are complete. [True in infinite dimensions?]
+
+If $M$ is a subset of $\R^n$ and $H\in C^2(M)$, the dynamical system $\dot{x}=-\nabla H(x)$ is called the \textit{gradient system} of $H$. The gradient system defines a flow $\R\times M\to M$ called the \textit{gradient flow}. In this finite dimensional setting, the orbit of the gradient system is either an equilibrium or else it is decreasing along the integral curve, since if $t\mapsto \varphi(t)$ is a solution curve then
+\[
+\frac{d}{dt}H(\varphi(t))=(\nabla H(\varphi(t)),\dot{\varphi}(t))=-\|\nabla H(\varphi(t))\|^2\leq 0.
+\]
+
+The tangent space to a Lie group $G$ at the identity $e$, $TG_e$, has a natural
+Lie algebra structure, which is defined as follows:  For an arbitrary $g\in G$, define $L_g: G\to G$ by $L_gh=gh$. If $X$ is a vector field on $G$, we say that $X$ is left invariant if for any $h\in G$,
+\[
+T_hL_g(X_h) = X_{gh}\quad \mathrm{or}\quad (L_g)_*X=X.
+\]
+Every left invariant vector field on a Lie group $G$ is complete. That is, for each left invariant tangent vector $X\in TG_e$ there is a flow $a\subset G$ with $(a^e)'(0)=X$.
+
+A Riemannian metric on a Lie group $G$ is called left invariant if it is preserved
+by all left translations $L_g$, i.e., if the derivative of left translation carries every
+vector to a vector of the same length. It is sufficient to give a left invariant metric at one point of the group, for instance the identity; then the metric can be carried to the remaining points by left translations. Right invariance is analogous.
+%
+%There is a bijective correspondence between left invariant metrics on $G$ and inner products on the Lie algebra $\mf g$ of $G$. 
+%If $\langle \cdot ,\cdot \rangle$ is an inner product on $\mf g$, an induced inner product on $G$ is given by
+%\[
+%  (u,v)=\langle (dL_{g^{-1}})_g u, (dL_{g^{-1}})_g v\rangle,\qquad u,v\in T_gG.
+%\]
+
+Thus, there are as many left invariant Riemannian metrics on a group as there are Euclidean structures on the algebra. A Euclidean structure on the algebra is defined by a symmetric positive definite operator from the algebra to its dual space, $A:\mf g\to\mf g^*$,
+\[
+\langle A \xi,\eta\rangle = \langle A\eta,\xi\rangle,\quad \mathrm{for}\ \mathrm{all}\ \xi,\eta\in \mf g.
+\]
+We define a symmetric operator $A_g:TG_g\to T^*G_g$ by left translation:
+\[
+ A_g = L^*_{g^{-1}}AL_{g^{-1}*}.
+\]
+Here, $L_{h*}:TG_g\to TG_{hg}$ is the induced tangent map of $L_h$ and $L^*_h$ denotes its adjoint, i.e., $\langle L_h^*\xi,\eta\rangle=\langle \xi,L_{h*}\eta\rangle$. The translation of $A$ induces a Riemannian metric by
+\[
+  (\xi,\eta)_g=\langle A_g \xi,\eta\rangle=\langle A_g \eta,\xi\rangle=(\eta,\xi)_g.
+\]
+
+Let $M$ be a compact,\footnote{For compact manifolds M and smooth vector fields, the time-one maps of the corresponding flows, and hence the exponential maps, are well defined. Note that the group of diffeomorphisms of a noncompact manifold is not complete, and hence it is not a Lie group in our sense. (Khesin, 2009: p.13)} 
+smooth $n$-dimensional manifold. Consider the
+set $\Diff(M)$ of diffeomorphisms on $M$. It is an open subspace of the Fréchet
+manifold of all smooth maps from $M$ to $M$. One can check that the composition
+and inversion are smooth maps, so that the set $\Diff(M)$ is a Fréchet-Lie group. Its Lie algebra is given by the Lie algebra of smooth vector fields on $M$, $\Vect(M)$. The adjoint representation of $\Diff(M)$ on $\Vect(M)$ is given by coordinate changes of the vector field: for a $\phi\in\Diff(M)$, $\Ad_\phi:X\mapsto \phi_*X\circ \phi^{-1}$ and $\ad_X(Y)=\frac{\partial X}{\partial x}Y-\frac{\partial Y}{\partial x}$.
+
+The generator $X$ of the Lie exponential defines an infinitesimal action, $X.p$, on the same manifold as the group itself acts on. This action is linear in the vector field. Therefore, it admits the definition of a \textit{momentum map} $J$ from the cotangent bundle $T^*M$ into the dual of the Lie algebra $\mf g$ through the relation
+\[
+\langle J(p,m),X\rangle = \langle m,X.p\rangle.
+\]
+Notice that the brackets denote one pairing on the left hand side which might differ from the pairing on the right hand side.
+
+Since $G$ acts on $M$ from the left, the action map induces a Riemannian structure
+on $G.p$. To understand this, we need the notion of horizontal vectors on $G$.
+
+Recall that the dual space of a Fréchet space is not necessarily a Fréchet space. In this case, instead of considering the full dual space to an infinite dimensional Lie algebra $\mf g$, we will usually confine ourselves to considering only appropriate ``smooth duals'', the functionals from a certain $G$-invariant Fréchet subspace. (Khesin, 2009: p.20)
+
+\subsection{The space of metrics}
+Denote by $S^2T^*M$ the bundle of  symmetric tensors of type $(0,2)$. If $C^k(S^2T^*M)$ denotes the space of $C^k$ sections of  $S^2T^*M$ with the $C^k$-topology, then
+\[
+C^\infty (S^2T^*M) = \bigcap_{k=0}^\infty C^k(S^2T^*M)
+\]
+is a Fréchet space with the $C^\infty$-topology.
+
+Let $\Met(M)$ be the space of all smooth Riemannian structures (metrics?) on a manifold $M$.
+The space $\Met(M)$ is an open, convex, positive cone in $C^\infty(S^2T^*M)$, i.e.,
+\[
+a,b>0,\ \g_1,\g_2\in \Met(M) \implies a\g_1+b\g_2\in\Met(M).
+\]
+Therefore, $\Met$ is a Frechet manifold and since $\Met(M)$ is open in the vector space $C^\infty (S^2T^*M)$  the tangent space $T_\g M$ at any $\g\in \Met(M)$ can be naturally identified with $C^\infty (S^2T^*M)$ itself.
+
+\subsection{Parallel transport, Lie derivatives and curvature}
+Parallel transport
+
+The covariant derivative $\nabla_X\eta$ of a tangent vector field $\eta$ in a
+direction $X\in T_pM$ is the rate of change of the vector of the field $\eta$ that is parallel transported to the point $p$ along the geodesic line $\gamma$ having at this point the velocity $X$.
+
+Suppose $X=\gamma'(0)$ is a smooth vector field on $M$. % and $\theta$ is the flow of $X$, which at $p\in M$ defines a curve $\gamma=\theta^p$. 
+For any smooth vector field $Y$ on $M$ define a (rough) vector field on $M$, denoted by $\lie_XY$ and called the Lie derivative of $Y$ with respect to $X$, by
+\[
+(\lie_XY)_p = \lim_{t\to 0^+}\frac{1}{t}\left(d(\gamma(-t))_{\gamma(t)(p)}Y_{\gamma(t)(p)}-Y_p\right)
+\]
+Let, for some open interval $I$ around $0$, $\phi : M \times I \to M$ be the one-parameter semigroup of local diffeomorphisms induced by the vector flow of $Y$ and denote $\phi_t(p) := \phi(p, t)$. For each sufficiently small $t$, $\phi_t$ is a diffeomorphism from a neighborhood in $M$ to another neighborhood in $M$. The Lie derivative of $T$, denoted by $\lie_XT$, is defined at a point $p$ via push forward or pullback: 
+\[
+(\lie_XT)_p = \left.\frac{d}{dt}\right|_{t=0} (\phi_{-t})_*T_{\phi_t(p)}=\left.\frac{d}{dt}\right|_{t=0} (\phi_{t})^*T_{\phi_t(p)}.
+\]
+
+The Lie derivative of the one-form corresponding to a vector
+field on a Riemannian manifold differs from the one-form corresponding to the
+covariant derivative of the field along itself by a complete differential:
+\[
+\lie_X=(\nabla_X X)^\flat +\frac{1}{2}d(X,X).
+\]
+
+The (Riemannian) curvature tensor $\Omega$ describes the infinitesimal
+transformation in a tangent space obtained by parallel translation around an
+infinitely small parallelogram.
+
+\subsection{The matching problem}
+Assume throughout this section that there are two images that we want to match. We measure their ``difference'' through a function that maps those images to $\R$ such that the function attains a minimum if the two images are equal. Denote this function by $E$. In order to study deformation, we fix the images and consider the function $E$ as a function from the space of deformation mappings, which we model as a Lie group $G$, to $\R$, i.e., $E:G\to \R$. Then we have the minimization problem
+\[
+\min \{E(g):g\in G\}.
+\]
+This can often be solved by integrating $\dot{g}=-\nabla E(g)$ since this is regular in the sense that $dE/dt=(\nabla E,\dot{g})=-\|\nabla E\|\leq 0$.
+
+In the case when $G$ is finite-dimensional, it is often enough to consider the
+gradient flow without regularization. However, if G is infinite-dimensional, this might
+not have a solution (that is, a well defined limit). Therefore, one needs to introduce
+regularization to ensure that the deformation remains ``mild'' and that the 
+flow
+has a limit. In this section we show how this is done without leaving the abstract
+framework. Let $F_{q'}$ be a functional with a (local) minimum at $q'\in Q$ and let $R:G\to \R$ be such that it attains a global minimum at $e\in G$. Then
+\[
+\min \{F_{q'}(g.q)+R(g):g\in G\}
+\]
+is a regularized problem, since any change of $g$ from the identity $e$ will increase the value of $R$. The solution is a trade-off between finding a good match, i.e., a small value of $F_{q'}$, while not being to far away from $e$.
+
+
+
+
+
+
+\begin{teo}
+	The momentum map associated to  the co-tangent lifted action  of $\Diff(M)$ on $\Met(M)$ is given by
+	\[
+	  J_\Met(\g,a)=2\Div (a)^\flat \otimes \mu_\g  
+	\]
+	where $T^*\Met(M)$ is identified with  symmetric $(2,0)$-tensors on $M$ and  pairs with $T\Met(M)$ through
+	\[
+	\langle a,b\rangle = \int_M \tr (a,b)\mu_\g.
+	\]
+\end{teo}
+
+
+\appendix
+\section{Hamiltonian formulation}
+It turns out that the Euler–Poisson equations with quadratic Hamiltonians
+have a beautiful Riemannian reformulation.
+V. Arnold suggested the following general setup for the Euler equation
+describing a geodesic flow on an arbitrary Lie group. Consider a (possibly
+infinite-dimensional) Lie group $G$, which can be thought of as the configuration
+space of some physical system.
+The tangent space at the identity of the Lie group
+G is the corresponding Lie algebra $\mf g$. Fix some (positive definite) quadratic
+form, the energy, on the Lie algebra. We consider left (or right) translations of this quadratic
+form to the tangent space at any point of the group (the ``translational symmetry''
+of the energy). In this way, the energy defines a left- (respectively,
+right-) invariant Riemannian metric on the group $G$. The geodesic flow on
+G with respect to this energy metric represents extremals of the least-action
+principle, i.e., possible motions of our physical system. To describe a geodesic
+on the Lie group $G$ with an initial velocity $v(0)$, we transport its velocity vector
+at any moment $t$ to the identity of the group using the left (respectively,
+right) translation. This way we obtain the evolution law for $v(t)$ on the Lie
+algebra $\mf g$.
+To fix the notation, let $(\cdot,\cdot)$ be some left-invariant metric on the group $G$.
+The geodesic flow with respect to this metric is a dynamical system on the
+tangent bundle $TG$ of the group $G$. We can pull back this system to the Lie
+algebra $\mf g$ of the group $G$ by left translation. That is, if $g(t)$ is a geodesic in
+the group $G$ with tangent vector $g'(t)$, then the pullback $v(t)=L^*_{g(t)^{-1}}g'(t)$ is an element of the Lie algebra. Hence, the geodesic equations for $g(t)$ give us a
+dynamical system
+\[
+\frac{d}{dt}v(t)=B(v(t))
+\]
+on the Lie algebra of the group $G$, where $B:\mf g\to \mf g$ is a possibly non-linear operator. This dynamical system describing the evolution of the velocity vector of a geodesic in a left-invariant metric on the Lie group $G$ is called the Euler (or Euler–Arnold) equation corresponding to this metric on $G$. It turns out that the Euler equation for a Lie group $G$ can be viewed as a Hamiltonian equation on the dual of the Lie algebra $\mf g$ in the following way. Observe that the metric $(\cdot,\cdot)_e$ at the identity $e\in G$ defines a non-degenerate bilinear form on the Lie algebra $\mf g$, and therefore, it also determines an inertia operator $A: \mf g\to \mf g^*$ such that $(v,w)_e=\langle Av,w\rangle$ for all $v,w\in \mf g$. This identification allows us to rewrite the Euler equation on the dual space $\mf g^*$. Setting $m=Av$ and $H(m)=\frac{1}{2}
+\langle m,A^{-1}\rangle$ we have the following theorem, due to Arnold.
+
+\begin{teo}
+For the left invariant metric on a group  generated by the inertia operator $A:\mf g\to \mf g^*$ the Euler equation assumes the form
+\[
+\frac{d}{dt}m(t)=-\ad_{A^{-1}m(t)}m(t)
+\]
+on the dual space $\mf g^*$.
+\end{teo}
+
+Instead of using a left invariant metric on $G$, we could have
+used a right invariant one. This changes the signs in the Euler equation.
+
+The underlying reason for the Riemannian reformulation is
+the fact that any geodesic problem in Riemannian geometry can be described
+in terms of symplectic geometry. Geodesics on $M$ are extremals of a quadratic
+Lagrangian on $TM$,
+\[
+L(g,v)=\frac{1}{2}(v,v)_g.
+\]
+They can also be described by the Hamiltonian flow on $T^*M$ for the quadratic Hamiltonian function obtained from the Lagrangian via the Legendre transform.
+
+\section{Incompressible fluids}
+The group of volume-preserving diffeomorphisms of the manifold $M$ consists of all diffeomorphisms of $M$ preserving the volume form $\mu$,
+\[
+S\Diff(M)=\{\phi\in\Diff(M): \phi^*\mu=\mu\}.
+\]
+
+
+\end{document}
