@@ -168,7 +168,7 @@ Here, $L_{h*}:TG_g\to TG_{hg}$ is the induced tangent map of $L_h$ and $L^*_h$ d
   (\xi,\eta)_g=\langle A_g \xi,\eta\rangle=\langle A_g \eta,\xi\rangle=(\eta,\xi)_g,\quad \mathrm{where}\ \xi,\eta\in TG_g.
 \]
 
-The \textit{tangent lifted right action} of a group element $g$ on a vector field $X$
+The \textit{tangent lifted right action} of a group element $g$ on a vector field $X$... [see Ebin [1970] and Isenberg and Marsden [1982]]
 
 %If $G$ acts on $M$ from the left, the action map induces a right invariant Riemannian structure on $G.p$. To understand this, we need the notion of horizontal vectors on $G$. 
 The \textit{vertical distribution} associated with the action of $G$ on $M$ is the subbundle of $TG$ given by
@@ -265,7 +265,13 @@ The (Riemannian) curvature tensor $\Omega$ describes the infinitesimal
 transformation in a tangent space obtained by parallel translation around an
 infinitely small parallelogram.
 
-\subsection{The matching problem}
+
+
+
+
+
+
+\section{The matching problem}
 Assume throughout this section that there are two images that we want to match. We measure their ``difference'' through a function that maps those images to $\R$ such that the function attains a minimum if the two images are equal. Denote this function by $E$. In order to study deformation, we fix the images and consider the function $E$ as a function from the space of deformation mappings, which we model as a Lie group $G$, to $\R$, i.e., $E:G\to \R$. Then we have the minimization problem
 \[
 \min \{E(g):g\in G\}.
@@ -273,20 +279,86 @@ Assume throughout this section that there are two images that we want to match. 
 This can often be solved by integrating $\dot{g}=-\nabla E(g)$ since this is regular in the sense that $dE/dt=(\nabla E,\dot{g})=-\|\nabla E\|\leq 0$.
 
 In the case when $G$ is finite-dimensional, it is often enough to consider the
-gradient flow without regularization. However, if G is infinite-dimensional, this might
-not have a solution (that is, a well defined limit). Therefore, one needs to introduce
-regularization to ensure that the deformation remains ``mild'' and that the 
-flow
-has a limit. In this section we show how this is done without leaving the abstract
-framework. Let $F_{q'}$ be a functional with a (local) minimum at $q'\in Q$ and let $R:G\to \R$ be such that it attains a global minimum at $e\in G$. Then
+gradient flow without regularization. However, if G is infinite-dimensional, this might not have a solution (that is, a well defined limit). Therefore, one needs to introduce regularization to ensure that the deformation remains ``mild'' and that the flow has a limit. In this section we show how this is done without leaving the abstract framework. Let $F_{q'}$ be a functional with a (local) minimum at $q'\in Q$ and let $R:G\to \R$ be such that it attains a global minimum at $e\in G$. Then
 \[
 \min \{F_{q'}(g.q)+R(g):g\in G\}
 \]
 is a regularized problem, since any change of $g$ from the identity $e$ will increase the value of $R$. The solution is a trade-off between finding a good match, i.e., a small value of $F_{q'}$, while not being to far away from $e$.
 
+\subsection{Analysis in the framework of LDDMM}
+This section follows ``Diffeomorphic Image Matching with Left-Invariant Metrics'' by Tanya Schmah, Laurent Risser, and François-Xavier Vialard.
+
+The flow of a time dependent vector field in $L^2([0,1],V)$ is well-defined if there exists a positive constant $C$ such that for every $v\in V$
+\[
+\|v\|_{1,\infty}\leq C\|v\|_V,
+\]
+where $\|\cdot\|_{1,\infty}$ is the Banach norm in $W^{1,\infty}(\Omega,\R^n)$. Under this hypothesis, the LDDMM problem
+\[
+  \min_\phi \,\frac{1}{2}\int_0^1\|v\|^2_Vdt + E(\phi(1))
+\]
+is well-defined and the set
+\[
+  G_R=\{\phi(1) : \partial_t\phi(t)=v(t)\circ\phi(t),\ v\in L^2([0,1],V),\,\phi(0)=\id\}
+\]
+is a group. In this setting, it has to be proven true that
+\[
+\partial_t\phi^{-1}(t)=-v(t)\circ \phi^{-1}(t).
+\]
+
+Similarly, the flow of $v\in C([0,1],H^s)$ defines an $H^s$-diffeomorphism provided $s>n/2+2$ where $n$ is the dimension of $M$. [Check this.]
+
+In the following, consider $\Omega$ a closed, bounded domain and $V$ a Hilbert space of vector fields such that $v\in V$ and the spatial derivative $Dv$ vanish on the boundary. Assume there is a $C>0$ such that $\|v\|_{1,\infty}\leq C\|v\|_V$. Also, let
+\[
+B=C^0([0,1],C^1_\infty(\Omega,\R^n))\cap H^1([0,1],L^2(\Omega,\R^n)).
+\]
+
+\begin{lem}
+Let $\phi\in B$ and denote by $\phi^{-1}$ the map $t\mapsto \phi_t^{-1}$. If $\phi_t$ is a diffeomorphism for all $t\in[0,1]$ then $\phi^{-1}\in B$.
+\end{lem}
+
+\begin{proof}
+Given $\partial_t\phi_t = v(t)\circ \phi_t$ we find
+\[
+ 0= \partial_t(\phi^{-1}_t\circ\phi_t )=\left(D\phi^{-1}_t\circ \phi_t\right) v(t)+\partial_t\phi^{-1}_t\circ\phi_t 
+\]
+\[
+\implies \partial_t\phi^{-1}_t=-D\phi_t^{-1} \left(v(t)\circ\phi_t^{-1}\right)=-\left(D\phi_t\circ\phi_t^{-1}\right)\left(v(t)\circ\phi_t^{-1}\right)
+\]
+To be completed ....
+\end{proof}
+
+\begin{prop}
+Solutions of $\partial_t\phi(t)=D\phi(t)\cdot v(t)$ exist in $B$. They are unique and are characterized by being solutions to 
+\[
+\partial_t\phi^{-1}(t)=-v(t)\circ \phi^{-1}(t).
+\]
+\end{prop}
+This implies that the two sets
+%
+\begin{align*}
+&\{\phi(1)\in B : \partial_t\phi(t)=D\phi(t)\cdot v(t),\ v\in L^2([0,1],V)\} \\
+&\{\phi(1)\in B : \partial_t\phi(t)=v(t)\circ \phi(t),\ v\in L^2([0,1],V)\}
+\end{align*}
+%
+coincide. When they do, we will write $G_V$ to denote any of them. Notice that on, say, $\Diff^s(M)$, the two sets do not coincide in general, since they are related via the inverse map, which might have less regularity.
+
+\begin{teo}
+If $V$ satisfies $\exists C>0: \|v\|_{1,\infty}\leq C\|v\|_V$ and $E$ is continuous w.r.t. uniform convergence of $\phi$ on every compact set in $\Omega$, then there exists a minimizer in $G_V$ of the functional 
+\[
+  \frac{1}{2}\int_0^1\|v\|^2_Vdt + E(\phi(1))
+\]
+under the constraint
+\[
+\partial_t\phi_t=D\phi(t)\cdot v(t).
+\]
+\end{teo}
+
+For proof, see Theorem 11.2 of L. Younes, \textit{Shapes and Diffeomorphisms}.
 
 
 
+
+\subsection{Met embedded in the space of symmetric tensors}
 
 
 \begin{teo}
