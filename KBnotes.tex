@@ -133,7 +133,7 @@ The \textit{Lie exponential} of a vector field $X$ is the value of the flow $a$ 
 \[
 X_M=\left.\frac{d}{dt}\right|_{t=0}\exp_{tX}.
 \]
-By the smoothness of $\exp$, the tangent space at $p'$ on the orbit $G.p$ can be constructed as the space $\{X_M\in T_{p'}M : X\in\mf g\}$.
+By the smoothness of $\exp$, the tangent space at $p'$ on the orbit $G.p$ can be constructed as the space $\{X_M\in T_{p'}M : X\in\mf g\}$. [Check $p'$.] The group action $\theta:G\times M\to M$ induces an infinitesimal action. Fix $p\in M$ and consider $\theta^p:G\to M$. The corresponding tangent map $\theta^p_*:TG\to T_pM$ is called the infinitesimal action of the Lie group $G$ on $M$. The map is smooth in $p$, so we can think of $\theta_*:TG\to TM$.
 
  
 
@@ -145,11 +145,11 @@ If $M$ is a subset of $\R^n$ and $H\in C^2(M)$, the dynamical system $\dot{x}=-\
 \]
 
 The tangent space to a Lie group $G$ at the identity $e$, $TG_e$, has a natural
-Lie algebra structure, which is defined as follows:  For an arbitrary $g\in G$, define $L_g: G\to G$ by $L_gh=gh$. If $X$ is a vector field on $G$, we say that $X$ is left invariant if for any $h\in G$,
+Lie algebra structure, which is defined as follows:  For an arbitrary $g\in G$, define $L_g: G\to G$ by $L_gh=gh$. If $\xi$ is a vector field on $G$, we say that $\xi$ is left invariant if for any $h\in G$,
 \[
-T_hL_g(X_h) = X_{gh}\quad \mathrm{or}\quad (L_g)_*X=X.
+T_hL_g(\xi_h) = \xi_{gh}\quad \mathrm{or}\quad (L_g)_*\xi=\xi.
 \]
-Every left invariant vector field on a Lie group $G$ is complete. That is, for each left invariant tangent vector $X\in TG_e$ there is a flow $a\subset G$ with $(a^e)'(0)=X$.
+Every left invariant vector field on a Lie group $G$ is complete. That is, for each left invariant tangent vector $\xi\in TG_e$ there is a flow $a\subset G$ with $(a^e)'(0)=\xi$.
 
 A Riemannian metric on a Lie group $G$ is called left invariant if it is preserved
 by all left translations $L_g$, i.e., if the derivative of left translation carries every
@@ -182,7 +182,7 @@ Given a translation invariant metric $(\cdot,\cdot)$ on $G$, we may define the o
 \]
 where $\mathrm{Ver}_g$ is the subbundle of $TG$ called the \textit{vertical distribution} associated with the action of $G$ on $M$. It is given by
 \[
-\mathrm{Ver}_g=\{L_{h*}\,g\in T_{hg}G : (L_{h*}\,g).p=0\}.
+\mathrm{Ver}_g=\{L_{e*}\,g\in T_{g}G : (L_{e*}\,g).p=0\}.
 \]
 If $G.p$ is a manifold, the mapping $\pi:G\to M$ defined by $\pi(g)=g.p$ is a submersion. Thus, $T_g\pi: \mathrm{Hor}_g\to T_{\pi(g)}G.p$ is a linear isomorphism and we may define the \textit{tangent lifted right action} of a group element $g$ on a vector field $X$ as the map
 \[
