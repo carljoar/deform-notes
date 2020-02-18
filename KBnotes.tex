@@ -133,7 +133,7 @@ The \textit{Lie exponential} of a vector field $X$ is the value of the flow $a$ 
 \[
 X_M=\left.\frac{d}{dt}\right|_{t=0}\exp_{tX}.
 \]
-By the smoothness of $\exp$, the tangent space at $p'$ on the orbit $G.p$ can be constructed as the space $\{X_M\in T_{p'}M : X\in\mf g\}$. [Check $p'$.] The group action $\theta:G\times M\to M$ induces an infinitesimal action. Fix $p\in M$ and consider $\theta^p:G\to M$. The corresponding tangent map $\theta^p_*:TG\to T_pM$ is called the infinitesimal action of the Lie group $G$ on $M$. The map is smooth in $p$, so we can think of $\theta_*:TG\to TM$.
+By the smoothness of $\exp$, the tangent space at $p'$ on the orbit $G.p$ can be constructed as the space $\{X_M\in T_{p'}M : X\in\mf g\}$.\todo{What is the relation to $p'$?} The group action $\theta:G\times M\to M$ induces an infinitesimal action. Fix $p\in M$ and consider $\theta^p:G\to M$. The corresponding tangent map $\theta^p_*:TG\to T_pM$ is called the infinitesimal action of the Lie group $G$ on $M$. We will denote this action $\xi.p$.\todo{What is the relation to $\xi$?} The map is smooth in $p$, so we can think of $\theta_*:TG\to TM$. 
 
  
 
@@ -149,7 +149,7 @@ Lie algebra structure, which is defined as follows:  For an arbitrary $g\in G$, 
 \[
 T_hL_g(\xi_h) = \xi_{gh}\quad \mathrm{or}\quad (L_g)_*\xi=\xi.
 \]
-Every left invariant vector field on a Lie group $G$ is complete. That is, for each left invariant tangent vector $\xi\in TG_e$ there is a flow $a\subset G$ with $(a^e)'(0)=\xi$.
+Every left invariant vector field on a Lie group $G$ is complete. That is, for each left invariant tangent vector $\xi\in TG_e$ there is a flow $a\subset G$ with $(a^e)'(0)=\xi$.\todo{Is this why we may define the infinitesimal action via $\xi$?}
 
 A Riemannian metric on a Lie group $G$ is called left invariant if it is preserved
 by all left translations $L_g$, i.e., if the derivative of left translation carries every
@@ -176,18 +176,15 @@ Here, $L_{h*}:TG_g\to TG_{hg}$ is the induced tangent map of $L_h$ and $L^*_h$ d
 
 
 %If $G$ acts on $M$ from the left, the action map induces a right invariant Riemannian structure on $G.p$. To understand this, we need the notion of horizontal vectors on $G$. 
-Given a translation invariant metric $(\cdot,\cdot)$ on $G$, we may define the orthogonal\footnote{Compare this brief exposition to Ebin [1970] or Isenberg and Marsden [1982].}  complement
+Given a translation invariant metric $(\cdot,\cdot)$ on $G$,\todo{All above is left invariance, but here we want right invariance? E.g., $R_{g*}\xi$?} we may define the orthogonal\footnote{Compare this brief exposition to Ebin [1970] or Isenberg and Marsden [1982].}  complement
 \[
 \mathrm{Hor}_g=\mathrm{Ver}_g^\perp=\{\xi\in TG : (\xi,\eta)=0,\ \forall\eta\in\mathrm{Ver}_g\}.
 \]
 where $\mathrm{Ver}_g$ is the subbundle of $TG$ called the \textit{vertical distribution} associated with the action of $G$ on $M$. It is given by
 \[
-\mathrm{Ver}_g=\{L_{e*}\,g\in T_{g}G : (L_{e*}\,g).p=0\}.
+\mathrm{Ver}_g=\{L_{g*}\,\xi\in T_{g}G : (L_{g*}\,\xi).p=0\}.
 \]
-If $G.p$ is a manifold, the mapping $\pi:G\to M$ defined by $\pi(g)=g.p$ is a submersion. Thus, $T_g\pi: \mathrm{Hor}_g\to T_{\pi(g)}G.p$ is a linear isomorphism and we may define the \textit{tangent lifted right action} of a group element $g$ on a vector field $X$ as the map
-\[
-X\mapsto (T_g\pi)^{-1}X.
-\]
+%If $G.p$ is a manifold, the mapping $\pi:G\to M$ defined by $\pi(g)=g.p$ is a submersion. Thus, $T_g\pi: \mathrm{Hor}_g\to T_{\pi(g)}G.p$ is a linear isomorphism and we may define the \textit{tangent lifted right action} of a group element $g$ on a vector field $X$ as the map \[  X\mapsto (T_g\pi)^{-1}X.\]
 
 \begin{lem}
 Assume that $G.p$ is a submanifold of $M$. Then any right invariant Riemannian metric $(\cdot,\cdot)$ on $M$ induces a Riemannian metric $r$ on $G.p$ fulfilling
@@ -200,7 +197,7 @@ Since $G.p$ is a manifold, the mapping $\pi:G\to M$ defined by $\pi(g)=g.p$ is a
 \[
 r_x(\dot{x},\dot{x})=\left((T_g\pi)^{-1}\dot{x},(T_g\pi)^{-1}\dot{x}\right)_g.
 \]
-This is independent of the choice of $g$ and right invariant.
+This is independent of the choice of $g$ by the right invariance of $(\cdot,\cdot)$.
 \end{proof}
 
 Any element $g\in G$ defines an automorphism $c_g$ of the group $G$ by conjugation, $c_g:G\to G,\ h\mapsto ghg^{-1}$. The differential of $c_g$ at the identity $e\in G$ maps the Lie algebra of $G$ to itself, that is, it defines an automorphism $\Ad_g$ on the Lie algebra. Viewed as a map of both variables, the operation $\Ad:G\times \mf g\to \mf g$ defines a left action of $G$ on its Lie algebra $\mf g$. We also see that $\Ad$ is a group homomorphism between $G$ and the group of invertible linear maps on $\mf g$, $GL(\mf g)$. This property is the reason for the name adjoint representation. The differential of the induced map $G\to\mathrm{Aut}(\mf g)$ at the identity $e\in G$ defines a map $\ad : \mf g\to \mathrm{End}(\mf g)$ called the adjoint representation of the Lie algebra $\mf g$. The relation to the Lie bracket is $[\xi,\eta]=\ad_\xi(\eta)$.
@@ -214,9 +211,9 @@ and inversion are smooth maps, so that the set $\Diff(M)$ is a Fréchet-Lie grou
 
 [Add page 313 and following pages from Marsden \& Ratiu, 1999. Why is $\Ad$ different from Khesin's? Because $t=0$ at page 324 in Marsden and Ratiu.]
 
-The generator $X$ of the Lie exponential defines an infinitesimal action, $X.p$, on the same manifold as the group itself acts on. This action is linear in the vector field. Therefore, it admits the definition of a \textit{momentum map} $J$ from the cotangent bundle $T^*M$ into the dual of the Lie algebra $\mf g$ through the relation
+The infinitesimal action map $\xi.p$, which is the tangent map $\theta^p_*$, is linear in the vector field. Therefore, it admits the definition of a \textit{momentum map} $J$ from the cotangent bundle $T^*M$ into the dual of the Lie algebra $\mf g$ through the relation
 \[
-\langle J(p,m),X\rangle = \langle m,X.p\rangle.
+\langle J(p,m),\xi\rangle = \langle m,\xi.p\rangle.
 \]
 Notice that the brackets denote one pairing on the left hand side which might differ from the pairing on the right hand side.
 
