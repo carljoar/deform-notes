@@ -116,14 +116,14 @@ A \textit{Lie group} is a smooth manifold $G$ such that its group operations are
 
 
 \begin{defin}
-	A \textit{global flow} on a smooth manifold $M$ is a left action $a:\R\times M\to M$ satisfying
+	A \textit{global flow} on a smooth manifold $M$ is a parameterized left action $a:\R\times M\to M$ satisfying
 	\[
 	  a(t,a(s,p))=a(t+s,p)
 	\]
 	for all $s,t\in\R$ and $p\in M$. 
 \end{defin}
 
-At any $p\in M$, we may define the curve $a^p:\R\to M$ by $a^p(t)=a(t,p)$, and for each $t\in\R$, $a_t:M\to M$ satisfies the group laws $a_s\circ a_t=a_{s+t}$.
+At any $p\in M$, we may define the curve $a^p:\R\to M$ by $a^p(t)=a(t,p)$, and for each $t\in\R$, $a_t:M\to M$ satisfies the group laws $a_s\circ a_t=a_{s+t}$. The curve $a^p$ defines a vector $X\in T_pM$ called the \textit{infinitesimal generator} of the flow $a$ by the relation $(a^p)'(0)=X$.
 
 \begin{prop}
 	Let $a:\R\times M\to M$ be a smooth global flow. The infinitesimal generator $X$ of $a$ is a smooth vector field on $M$ and each curve $a^p$ is an integral curve of $X$.
@@ -133,7 +133,7 @@ The \textit{Lie exponential} of a vector field $X$ is the value of the flow $a$ 
 \[
 X_M=\left.\frac{d}{dt}\right|_{t=0}\exp_{tX}.
 \]
-By the smoothness of $\exp$, the tangent space at $p'$ on the orbit $G.p$ can be constructed as the space $\{X_M\in T_{p'}M : X\in\mf g\}$.\todo{What is the relation to $p'$?} The group action $\theta:G\times M\to M$ induces an infinitesimal action. Fix $p\in M$ and consider $\theta^p:G\to M$. The corresponding tangent map $\theta^p_*:TG\to T_pM$ is called the infinitesimal action of the Lie group $G$ on $M$. We will denote this action $\xi.p$.\todo{What is the relation to $\xi$?} The map is smooth in $p$, so we can think of $\theta_*:TG\to TM$. 
+By the smoothness of $\exp$, the tangent space at $p'$ on the orbit $G.p$ can be constructed as the space $\{X_M\in T_{p'}M : X\in\mf g\}$.\todo{What is the relation to $p'$? Why different infinitesimal generators?} The group action $\theta:G\times M\to M$ induces an infinitesimal action. Fix $p\in M$ and consider $\theta^p:G\to M$. The corresponding tangent map $\theta^p_*:TG\to T_pM$ is called the infinitesimal action of the Lie group $G$ on $M$. The map is smooth in $p$, so it induces an action $TG\to TM$. We will denote this action $\xi.X$. 
 
  
 
@@ -207,6 +207,7 @@ smooth $n$-dimensional manifold. Consider the
 set $\Diff(M)$ of diffeomorphisms on $M$. It is an open subspace of the Fréchet
 manifold of all smooth maps from $M$ to $M$. One can check that the composition
 and inversion are smooth maps, so that the set $\Diff(M)$ is a Fréchet-Lie group. Its Lie algebra is given by the Lie algebra of smooth vector fields on $M$, $\Vect(M)$. The adjoint representation of $\Diff(M)$ on $\Vect(M)$ is given by coordinate changes of the vector field: for a $\phi\in\Diff(M)$, $\Ad_\phi:X\mapsto \phi_*X\circ \phi^{-1}$ and $\ad_X(Y)=\frac{\partial X}{\partial x}Y-\frac{\partial Y}{\partial x}$.
+
 
 
 [Add page 313 and following pages from Marsden \& Ratiu, 1999. Why is $\Ad$ different from Khesin's? Because $t=0$ at page 324 in Marsden and Ratiu.]
@@ -392,18 +393,68 @@ where $d_L$ is a left invariant metric on $G_V$ defined by
 	\]
 \end{teo}
 
+\begin{proof}
+	Given that the group of diffeomorphisms on $M$ has left action \textit{push forward} (and right action pullback), the infinitesimal action of a vector field $\xi$ on $X\in TM$ is
+	\[
+	\xi.X = \left.\frac{d}{dt}\right|_{t=0} \varphi^p(t)_*X = -\lie_\xi X.
+	\]
+	Here, $\xi$ generates the flow $\varphi :\R\times G \to G$.
+\end{proof}
+
+
 \newpage
 \appendix
 \section{Manifolds}
-Let M and N be differentiable manifolds and $f: M\to N$ be a differentiable map between them. The map $f$ is a submersion at a point $p\in M$ if its differential
+\subsection{Tangent and cotangent bundles}
+If $\pi:E\to M$ from a topological space $E$ into a smooth manifold $M$ has an inverse, the image $\pi^{-1}(p)$ of $p\in M$ is called a \textit{fiber} of $\pi$. It is often denoted $E_p$. A surjective smooth map $\pi: E\to M$ is said to be \textit{locally trivial} of rank $r$ if
+\begin{enumerate}
+	\item[(i)] each fiber is a vector space of rank $r$, and
+	\item[(ii)] for all $p\in M$, there is an open neighborhood $U$ of $p$ and there exists a fiber-preserving diffeomorphism $\phi:\pi^{-1}(U)\to U\times \R^r$.
+\end{enumerate}
+%
+The collection $\{(U,\phi)\}$ is called the \textit{local trivialization} of $E$.	A smooth \textit{vector bundle} of rank $r$ is a triple $(E,M,\pi)$, where $\pi$ is a surjective smooth map $E\to M$ which is locally trivial of rank $r$. A smooth section of $E$ is a map $S:M\to E$ such that $\pi\circ S=\id_M$. 
+
+\begin{defin}
+	The \textit{tangent bundle} of a smooth manifold is the disjoint union
+	\[
+	TM=\bigcup_{p\in M}\{p\}\times T_pM.
+	\]
+\end{defin}
+
+For any smooth $n$-manifold $M$, the tangent bundle $TM$ has a natural topology and a smooth structure that makes it a $2n$-dimensional smooth manifold with a smooth projection $TM\to M$. Moreover, $TM$ is, with its natural topology and smooth structure, a smooth vector bundle over $M$ of rank $n$.
+
+\begin{defin}
+	The \textit{cotangent bundle} is the disjoint union of duals to $T_pM$, i.e.,
+	\[
+	T^*M = \bigcup_{p\in M} T_p^*M.
+	\]
+\end{defin}
+
+A 1-form $\omega$ is a smooth section of $T^*M$, i.e., a map $M\to T^*M$ such that $\pi\circ \omega=\id_M$, where $\pi:T^*M\to M$ is the natural projection. A $k$-form $\omega$ is a smooth section of the exterior product $\Lambda^kT_p^*M$, that is,
 \[
-T_pM\to T_{f(p)}N
+ \omega:M\to \Lambda^kT_p^*M = \bigcup_{p\in M}\Alt^k(T_pM)
 \]
-is a surjective linear map.
+such that $\pi\circ \omega=\id_M$. Here, the alternating algebra of $T_pM$, denoted $\Alt^kT_pM$, is the collection of multilinear, alternating maps $T_pM\times ...\times T_pM\to \R$. One can show that $\Lambda^kT_p^*M$ is a vector bundle of rank $\binom{n}{k}$.
+
+\subsection{Topology}
+In the mathematical field of topology, a \textit{homeomorphism}, topological isomorphism, or bicontinuous function is a continuous function between topological spaces that has a continuous inverse function.
+
+Let M and N be differentiable manifolds and $f: M\to N$ be a differentiable map between them. Then $f$ is called an \textit{immersion} if its derivative is everywhere injective. The map $f$ is a \textit{submersion} at a point $p\in M$ if its differential
+\[
+f_*:T_pM\to T_{f(p)}N
+\]
+is a surjective linear map. The dimension of the image $f_*(T_pM)$ is the \textit{rank} of $f$. If $f$ is an \textit{embedding}, that is, an injective immersion which is an embedding in the topological sense (i.e. homeomorphism onto its image), then $\mathrm{rank}(f)=\dim f(M)$.
 
 Isomorphisms are defined in many different contexts but they all share a common thread. Given two objects $G$ and $H$ (which are of the same type; maybe groups, or rings, or vector spaces... etc.), an isomorphism from $G$ to $H$ is a bijection $\phi:G\to H$ which, in some sense, respects the structure of the objects. In other words, they basically identify the two objects as actually being the same object, after renaming of the elements.
 
 For example, an isomorphism between vector spaces $V$ and $W$ is a bijection $\phi:V\to W$ which respects scalar multiplication, in that $\phi(\alpha\vec{v})=\alpha\phi(\vec{v})$ for all $\vec{v}\in V$ and $\alpha\in K$, and also respects addition in that $\phi(\vec{v}+\vec{u})=\phi(\vec{v})+\phi(\vec{u})$ for all $\vec{v},\vec{u}\in V$. (Here, we've assumed that $V$ and $W$ are both vector spaces over the same base field $K$.) Similarly, a diffeomorphism is an isomorphism of spaces equipped with a differential structure, typically differentiable manifolds.
+
+\subsection{Integration on manifolds}
+A smooth $n$-manifold is said to be \textit{orientable} is there exists an $n$-form $\omega$ such that it is nowhere vanishing. Two nowhere vanishing $n$-forms $\omega,\tau$ are said to be \textit{equivalent} if $\omega=f\tau$ for some $f\in C^\infty(M)$. An orientation on $M$ is an equivalent class of orientation forms.
+\begin{lem}
+On a connected, orientable smooth manifold there are precisely two orientations.
+\end{lem}
+A diffeomorphism $\phi$ is said to be orientation preserving if for two orientation forms $\omega$ and $\tau$, $\phi^*(\omega)=\tau$. 
 
 \section{Hamiltonian formulation}
 It turns out that the Euler–Poisson equations with quadratic Hamiltonians
