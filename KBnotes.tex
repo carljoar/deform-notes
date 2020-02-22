@@ -59,7 +59,17 @@ Assume that we have a collection of ``shapes'' which are measurable functions de
 
 
 \section{Theory}
-\textit{Fréchet spaces} are complete locally convex Hausdorff metrizable vector spaces, and a \textit{Fréchet manifold} is a Hausdorff space with a coordinate atlas taking values in a Fréchet space such that all transition functions are smooth maps. Vector fields, tangent spaces, differential forms, principal bundles, and the like on a Fréchet manifold can be defined in the same way as for finite-dimensional manifolds. For example, a tangent vector at some point $p$ on a manifold $M$ is defined as an equivalence class of smooth parametrized curves $a:\R\to M$ such that $a(0)=p$. The collection of a such equivalence classes at $p$ is the tangent space at $p$, $T_pM$, and the union of the tangent spaces
+A \textit{smooth manifold} modeled on the vector space $E$ is a Hausdorff  topological space $M$ together with a collection of charts $(U_\alpha,h_\alpha)_{\alpha\in A}$ such that 
+%
+\begin{enumerate}
+	\item $U_\alpha \subset M$ are open sets and $\bigcup_{\alpha\in A}U_\alpha = M$,
+	\item $h_\alpha:U_\alpha\to h_\alpha(U_\alpha)\subset E$ are homeomorphisms onto open sets, and
+	\item all maps $h_\beta \circ h^{-1}_\alpha$ are smooth.
+\end{enumerate}
+%
+There are several possible choices of vector space $E$, for instance Hilbert spaces, Banach spaces and Fréchet spaces.
+
+\textit{Fréchet spaces} are complete locally convex Hausdorff metrizable vector spaces, and a \textit{Fréchet manifold} is a Hausdorff space with a coordinate atlas taking values in a Fréchet space in such a way that all transition functions are smooth maps. Vector fields, tangent spaces, differential forms, principal bundles, and the like on a Fréchet manifold can be defined in the same way as for finite-dimensional manifolds. For example, a tangent vector at some point $p$ on a manifold $M$ is defined as an equivalence class of smooth parametrized curves $a^p:\R\to M$ such that $a^p(0)=p$. The collection of a such equivalence classes at $p$ is the tangent space at $p$, $T_pM$, and the union of the tangent spaces
 \[
 TM:=\bigcup_{p\in M}T_pM,
 \]
@@ -98,58 +108,67 @@ Formally for $\phi: U\to V$ and any $\omega\in \Omega^p(V)$ we define the \texti
 	\] 
 \end{defin}
 
-Introduce Riemannian metric $\g$ as the inner product that for each pair $X,Y\in TM$, $\g(X,T)$ is smooth on $M$. We usually write only $(\cdot,\cdot)$ to denote the metric.
+Let $M$ be a smooth manifold   modelled on a vector space $E$. A \textit{weak Riemannian metric} $(\cdot,\cdot)$ is a map $TM\times TM\to\R$ satisfying 
+%
+\begin{enumerate}
+	\item $(\cdot,\cdot)_p$ is biliear for all $p\in M$, 
+	\item $(X,X)_p\geq 0$ for all $X\in T_pM$, with equality only if $X=0$, and
+	\item the map $p\mapsto (X,X)_p$ is smooth for any $X\in TM$. 
+\end{enumerate}
+%
+A strong Riemannian metric is in addition required to induce the same topology as $T_pM$ inherits from $M$ on the inner product space $\left(T_pM,(\cdot,\cdot)_p\right)$. A (weak or strong) Riemannian manifold is the pair ($M,(\cdot,\cdot)$).
 
 \begin{defin}
-	The \textit{gradient} of a function $f:M\to \R$ is the vector field $\nabla f$ corresponding to the differential $\omega_{\nabla f}^1$, i.e., 
+	The \textit{gradient} of a function $f:M\to \R$ is the vector field $\nabla f$ corresponding to the differential $\iota_{\nabla f}$, i.e., %$\omega_{\nabla f}^1$, i.e., 
 	\[
 	(\nabla f,X)=df(X)\qquad \forall X\in TM.
 	\]
 \end{defin}
 
 \subsection{Lie groups}
-If $G$ is a group and $M$ is a set, a \textit{left action} of $G$ on $M$ is a map $G\times M\to M$, often written as $\theta: (g,p)\mapsto g.p$, that satisfies $g_1.(g_2.p)=(g_1g_2).p$ for all $g_1$ and $g_2$ in $G$ and all $p$ in $M$ and $\exists e\in G: e.p=p$ for all $p$ in $M$. For any $p\in M$, we define the \textit{orbit} of $p$ under the group action $\theta$ of $G$ as the set 
+A  group is a set $G'$ equipped with a binary operation $\cdot$ that combines any two elements to form a third element in such a way that four conditions called group axioms are satisfied, namely
+%
+\begin{description}
+	\item[closure:] $a,b\in G' \implies a\cdot b\in G'$
+	\item[associativity:] for all $a,b,c\in G',\quad a\cdot(b\cdot c)=(a\cdot b)\cdot c$
+	\item[identity:] $\exists e\in G' : a\cdot e=e\cdot a=a$ for all $a\in G'$
+	\item[existence of inverse:] for all $a\in G'$ there exists an element $c\in G'$ such that $a\cdot c=c\cdot a=e$
+\end{description}
+%
+We will write $a\cdot b=ab$, omitting the $\cdot$, for simplicity.
+
+A \textit{Lie group} is a smooth manifold $G$ such that its group operations (multiplication and inversion) are smooth maps from the product manifold $G\times G$ to $G$. Its \textit{Lie algebra} is the tangent space at the identity, often denoted $\mf g$, together with a bilinear skewsymmetric operation $[\cdot,\cdot]:\mf g \times \mf g \to\mf g$ called the \textit{Lie bracket}, which satisfies the Jacobi identity. 
+
+Left multiplication on the Lie group, $L_g: G\ni h\mapsto gh\in G$, is a diffeomorphism, since the group operations are smooth. A vector field $\eta$ on $G$ is said to be left invariant if $(L_g)_*\eta=\eta$ for all $g\in G$, where $(L_g)_*$ is the tangent map of $L_g$.
+
+The Lie algebra $\mf g$ can be identified with the set of left invariant vector fields on the group $G$, since for any $\xi\in\mf g$ we can associate a left invariant vector $\xi^g\in T_gG$ by translation via the tangent map, that is, $\xi^g=(L_g)_*\xi$. Let $\gamma$ be the integral curve of $\xi^g$, parameterized such that $\gamma_0=e$ and $(\gamma_t)'|_{t=0}=\xi$. Then
 \[
-   G.p = \mathrm{Image}_p(\theta)= \{g.p:g\in G\}.
+  \gamma_t\circ \gamma_s=\gamma_{t+s}\quad \mathrm{and}\quad \gamma_{-t}=(\gamma_t)^{-1}\in G,
 \]
-A \textit{Lie group} is a smooth manifold $G$ such that its group operations are smooth maps. A \textit{Lie algebra} is a vector space $\mf g$, together with a bilinear skewsymmetric operation $[\cdot,\cdot]:\mf g \times \mf g \to\mf g$  which satisfies the Jacobi identity called the \textit{Lie bracket}. 
+that is, the integral curve defines a one-parameter (Abelian) group of diffeomorphisms.
 
+\begin{oss}
+	Is every diffeomorphism an element of a one parameter group of diffeomorphims? No. Diffeomorphisms form a topological group $\Diff(M)$ which in some respects behaves like an infinite-dimensional Lie group, but this topological group is not connected in general. The only diffeomorphisms which can be part of one-parameter groups are those in the identity component.
+\end{oss}
 
-\begin{defin}
-	A \textit{global flow} on a smooth manifold $M$ is a parameterized left action $a:\R\times M\to M$ satisfying
+\begin{oss}
+	Warning 1.6 of Milnor's paper ``Remarks on infinite-dimensional Lie groups'': Regard $S^1$ as $\R/2\pi$. Fix a positive integer $n$ and some $\varepsilon$ such that $0<\varepsilon<1/n$ and define
 	\[
-	  a(t,a(s,p))=a(t+s,p)
+	f: S^1\to S^1,\quad x\mapsto x+\pi/n+\varepsilon\sin^2(nx).
 	\]
-	for all $s,t\in\R$ and $p\in M$. 
-\end{defin}
+	Choosing $n$ large enough and $\varepsilon$ small enough, we can make $f$ arbitrarily close to the identity in the $C^\infty$ topology. It is a fun exercise to show that $f$ does not lie in any 1-parameter subgroup of $\Diff(S^1)$.
+\end{oss}
 
-At any $p\in M$, we may define the curve $a^p:\R\to M$ by $a^p(t)=a(t,p)$, and for each $t\in\R$, $a_t:M\to M$ satisfies the group laws $a_s\circ a_t=a_{s+t}$. The curve $a^p$ defines a vector $X\in T_pM$ called the \textit{infinitesimal generator} of the flow $a$ by the relation $(a^p)'(0)=X$.
+\begin{oss}
+	 What about a Banach manifold version of the diffeomorphism group? One can consider
+	 \[
+	 \Diff_{C^n}(M)=\{\varphi\in C^n(M,M): \varphi\ \mathrm{bijective},\ \varphi^{-1}\in C^n(M,M)\}.
+	 \]
+	 This is a Banach manifold and a topological group, but not a Lie group. The group operations are continuous, but not differentiable, see [arXiv:1807.11290].
+\end{oss}
 
-\begin{prop}
-	Let $a:\R\times M\to M$ be a smooth global flow. The infinitesimal generator $X$ of $a$ is a smooth vector field on $M$ and each curve $a^p$ is an integral curve of $X$.
-\end{prop}
 
-The \textit{Lie exponential} of a vector field $X$ is the value of the flow $a$ generated by $X$ at $(1,p)$, i.e, $\exp_X=a^p(1)$. Conversely, if $X\in \mf g$ then this defines a vector field on $TM$ called the infinitesimal generator $X_M$ through
-\[
-X_M=\left.\frac{d}{dt}\right|_{t=0}\exp_{tX}.
-\]
-By the smoothness of $\exp$, the tangent space at $p'$ on the orbit $G.p$ can be constructed as the space $\{X_M\in T_{p'}M : X\in\mf g\}$.\todo{What is the relation to $p'$? Why different infinitesimal generators?} The group action $\theta:G\times M\to M$ induces an infinitesimal action. Fix $p\in M$ and consider $\theta^p:G\to M$. The corresponding tangent map $\theta^p_*:TG\to T_pM$ is called the infinitesimal action of the Lie group $G$ on $M$. The map is smooth in $p$, so it induces an action $TG\to TM$. We will denote this action $\xi.X$. 
-
- 
-
-Not all vector field generate global flows, but on compact manifolds, all vector fields are complete. [True in infinite dimensions?]
-
-If $M$ is a subset of $\R^n$ and $H\in C^2(M)$, the dynamical system $\dot{x}=-\nabla H(x)$ is called the \textit{gradient system} of $H$. The gradient system defines a flow $\R\times M\to M$ called the \textit{gradient flow}. In this finite dimensional setting, the orbit of the gradient system is either an equilibrium or else it is decreasing along the integral curve, since if $t\mapsto \varphi(t)$ is a solution curve then
-\[
-\frac{d}{dt}H(\varphi(t))=(\nabla H(\varphi(t)),\dot{\varphi}(t))=-\|\nabla H(\varphi(t))\|^2\leq 0.
-\]
-
-The tangent space to a Lie group $G$ at the identity $e$, $TG_e$, has a natural
-Lie algebra structure, which is defined as follows:  For an arbitrary $g\in G$, define $L_g: G\to G$ by $L_gh=gh$. If $\xi$ is a vector field on $G$, we say that $\xi$ is left invariant if for any $h\in G$,
-\[
-T_hL_g(\xi_h) = \xi_{gh}\quad \mathrm{or}\quad (L_g)_*\xi=\xi.
-\]
-Every left invariant vector field on a Lie group $G$ is complete. That is, for each left invariant tangent vector $\xi\in TG_e$ there is a flow $a\subset G$ with $(a^e)'(0)=\xi$.\todo{Is this why we may define the infinitesimal action via $\xi$?}
+\subsubsection{Translation invariant metrics on Lie groups}
 
 A Riemannian metric on a Lie group $G$ is called left invariant if it is preserved
 by all left translations $L_g$, i.e., if the derivative of left translation carries every
@@ -167,12 +186,73 @@ Thus, there are as many left invariant Riemannian metrics on a group as there ar
 \]
 We define a symmetric operator $A_g:TG_g\to T^*G_g$ by left translation:
 \[
- A_g = L^*_{g^{-1}}AL_{g^{-1}*}.
+A_g = L^*_{g^{-1}}AL_{g^{-1}*}.
 \]
-Here, $L_{h*}:TG_g\to TG_{hg}$ is the induced tangent map of $L_h$ and $L^*_h$ denotes its adjoint, i.e., $\langle L_h^*\xi,\eta\rangle=\langle \xi,L_{h*}\eta\rangle$. The translation of $A$ induces a Riemannian metric by
+Here, $L_{h*}:TG_g\to TG_{hg}$ is the induced tangent map of $L_h$ and $L^*_h$ denotes its adjoint, i.e., $\langle L_h^*\xi,\eta\rangle=\langle \xi,L_{h*}\eta\rangle$. The translation\todo{The pairing seems to be on the whole of $T^*M\times TM$ and not just on $\mf g^*\times \mf g$.} of $A$ induces a Riemannian metric by
 \[
-  (\xi,\eta)_g=\langle A_g \xi,\eta\rangle=\langle A_g \eta,\xi\rangle=(\eta,\xi)_g,\quad \mathrm{where}\ \xi,\eta\in TG_g.
+(\xi,\eta)_g=\langle A_g \xi,\eta\rangle=\langle A_g \eta,\xi\rangle=(\eta,\xi)_g,\quad \mathrm{where}\ \xi,\eta\in TG_g.
 \]
+
+\subsubsection{Group actions}
+
+If $G$ is a group and $M$ is a set, a \textit{left action} of $G$ on $M$ is a map $G\times M\to M$, often written as $\theta: (g,p)\mapsto g.p$, that satisfies $g_1.(g_2.p)=(g_1g_2).p$ for all $g_1$ and $g_2$ in $G$ and all $p$ in $M$ and $\exists e\in G: e.p=p$ for all $p$ in $M$. For any $p\in M$, we define the \textit{orbit} of $p$ under the group action $\theta$ of $G$ as the set 
+\[
+   G.p = \mathrm{Image}_p(\theta)= \{g.p:g\in G\}.
+\]
+
+
+
+\begin{defin}
+	A \textit{global flow} on a smooth manifold $M$ is a parameterized left action $a:\R\times M\to M$ satisfying
+	\[
+	  a(t,a(s,p))=a(t+s,p)
+	\]
+	for all $s,t\in\R$ and $p\in M$. 
+\end{defin}
+
+At any $p\in M$, we may define the curve $a^p:\R\to M$ by $a^p(t)=a(t,p)$, and for each $t\in\R$, $a_t:M\to M$ satisfies the group laws $a_s\circ a_t=a_{s+t}$. The curve $a^p$ defines a vector $X\in T_pM$ called the \textit{infinitesimal generator} of the flow $a$ by the relation $(a^p)'(0)=X$.
+
+\begin{prop}
+	Let $a:\R\times M\to M$ be a smooth global flow. The infinitesimal generator $X$ of $a$ is a smooth vector field on $M$ and each curve $a^p$ is an integral curve of $X$.
+\end{prop}
+
+The exponential map from a Lie algebra $\mf g$ to the corresponding Lie group $G$ can be defined provided the existence of flows. Given $\xi\in\mf g$ and the corresponding left invariant vector $\xi^g$. If the equation $(\gamma_t)'=\xi^g$\todo{Is the notation misleading?} with $\gamma_0=e$ admits a solution (in a neighborhood to $t=0$ containing $t=1$) the exponential map is defined as
+\[
+\exp: \mf g\to G,\quad \xi \mapsto \gamma_1.
+\]
+Conversely, if $\xi\in \mf g$ then this defines a vector field on $TM$ \todo{On $TG$?} called the infinitesimal generator $X_M$ through
+\[
+X_M=\left.\frac{d}{dt}\right|_{t=0}\exp_{t\xi}.
+\]
+By the smoothness of $\exp$, the tangent space at $p'$ on the orbit $G.p$ can be constructed as the space $\{X_M\in T_{p'}M : \xi\in\mf g\}$.\todo{What is the relation to $p'$? Why different infinitesimal generators?} 
+
+\begin{oss}
+	The exponential map of $\Diff(M)$ is in general neither locally surjective nor locally injective. [arXiv:1807.11290]
+\end{oss}
+
+A group action $\theta:G\times M\to M$ induces an \textit{infinitesimal group action}. Fix $p\in M$ and consider $\theta^p:G\to M$. The corresponding tangent map $\theta^p_*:TG\to T_pM$ is called the infinitesimal action of the Lie group $G$ on $M$. The map is smooth in $p$, so it induces an action $TG\to TM$. We will denote this action $\xi.X$. 
+
+An action $G\times M\to M$ is said to act transitively if for any points $p,q\in M$ there exists $g\in G$ such that $g.p=q$. The action is called effective if
+\[
+g.p=h.p\ \mathrm{for}\ \mathrm{all}\ p\in M \implies g=h.
+\]
+
+\begin{exam}
+	The action of the group of diffeomorphisms on a manifold $M$, $\Diff(M)$, is $(\phi,p)\mapsto \phi(p)$. It is both transitive and effective.
+\end{exam}
+
+\begin{teo}[Omori, 1978]
+	If a connected Banach-Lie group $G$ acts smoothly, transitively and effectively on a compact manifold, then $G$ must be a finite-dimensional Lie group.
+\end{teo}
+
+Not all vector field generate global flows, but on compact manifolds, all vector fields are complete. [True in infinite dimensions?]
+
+If $M$ is a subset of $\R^n$ and $H\in C^2(M)$, the dynamical system $\dot{x}=-\nabla H(x)$ is called the \textit{gradient system} of $H$. The gradient system defines a flow $\R\times M\to M$ called the \textit{gradient flow}. In this finite dimensional setting, the orbit of the gradient system is either an equilibrium or else it is decreasing along the integral curve, since if $t\mapsto \varphi(t)$ is a solution curve then
+\[
+\frac{d}{dt}H(\varphi(t))=(\nabla H(\varphi(t)),\dot{\varphi}(t))=-\|\nabla H(\varphi(t))\|^2\leq 0.
+\]
+
+
 
 
 %If $G$ acts on $M$ from the left, the action map induces a right invariant Riemannian structure on $G.p$. To understand this, we need the notion of horizontal vectors on $G$. 
@@ -396,9 +476,26 @@ where $d_L$ is a left invariant metric on $G_V$ defined by
 \begin{proof}
 	Given that the group of diffeomorphisms on $M$ has left action \textit{push forward} (and right action pullback), the infinitesimal action of a vector field $\xi$ on $X\in TM$ is
 	\[
-	\xi.X = \left.\frac{d}{dt}\right|_{t=0} \varphi^p(t)_*X = -\lie_\xi X.
+	TG\times TM\to TM,\qquad (\xi,X)\mapsto\xi.X = \left.\frac{d}{dt}\right|_{t=0} (\varphi_t)_*X = -\lie_\xi X.
 	\]
-	Here, $\xi$ generates the flow $\varphi :\R\times G \to G$.
+	Here, $\xi$ generates the flow $\varphi :\R\times G \to G$. On tensors of type (0,2), we have
+	\[
+	\xi.\tau = -\lie_\xi\tau.
+	\]
+	Let $g$ denote the Riemannian metric (as there is no confusion with group elements, which are denoted $\varphi$). Then
+	\[
+	\langle \omega,\xi.\tau\rangle = -\int_M \tr (\omega,\lie_\xi\tau)\Vol_\g.
+	\]
+	The covariant divergence $\delta_g$ acting on a symmetric 2-form $\omega$ on $M$ is the first-order differential operator $(\delta_g\omega)^i=-\nabla_j\omega^{ij}$, where $\nabla$ is the Riemannian connection. (Or $\tr(\xi\mapsto -\nabla_\xi\omega)$?)
+	Denote
+	\[
+	\alpha_g:\xi\mapsto \frac{1}{2}\lie_\xi g.
+	\]
+	Then (Smolentsev, Journal of Mathematical Sciences, Vol. 142, No. 5, 2007),
+	\[
+	(\alpha_g(\xi),\omega)_g=(\xi,\delta_g\omega)_g.
+	\]
+	TODO: adapt notation.
 \end{proof}
 
 
