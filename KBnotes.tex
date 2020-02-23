@@ -220,11 +220,11 @@ The exponential map from a Lie algebra $\mf g$ to the corresponding Lie group $G
 \[
 \exp: \mf g\to G,\quad \xi \mapsto \gamma_1.
 \]
-Conversely, if $\xi\in \mf g$ then this defines a vector field on $TM$ \todo{On $TG$?} called the infinitesimal generator $X_M$ through
+Conversely, if $\xi\in \mf g$ then this defines a vector field on $TM$ called the infinitesimal generator $X_M$ through
 \[
 X_M=\left.\frac{d}{dt}\right|_{t=0}\exp_{t\xi}.
 \]
-By the smoothness of $\exp$, the tangent space at $p'$ on the orbit $G.p$ can be constructed as the space $\{X_M\in T_{p'}M : \xi\in\mf g\}$.\todo{What is the relation to $p'$? Why different infinitesimal generators?} 
+By the smoothness of $\exp$, the tangent space at $p'$ on the orbit $G.p$ can be constructed as the space $\{X_M\in T_{p'}M : \xi\in\mf g\}$. That is, for any $p\in M$, there is a diffeomorphism from the quotient space $G/G_{p}$ to the orbit $G.p$, which we view as a manifold, and there is an isomorphism $T_{p'}(G.p)\cong\{X_M\in T_{p'}M : \xi\in\mf g\}$, see Marsden and Ratiu, Introduction to Mechanics and Symmetry, 1994, Chapter 9.3.
 
 \begin{oss}
 	The exponential map of $\Diff(M)$ is in general neither locally surjective nor locally injective. [arXiv:1807.11290]
@@ -266,6 +266,11 @@ where $\mathrm{Ver}_g$ is the subbundle of $TG$ called the \textit{vertical dist
 \]
 %If $G.p$ is a manifold, the mapping $\pi:G\to M$ defined by $\pi(g)=g.p$ is a submersion. Thus, $T_g\pi: \mathrm{Hor}_g\to T_{\pi(g)}G.p$ is a linear isomorphism and we may define the \textit{tangent lifted right action} of a group element $g$ on a vector field $X$ as the map \[  X\mapsto (T_g\pi)^{-1}X.\]
 
+
+Add Proposition 18.4 of https://www.cis.upenn.edu/~cis610/cis610-15-sl18.pdf
+
+Add Theorem 18.7 and Proposition 18.18 from ibid.
+
 \begin{lem}
 Assume that $G.p$ is a submanifold of $M$. Then any right invariant Riemannian metric $(\cdot,\cdot)$ on $M$ induces a Riemannian metric $r$ on $G.p$ fulfilling
 \[
@@ -292,11 +297,11 @@ and inversion are smooth maps, so that the set $\Diff(M)$ is a Fréchet-Lie grou
 
 [Add page 313 and following pages from Marsden \& Ratiu, 1999. Why is $\Ad$ different from Khesin's? Because $t=0$ at page 324 in Marsden and Ratiu.]
 
-The infinitesimal action map $\xi.p$, which is the tangent map $\theta^p_*$, is linear in the vector field. Therefore, it admits the definition of a \textit{momentum map} $J$ from the cotangent bundle $T^*M$ into the dual of the Lie algebra $\mf g$ through the relation
+The infinitesimal action map $TG\to T_pM$ which is the tangent map $\theta^p_*$, is linear in the vector field. Therefore, it admits the definition of a \textit{momentum map} $J$ from the cotangent bundle $T^*M$ into the dual of the Lie algebra $\mf g$ through the relation\todo{Select notation: $\xi.X$ or $X_M$?}
 \[
-\langle J(p,m),\xi\rangle = \langle m,\xi.p\rangle.
+\langle J(p,m),\xi\rangle = \langle m,X_M\rangle.
 \]
-Notice that the brackets denote one pairing on the left hand side which might differ from the pairing on the right hand side.
+Notice that the brackets denote the pairing $\mf g^*\times\mf g$ on the left hand side whereas on the right hand side, it denotes the pairing $T^*M\times TM$.
 
 Insert remark 1 from page 387 of Marsden and Ratiu, Introduction to Mechanics and Symmetry, 1999
 
@@ -314,22 +319,20 @@ This inner product can be used to identify the current algebra $\mf g^M$ with a 
 
 
 
-\subsection{The space of metrics}
+\subsection{The space of Riemannian metrics}
 Denote by $S^2T^*M$ the bundle of  symmetric tensors of type $(0,2)$. If $C^k(S^2T^*M)$ denotes the space of $C^k$ sections of  $S^2T^*M$ with the $C^k$-topology, then
 \[
 C^\infty (S^2T^*M) = \bigcap_{k=0}^\infty C^k(S^2T^*M)
 \]
-is a Fréchet space with the $C^\infty$-topology.
-
-Let $\Met(M)$ be the space of all smooth Riemannian structures (metrics?) on a manifold $M$.
-The space $\Met(M)$ is an open, convex, positive cone in $C^\infty(S^2T^*M)$, i.e.,
+is a Fréchet space with the $C^\infty$-topology. The set of all Riemannian metrics, $\Met(M)$, is the set of all sections in $C^\infty (S^2T^*M)$ which induce a positive definite inner product on each tangent space on the manifold $M$.
+The space $\Met(M)$ is an open, convex, positive cone in $C^\infty(S^2T^*M)$, that is,
 \[
 a,b>0,\ \g_1,\g_2\in \Met(M) \implies a\g_1+b\g_2\in\Met(M).
 \]
-Therefore, $\Met$ is a Frechet manifold and since $\Met(M)$ is open in the vector space $C^\infty (S^2T^*M)$  the tangent space $T_\g M$ at any $\g\in \Met(M)$ can be naturally identified with $C^\infty (S^2T^*M)$ itself.
+Therefore, $\Met$ is a Frechet manifold and since $\Met(M)$ is an open subset in the vector space $C^\infty (S^2T^*M)$  the tangent space $T_\g M$ at any $\g\in \Met(M)$ can be naturally identified with $C^\infty (S^2T^*M)$ itself.
 
 \subsection{Parallel transport, Lie derivatives and curvature}
-Parallel transport
+\todo[inline]{Introduce Parallel transport}
 
 The covariant derivative $\nabla_X\eta$ of a tangent vector field $\eta$ in a
 direction $X\in T_pM$ is the rate of change of the vector of the field $\eta$ that is parallel transported to the point $p$ along the geodesic line $\gamma$ having at this point the velocity $X$.
@@ -355,6 +358,7 @@ The (Riemannian) curvature tensor $\Omega$ describes the infinitesimal
 transformation in a tangent space obtained by parallel translation around an
 infinitely small parallelogram.
 
+\todo[inline]{Introduce Lie derivative on tensors of arbitrary type.}
 
 
 
@@ -460,44 +464,61 @@ where $d_L$ is a left invariant metric on $G_V$ defined by
 
 
 \subsection{Met embedded in the space of symmetric tensors}
-
+We define the inner product of two tangent vectors $S,T$, that is, two symmetric (0,2)-tensors, at the point $\g\in\Met(M)$ by
+\[
+(S,T)_g=\int_M \tr(g^{-1}Sg^{-1}T)\,\Vol_\g = \int_M S_{ij}T^{ij}\,\Vol_\g,
+\]
+where Einstein summation is understood. This inner product in invariant under the pullback action of $\Diff(M)$, that is,
+\[
+(\phi^*S,\phi^*T)_{\phi^*\g}=(S,T)_\g.
+\]
+Pullback is a right action, whereas the push forward of a diffeomorphism on a tensor in $C^\infty(S^2T^*M)$ is a left action since $(\phi\circ\varphi)_*=(\phi)_*\circ(\varphi)_*$. 
 
 \begin{teo}
-	The momentum map associated to  the co-tangent lifted action  of $\Diff(M)$ on $\Met(M)$ is given by
+	The momentum map associated to  the co-tangent lifted (left) action  of $\Diff(M)$ on $\Met(M)$ is given by
 	\[
 	  J_\Met(\g,a)=2\Div (a)^\flat \otimes \Vol_\g  
 	\]
 	where $T^*\Met(M)$ is identified with  symmetric $(2,0)$-tensors on $M$ and  pairs with $T\Met(M)$ through
 	\[
-	\langle a,b\rangle = \int_M \tr (a,b)\Vol_\g.
+	\langle a,b\rangle = \int_M \tr (a,b)\Vol_\g=\int_M a^{ij}b_{ij}\Vol_\g.
 	\]
 \end{teo}
 
 \begin{proof}
-	Given that the group of diffeomorphisms on $M$ has left action \textit{push forward} (and right action pullback), the infinitesimal action of a vector field $\xi$ on $X\in TM$ is
+	The infinitesimal left action of $\Diff(M)$ on $\Met(M)$ is
 	\[
-	TG\times TM\to TM,\qquad (\xi,X)\mapsto\xi.X = \left.\frac{d}{dt}\right|_{t=0} (\varphi_t)_*X = -\lie_\xi X.
+	T\Diff\times T\Met\to T\Met,\qquad (\xi,S)\mapsto\xi.S = \left.\frac{d}{dt}\right|_{t=0} (\varphi_t)_*S = -\lie_\xi S,
 	\]
-	Here, $\xi$ generates the flow $\varphi :\R\times G \to G$. On tensors of type (0,2), we have
+	where $\xi$ generates the flow $\varphi :\R\times G \to G$. Let $g$ denote a Riemannian metric (as there is no confusion with group elements, which are denoted $\varphi$). The pairing with an element $\omega$ in $T^*\Met$ is therefore
 	\[
-	\xi.\tau = -\lie_\xi\tau.
+	\langle \omega,\xi.S\rangle = -\int_M \tr (\omega,\lie_\xi S)\Vol_\g.
 	\]
-	Let $g$ denote the Riemannian metric (as there is no confusion with group elements, which are denoted $\varphi$). Then
-	\[
-	\langle \omega,\xi.\tau\rangle = -\int_M \tr (\omega,\lie_\xi\tau)\Vol_\g.
-	\]
-	The covariant divergence $\delta_g$ acting on a symmetric 2-form $\omega$ on $M$ is the first-order differential operator $(\delta_g\omega)^i=-\nabla_j\omega^{ij}$, where $\nabla$ is the Riemannian connection. (Or $\tr(\xi\mapsto -\nabla_\xi\omega)$?)
+	The covariant divergence $\delta_g$ acting on a symmetric 2-form $\omega$ on $M$ is the first-order differential operator $(\delta_g\omega)^i=-\nabla_j\omega^{ij}$, where $\nabla$ is the Riemannian connection compatible with $\g$ and raising indices is the map $\omega\mapsto \omega^\sharp=g^{-1}\omega$. (Or $\delta_g=\tr(\xi\mapsto-\nabla_\xi\omega)$?)
 	Denote
 	\[
 	\alpha_g:\xi\mapsto \frac{1}{2}\lie_\xi g.
 	\]
 	Then (Smolentsev, Journal of Mathematical Sciences, Vol. 142, No. 5, 2007),
 	\[
-	(\alpha_g(\xi),\omega)_g=(\xi,\delta_g\omega)_g.
+	\langle\alpha_g(\xi),\omega\rangle=\langle\xi,\delta_g\omega\rangle,
 	\]
-	TODO: adapt notation.
+	since integration by parts (w.r.t. Riemannian connection $\nabla^g$) yields
+	%
+	\begin{multline*}
+	(T,\frac{1}{2}\lie_\xi g)_g=\int_M \tr(\underbrace{g^{-1}g^{-1}T}_{\alpha\in T^*\Met}\frac{1}{2}\lie_\xi g)\,\Vol_g =\\
+	(g\ \mathrm{symm.}\implies \xi_k=g_{jk}\xi^j=g_{kj}\xi^j\implies \frac{1}{2}(\lie_\xi g)_{ik}=\frac{1}{2}(\nabla_i\xi_k+\nabla_k\xi_i)=\nabla_k\xi_i)\\
+	=\int_M\tr(\alpha \nabla^g\xi)\,\Vol_g=-\int_M \nabla^g_i\alpha^{ik}\xi_k\,\Vol_g=((\delta_g \alpha)^\flat,\xi)_g.
+	\end{multline*}
+	%
+	Here, the flat map is $\omega \mapsto\omega^\flat= g \omega$. We conclude that
+	\[
+	\langle \omega,\xi.g\rangle=\langle -\delta_g g^{-1}g^{-1}T,\xi\rangle,
+	\]
+	that is, $J(g,\omega)=-2\delta_g\omega^\flat$.
 \end{proof}
 
+\todo[inline]{Check if $$\xi.S=-\lie_\xi(\varphi_*S)$$}
 
 \newpage
 \appendix
