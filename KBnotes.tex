@@ -466,6 +466,19 @@ where $d_L$ is a left invariant metric on $G_V$ defined by
  d_L(\phi,\id)=\inf\left\{\sqrt{\int_0^1\|v_L^\phi(t)\|_V^2 dt}: \phi_0=\id,\ \phi_1=\phi \right\}.
 \]
 
+\subsection{Existence of minimizers}
+We have $\dot{u}(t)=\partial_t\varphi \circ \varphi^{-1}(t)$. Fix two images $I$ and $I'$. Introduce the notation
+\[
+U(\varphi)= \frac{1}{2\sigma^2}\|I\circ \varphi^{-1}-I'\|^2_{L^2}.
+\]
+
+\begin{teo}
+Let $\mathcal H$ be an admissible space  and $I,I'\in L^2(\Omega)$. Then there exists a minimizer to
+\[
+E(u)=\frac{1}{2}\int_0^1 |\dot{u}|_{\mathcal H}^2 dt + U(\varphi).
+\]
+\end{teo}
+
 
 \subsection{Met embedded in the space of symmetric tensors}
 We define the inner product of two tangent vectors $S,T$, that is, two symmetric (0,2)-tensors, at the point $\g\in\Met(M)$ by
