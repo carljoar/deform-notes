@@ -467,10 +467,47 @@ where $d_L$ is a left invariant metric on $G_V$ defined by
 \]
 
 \subsection{Existence of minimizers}
+We let $\Omega\in\R^d$ be open and bounded. We denote by $C^1_0(\Omega,\R^d)$ the Banach space of continuously differentiable vector fields $v$  on $\Omega$ such that $v$ and $Dv$ vanish on $\partial\Omega$ and at infinity. Elements $v\in C^1_0(\Omega,\R^d)$ can be considered asdefined on $\R^d$ by setting $v=0$ on $\R^d\setminus\Omega$. We define the set $\mathcal{X}_1^1(T,\Omega)$ of absolutely integrable functions from $[0,T]$ to $C^1_0(\Omega,\R^d)$. Elements of $\mathcal{X}_1^1(T,\Omega)$ are time dependent vector fields.
+
+The function $(t,x)\mapsto \varphi^v_{st}(x)$ is called the flow associated to $v$ starting at $s$. It can be proven that if $v\in\mathcal{X}_1^1(T,\Omega)$ then $\varphi^v_{st}(x)$ is a diffeomorphism of $\Omega$ at all times. We will study the effects that a variation of the time-dependent vector may have on the induced flow. We have the following theorem.
+
+\begin{teo}[Thm. 8.11 in Younes (2010)]
+\label{teo:811}
+If $v\in\mathcal{X}_1^1(T,\Omega)$ and $v^n$ is a bounded sequence in $\mathcal{X}_1^1(T,\Omega)$ which weakly converges to $v$, then, for all $s,t\in[0,T]$ and for every compact subset $Q\subset \overline{\Omega}$,
+\[
+\lim_{n\to\infty} \max_{x\in Q} |\varphi_{st}^{v^n}(x)-\varphi_{st}^{v}(x)|=0.
+\]
+\end{teo}
+
+Theorem~\ref{teo:811} can be generalized to higher derivatives in $\varphi$.
+
+\begin{lem}
+\label{lem:weak}
+Let $u_n\to u^*$ weakly. Then the sequence of flows that these vectors generate satisfies 
+\begin{itemize}
+	\item $\varphi_1^n\to \varphi_1^*$ and $(\varphi_1^n)^{-1}\to (\varphi_1^*)^{-1}$ uniformly on compact sets, and
+	\item the sequence $\{|D\varphi^n|_\infty\}_\N$ is bounded.
+\end{itemize}
+\end{lem}
+\begin{proof}
+Use Theorem~\ref{teo:811}. Since $(\varphi^n)_t^{-1}$ is the flow of the vector field $-u_n(1-t)$ uniform convergence of the inverse diffeomorphisms follows. A  generalized  version  of Grönwall's lemma gives the estimate
+\[
+|D\varphi^n|_\infty\leq A \exp\left(B\int_0^1 |\dot{u}_n|_{1,\infty}dt\right)
+\]
+for constants $A$ and $B$, and since $\{u_n\}$ is $L^2$-bounded,
+\[
+\int_0^1|\dot{u}_n|_{1,\infty}dt\leq C\int_0^1 |\dot{u}_n|_k dt =C|u^n|_{L^1}\leq C|u_n|_{L^2}, 
+\]
+which implies the boundedness of $|D\varphi^n|_\infty$.
+\end{proof}
+
 We have $\dot{u}(t)=\partial_t\varphi \circ \varphi^{-1}(t)$. Fix two images $I$ and $I'$. Introduce the notation
 \[
 U(\varphi)= \frac{1}{2\sigma^2}\|I\circ \varphi^{-1}-I'\|^2_{L^2}.
 \]
+Show Lemma 2.8 in 
+
+https://spiral.imperial.ac.uk/bitstream/10044/1/9692/1/Bruveris-M-2012-PhD-Thesis.pdf
 
 \begin{teo}
 Let $\mathcal H$ be an admissible space  and $I,I'\in L^2(\Omega)$. Then there exists a minimizer to
@@ -479,8 +516,26 @@ E(u)=\frac{1}{2}\int_0^1 |\dot{u}|_{\mathcal H}^2 dt + U(\varphi).
 \]
 \end{teo}
 
+\begin{proof}
+Consider a minimizing sequence $\{u_n\}_\N \in L^2([0,1],\mathcal{H})$ such that $E(u_n)\to \inf_u E(u)$. Since the functional $U$ is bounded from below, the sequence $\{u_n\}$ is bounded in the Hilbert space $L^2([0,1],\mathcal{H})$. Since bounded sets in Hilbert spaces are weakly compact, we can extract a subsequence that converges to some $u^*$. We show that $u^*$ is a minimizer. We have $\inf_u E(u)\leq E(u^*)$ by the definition of infimum, so it remains to show the converse.
 
-\subsection{Met embedded in the space of symmetric tensors}
+The Cauchy-Schwartz inequality on the inner product of the Hilbert space $\mathcal{H}$ provides the following limit result:
+\[
+\langle u^*,u_n\rangle\leq |u^*|_{L^2}\,|u_n|_{L^2} \implies |u^*|^2\leq \liminf |u_n|^2_{L^2}.
+\]
+
+Use Lemma~\ref{lem:weak}. 
+When $\varphi_1^n\to \varphi_1^*$ and $(\varphi_1^n)^{-1}\to (\varphi_1^*)^{-1}$ on compact sets and the sequence $\{|D\varphi^n|_\infty\}_\N$ is bounded we have weak convergence: $U(\varphi^n)\to U(\varphi^*)$. 
+Therefore,
+\begin{align*}
+E(u^*) \ &= |u^*|^2_{L^2} + U(\varphi^*)\\
+&\leq \liminf |u_n|^2_{L^2} + U(\varphi^*)\\
+&= \liminf |u_n|^2_{L^2} + U(\varphi^n) = \lim_{n\to\infty} E(u_n)\\
+&\leq \inf_n E(u_n).
+\end{align*} 
+\end{proof}
+
+\subsection[Met embedded]{Met embedded in the space of symmetric tensors}
 We define the inner product of two tangent vectors $S,T$, that is, two symmetric (0,2)-tensors, at the point $\g\in\Met(M)$ by
 \[
 (S,T)_g=\int_M \tr(g^{-1}Sg^{-1}T)\,\Vol_\g = \int_M S_{ij}T^{ij}\,\Vol_\g,
