@@ -467,7 +467,7 @@ where $d_L$ is a left invariant metric on $G_V$ defined by
 \]
 
 \subsection{Existence of minimizers}
-We let $\Omega\in\R^d$ be open and bounded. We denote by $C^1_0(\Omega,\R^d)$ the Banach space of continuously differentiable vector fields $v$  on $\Omega$ such that $v$ and $Dv$ vanish on $\partial\Omega$ and at infinity. Elements $v\in C^1_0(\Omega,\R^d)$ can be considered asdefined on $\R^d$ by setting $v=0$ on $\R^d\setminus\Omega$. We define the set $\mathcal{X}_1^1(T,\Omega)$ of absolutely integrable functions from $[0,T]$ to $C^1_0(\Omega,\R^d)$. Elements of $\mathcal{X}_1^1(T,\Omega)$ are time dependent vector fields.
+We let $\Omega\in\R^d$ be open and bounded. We denote by $C^1_0(\Omega,\R^d)$ the Banach space of continuously differentiable vector fields $v$  on $\Omega$ such that $v$ and $Dv$ vanish on $\partial\Omega$ and at infinity. Elements $v\in C^1_0(\Omega,\R^d)$ can be considered asdefined on $\R^d$ by setting $v=0$ on $\R^d\setminus\Omega$. We define the set $\mathcal{X}_1^1(T,\Omega)$ of absolutely integrable functions from $[0,T]$ to $C^1_0(\Omega,\R^d)$. Elements of $\mathcal{X}_1^1(T,\Omega)$ are time dependent vector fields. If the vector fields are integrable with respect to the norm of a vector space $V$, we write $v\in \mathcal{X}_V^1(T,\Omega)$.
 
 The function $(t,x)\mapsto \varphi^v_{st}(x)$ is called the flow associated to $v$ starting at $s$. It can be proven that if $v\in\mathcal{X}_1^1(T,\Omega)$ then $\varphi^v_{st}(x)$ is a diffeomorphism of $\Omega$ at all times. We will study the effects that a variation of the time-dependent vector may have on the induced flow. We have the following theorem.
 
@@ -505,9 +505,6 @@ We have $\dot{u}(t)=\partial_t\varphi \circ \varphi^{-1}(t)$. Fix two images $I$
 \[
 U(\varphi)= \frac{1}{2\sigma^2}\|I\circ \varphi^{-1}-I'\|^2_{L^2}.
 \]
-Show Lemma 2.8 in 
-
-https://spiral.imperial.ac.uk/bitstream/10044/1/9692/1/Bruveris-M-2012-PhD-Thesis.pdf
 
 \begin{teo}
 Let $\mathcal H$ be an admissible space  and $I,I'\in L^2(\Omega)$. Then there exists a minimizer to
@@ -525,7 +522,30 @@ The Cauchy-Schwartz inequality on the inner product of the Hilbert space $\mathc
 \]
 
 Use Lemma~\ref{lem:weak}. 
-When $\varphi_1^n\to \varphi_1^*$ and $(\varphi_1^n)^{-1}\to (\varphi_1^*)^{-1}$ on compact sets and the sequence $\{|D\varphi^n|_\infty\}_\N$ is bounded we have weak convergence: $U(\varphi^n)\to U(\varphi^*)$. 
+When $\varphi_1^n\to \varphi_1^*$ and $(\varphi_1^n)^{-1}\to (\varphi_1^*)^{-1}$ on compact sets and the sequence $\{|D\varphi^n|_\infty\}_\N$ is bounded we have weak convergence due to the following: Choose a function $f$ with compact support which satisfies $\|I-f\|_{L^2}<\varepsilon$. Then, leaving out the subscript $1$,
+%
+\begin{multline*}
+\|I\circ (\varphi^n)^{-1} - I\circ \varphi^{-1}\|\\
+=\|I\circ (\varphi^n)^{-1}- f\circ(\varphi^n)^{-1}+f\circ \varphi^{-1}- I\circ \varphi^{-1} -f\circ \varphi^{-1}+f\circ(\varphi^n)^{-1}\|\\
+\leq \|I\circ (\varphi^n)^{-1}- f\circ(\varphi^n)^{-1}\|+\|f\circ \varphi^{-1}- I\circ \varphi^{-1}\|+\|f\circ \varphi^{-1}-f\circ(\varphi^n)^{-1}\|
+\end{multline*}
+%
+By change of variables, $\|I\circ (\varphi^n)^{-1}- f\circ(\varphi^n)^{-1}\|=\|\sqrt{|\det D\varphi^n|}(I-f)\|$ and similarly, $\|I\circ \varphi^{-1}-f\circ\varphi^{-1}\|=\|\sqrt{|\det D\varphi|}(I-f)\|$. Apply that $\{|D\varphi^n|_\infty\}_\N$ is bounded and
+\[
+\|f\circ \varphi^{-1}-f\circ(\varphi^n)^{-1}\|\leq \left(\int_\Omega |f'|^2_\infty|(\varphi^n)^{-1}(x)-\varphi^{-1}(x)|^2dx\right)^{1/2}
+\]
+\[
+=|f'|_\infty\left(\int_{\mathrm{supp}(f)} |(\varphi^n)^{-1}(x)-\varphi^{-1}(x)|^2dx\right)^{1/2}=|f'|_\infty\|(\varphi^n)^{-1}-\varphi^{-1}\|_{\mathrm{supp}(f)}.
+\]
+We get
+%
+\begin{align*}
+\|I\circ (\varphi^n)^{-1}- f\circ(\varphi^n)^{-1}\|&\ \leq C_1 \varepsilon \\
+\|f\circ \varphi^{-1}- I\circ \varphi^{-1}\| &\ \leq C_2 \varepsilon \\
+\|f\circ \varphi^{-1}-f\circ(\varphi^n)^{-1}\|&\ \leq |f'|_\infty\|(\varphi^n)^{-1}-\varphi^{-1}\|_{\mathrm{supp}(f)} 
+\end{align*}
+%
+for constants $C_1\geq \sqrt{|\det D\varphi^n|}$ and $C_2\geq \sqrt{|\det D\varphi|}$. Because of the uniform convergence of the diffeomorphisms, for large $n$, $|U(\varphi^n)-U(\varphi)|\leq C_3\varepsilon$ for some constant $C_3$. [Comment: add steps.]
 Therefore,
 \begin{align*}
 E(u^*) \ &= |u^*|^2_{L^2} + U(\varphi^*)\\
@@ -534,6 +554,27 @@ E(u^*) \ &= |u^*|^2_{L^2} + U(\varphi^*)\\
 &\leq \inf_n E(u_n).
 \end{align*} 
 \end{proof}
+
+For an admissible vector space $V\in C_0^1(\Omega,\R^d)$ we let $G_V$ denote the set of diffeomorphisms provided by flows associated to elements $v\in \mathcal{X}_1^1(T,\Omega)$ at time $t=1$, that is, $G_V=\{\varphi_{01}^v,\ v\in \mathcal{X}_1^1(T,\Omega)\}.$ In Younes (2010), chapter 8, it is proven that $G_V$ is a group for the composition of functions. Trouvé proved that
+the function
+\[
+d_V(\psi,\phi)=\inf\{\|v\|_{\mathcal{X}_V^1},\ \phi=\psi\circ\varphi_{01}^v,\ v\in \mathcal{X}_V^1(T,\Omega)\}
+\]
+is  a  distance  on $G_V$, and that $(G_V,d_V)$ is a complete metric space.
+
+Let $C_0^q(\Omega,\R^d)$ be the set of functions $f$ in $C^q(\overline{\Omega},\R^d)$ with vanishing derivatives up to order $q$ on $\partial\Omega$ (defined by letting $f=0$ on the complement to $\Omega$). Then, compact sets are described by Ascoli's theorem.
+
+\begin{teo}
+If $V$ is Hilbert and admissible and $\psi,\phi\in G_V$, there exists $v\in\mathcal{X}_V^2$ such that $d_V(\psi,\phi)=\|v\|_{\mathcal{X}_V^2}$ and $\phi=\varphi_{01}^v\circ\psi$, where  $\mathcal{X}_V^p$ is the vector space with norm
+\[
+\|v\|_{\mathcal{X}_V^p}=\left(\int_0^1 \|v(t)\|_V^p dt\right)^{1/p}.
+\]
+\end{teo}
+
+\begin{teo}
+Let $V$ be a Hilbert space which is embedded in $C_0^{p+1}(\Omega,\R^d)$. Assume that the functional $U:G_V\to\R$ is bounded from below and that it is continuous with respect to uniform convergence on compact sets of derivatives up to order $p$. Then there exists a minimizer over $G_V$ of \[E(\varphi)=d_V(\id,\varphi)^2+U(\varphi).\]
+\end{teo}
+
 
 \subsection[Met embedded]{Met embedded in the space of symmetric tensors}
 We define the inner product of two tangent vectors $S,T$, that is, two symmetric (0,2)-tensors, at the point $\g\in\Met(M)$ by
