@@ -24,6 +24,7 @@
 \newtheorem{prop}[teo]{Proposition}
 \newtheorem{cor}[teo]{Corollary}
 \newtheorem{lem}[teo]{Lemma}
+\newtheorem{con}[teo]{Conjecture}
 \endgroup
 
 \theoremstyle{definition}
@@ -33,6 +34,10 @@
 \newtheorem{exam}[teo]{Example}
 \newtheorem{claim}{Claim}
 \endgroup
+
+\numberwithin{equation}{section}
+\renewcommand{\theequation}{\thesection.\arabic{equation}}
+\renewcommand{\thefootnote}{\fnsymbol{footnote}}
 
 \newcommand{\N}{\ensuremath{\mathbb{N}}}
 \newcommand{\Z}{\ensuremath{\mathbb{Z}}}
@@ -52,6 +57,7 @@
 \newcommand{\mf}{\ensuremath{\mathfrak}}
 
 \title{Gradient Flows on Riemannian Manifolds}
+\author{CJK et al.}
 \begin{document}
 \maketitle 
 \thispagestyle{empty}
@@ -59,6 +65,18 @@
 
 \section{Intro}
 Assume that we have a collection of ``shapes'' which are measurable functions defined on a compact Riemannian manifold $M$ without boundary. For instance, periodic images correspond to functions on the 2-torus $M=\R^2/\Z^2$ that maps into $\R$ if those images are gray-scale.
+
+Image matching quantifies the similarity of images and it is of interest to find algorithms that ``reshapes'' one image so that is looks like another. Reshaping might be achieved by transformations of the underlying Riemannian manifold. In particular, consider diffeomorphisms, that is, smooth maps $\varphi:M\to M$ such that the inverse map $\varphi^{-1}$ is smooth.
+
+Finding a diffeomorphism such that an image $I$ is deformed at any cost into a template image $I'$ is called the greedy matching problem and can be written as $\min_\varphi\{E(\varphi)\}$ where
+\[
+E(\varphi)=\|I\circ\varphi^{-1}-I'\|
+\]
+for some norm $\|\cdot\|$. The (Riemannian) gradient of $E$ is
+\[
+\nabla E(\varphi)=(I\circ\varphi^{-1}-I')D(I\circ\varphi^{-1})
+\]
+and we may try to minimize $\|I\circ\varphi^{-1}-I'\|$ by some gradient descent scheme. There is however usually no diffeomorphism such that $I\circ\varphi^{-1}=I'$, and the gradient descent algorithm will therefore progress indefinitely, creating huge deformations while trying to solve an impossible problem.
 
 
 
@@ -383,9 +401,48 @@ gradient flow without regularization. However, if G is infinite-dimensional, thi
 \]
 is a regularized problem, since any change of $g$ from the identity $e$ will increase the value of $R$. The solution is a trade-off between finding a good match, i.e., a small value of $F_{q'}$, while not being to far away from $e$.
 
-\subsection{Analysis in the framework of LDDMM}
-This section follows ``Diffeomorphic Image Matching with Left-Invariant Metrics'' by Tanya Schmah, Laurent Risser, and François-Xavier Vialard.
+\subsection{Greedy matching and geodesic regularization}
+Finding a diffeomorphism such that the image $I$ is deformed at any cost into the template image $I'$ is called the greedy matching problem and can be written as
+\[
+\min\left\{\|I\circ\varphi^{-1}-I'\| : \varphi\in G_\mathcal{H}\right\}
+\]
+for some norm $\|\cdot\|$. The (Riemannian) gradient is
+\[
+(I\circ\varphi^{-1}-I')D(I\circ\varphi^{-1})
+\]
+and we may try to minimize $\|I\circ\varphi^{-1}-I'\|$ by some gradient descent scheme. There is however usually no diffeomorphism such that $I\circ\varphi^{-1}=I'$, and the gradient descent algorithm will therefore progress indefinitely, creating huge deformations while trying to solve an impossible problem.
 
+
+\begin{prop}
+Assume that $v\in\mathcal{X}_V^2(\Omega)$ satisfies 
+%
+\begin{equation}
+\label{eq:momentumconservation}
+v(t)=\Ad_{\varphi^v(1)}^Tv(0)
+\end{equation}
+%
+with $v(0)=K\rho_0$ and that $\langle \rho_0,u)\leq C\|u\|_{p-1,\infty}$ for some constant $C$ and that $V$ is continuously embedded in $C_0^p(\Omega,R^d)$. Then equation~(\ref{eq:momentumconservation}) admits a unique solution in small time.
+\end{prop}
+
+\begin{proof}
+We want to apply the uniqueness and existence theorem for differential equations in Banach spaces. Write $\varphi=\id+u$ so that $\varphi$ evolves according to
+\[
+\frac{dU}{dt}=G(U),\quad\mathrm{where\ } U=(u,Du,...,D^pu).
+\]
+Define
+\[
+\|U\|=\sum_{k=1}^p \|U\|_{p-k,\infty}.
+\]
+Then, if $\max(\|U\|,\|U'\|)$ is bounded, there exists a constant $C$ such that
+\[
+\|G(U)-G(W)\|\leq C\|V-W\|
+\]
+by Lemma (TODO, see page 262 of~\cite{younes2010shapes}).
+\end{proof}
+
+
+\subsection{Analysis in the framework of LDDMM}
+This section follows~\cite{schmah2015diffeomorphic}.
 The flow of a time dependent vector field in $L^2([0,1],V)$ is well-defined if there exists a positive constant $C$ such that for every $v\in V$
 \[
 \|v\|_{1,\infty}\leq C\|v\|_V,
@@ -481,6 +538,10 @@ If $v\in\mathcal{X}_1^1(T,\Omega)$ and $v^n$ is a bounded sequence in $\mathcal{
 
 Theorem~\ref{teo:811} can be generalized to higher derivatives (in $\varphi$ ?). [Comment: I suppose we want the following lemma specific to the group $G_\mathcal{H}$?]
 
+\begin{teo}[Arzela-Ascoli  Compactness  Criterion]
+Let $\{f_k\}$ be a sequence of real-valued functions on $\R^n$  such that $|f_k(x)|\leq M$ for all $k$ and and $x\in\R^n$ for some constant $M$. Assume that the $f_k$'s are uniformly equicontinuous, that is, \[\forall \eta>0\,\exists\delta>0\,\forall k\in\N\,\forall x,y\in\R^n:|x-y|<\delta\implies|f_k(x)-f_k(y)|<\eta.\] Then there exists a subsequence $\{f_{k_j}\}\subset\{f_k\}$ and a continuous function $f$ such that $f_{k_j}\to f$ uniformly on compact subsets of $\R^n$.
+\end{teo}
+
 \begin{lem}
 \label{lem:weak}
 Let $u_n\to u$ weakly. Then the sequence of flows that these vectors generate satisfies 
@@ -501,6 +562,78 @@ for constants $A$ and $B$, and since $\{u_n\}$ is $L^2$-bounded,
 which implies the boundedness of $|D\varphi^n|_\infty$.
 \end{proof}
 
+
+
+We review the Large Deformation Diffeomorphic Metric Mapping (LDDMM) approach to image registration, mainly following 
+Chapter~8 of Younes (2010) and Section~3 of Bruveris-Holm. To begin with, we define $G_{\mathcal{H}}$, the group of diffeomorphisms we will be working with, first introduced by Trouvé, along with a distance function on $G_{\mathcal{H}}$. This will make it possible to quantify the size of a deformation by its distance to the identity map.  We say that $\mathcal{H}$, a Hilbert space of vector fields on $\Omega$, is \emph{admissible} if it is contained and continuously embedded in $C^1_0(\Omega,\mathbb{R}^d)$.  Having chosen an admissible space $\mathcal{H}$, we consider the Hilbert space $L^2([0,1],\mathcal{H})$ of time-dependent vector fields with the usual scalar product
+$$\langle u,v\rangle_{L^2([0,1],\mathcal{H})}=\int_0^1\langle u(t),v(t)\rangle_{\mathcal{H}} d t\quad\mathrm{for\ any\ }u,v\in
+L^2([0,1],\mathcal{H}).$$
+
+We let
+\begin{equation}
+G_{\mathcal{H}}=\{g=\varphi^u(1):\ 
+u\in L^2([0,1],\mathcal{H})\}
+\end{equation}
+where $\varphi^u$ is the solution of $\partial_t\varphi=u\circ\varphi$ with initial condition $\varphi(0)=e$,  $e$ denoting the identity map.
+
+For any $t\in[0,1]$, in particular for $t=1$, the map $\varphi^u(t)$ is a $C^1$ diffeomorphism of $\Omega$ onto itself. Actually, $\varphi^u(t)$ (and its inverse as well) may be extended to all of $\mathbb{R}^d$ by letting it be equal to the identity outside $\Omega$ and this extension is a $C^1$ diffeomorphism of $\mathbb{R}^d$ onto itself.
+
+The set $G_{\mathcal{H}}$ thus defined is a group with respect to the composition of maps and a complete metric space endowed with the distance
+$$d_{\mathcal{H}}(g_0,g_1)=\min_{u\in L^2([0,1],\mathcal{H})}\left\{\|u\|:\ g_1=g_0\circ\varphi^u(1)
+\right\}\quad\mathrm{for\ any\ }g_0,g_1\in
+G_{\mathcal{H}}.$$
+
+In Younes (2010), chapter 8, it is proven that $G_\mathcal{H}$ is a group for the composition of functions. Trouvé proved that
+the function
+\[
+d_\mathcal{H}(\psi,\phi)=\inf\{\|v\|_{\mathcal{X}_\mathcal{H}^1},\ \phi=\psi\circ\varphi_{01}^v,\ v\in \mathcal{X}_\mathcal{H}^1(T,\Omega)\}
+\]
+is  a  distance  on $G_\mathcal{H}$, and that $(G_\mathcal{H},d_\mathcal{H})$ is a complete metric space.
+
+[CJK, comment:] Does $G_{\mathcal{H}}$ also define a (complete) metric space with distance function
+\[
+d(g_0,g_1)=d_\mathrm{Met}(m_0,m_1) = \int_\Omega |m_1-m_0|_\mathrm{Fr}^2 d \mu_{g_0}\ \mathrm{where}\ m_1=\varphi^u_*m_0?
+\]
+Maybe that does not matter, since the regularization is $\mathrm{Met}\times\mathrm{Met}\mapsto \mathbb{R}$ regardless of $d_{\mathcal{H}}$.
+
+\begin{defin}\label{weakconv}
+	Given a sequence $\{g_n\}_{n\in\mathbb{N}}\subset G_{\mathcal{H}}$, we say that $g_n$ weakly converges in $G_{\mathcal{H}}$ to $g$, as $n\to \infty$, if and only if there exists a constant $C>0$ such that 
+	$\|Dg_n\|_{L^{\infty}}\leq C$ and $\|Dg^{-1}_n\|_{L^{\infty}}\leq C$ for any $n\in\mathbb{N}$, and
+	$g_n\to g$ and $(g_n)^{-1}\to g^{-1}$ uniformly on compact subsets of $\overline{\Omega}$.
+\end{defin} 
+
+An important choice of admissible Hilbert space is the following.
+We fix $s>d/2+1$ and we call
+\[
+\mathcal{D}^s(\mathbb{R}^d)=\{g\in e+H^s(\mathbb{R}^d,\mathbb{R}^d):\
+g\mathrm{\ is\ bijective\ and\ }g^{-1}\in e+H^s(\mathbb{R}^d,\mathbb{R}^d)\},
+\]
+where $H^s$ is the usual Sobolev space. We have that $\mathcal{D}^s(\mathbb{R}^d)-e$
+is an open subset of $H^s(\mathbb{R}^d,\mathbb{R}^d)$
+and that the inversion operation is continuous, although not smooth, in $\mathcal{D}^s(\mathbb{R}^d)$.
+We call $\mathcal{D}^s(\mathbb{R}^d)_0$ the connected component of the identity in $\mathcal{D}^s(\mathbb{R}^d)$. We further note that if we choose $\mathcal{H}=H^s(\mathbb{R}^N,\mathbb{R}^N)=H^s$, then $\mathcal{H}$ is admissible. 
+Then we have the following result.
+
+\begin{teo}\label{Hscase}
+	Let $\mathcal{H}=H^s(\mathbb{R}^d,\mathbb{R}^d)=H^s$, with $s>d/2+1$. Then
+	we have that
+	\begin{equation}\label{equivalence}
+	G_{H^s}=\mathcal{D}^s(\mathbb{R}^d)_0.
+	\end{equation}
+	%
+	Furthermore, let us consider a sequence $\{ g_n\}_{n\in\mathbb{N}}\subset G_{H^s}$ and $ g\in G_{H^s}$, and corresponding $u_n\in L^2([0,1],H^s)$ such that
+	$ g_n=\varphi^{u_n}(1)$, for any $n\in\mathbb{N}$, and $u\in L^2([0,1],H^s)$  such that $\varphi^u(1)= g$. The following properties are satisfied. 
+	
+	If, as $n\to\infty$, $u_n$ converges to $u$ strongly in $L^2([0,1],H^s)$ then
+	$ g_n$ converges to $ g$ and $ g_n^{-1}$ converges to $ g^{-1}$, in both cases in $H^s$.
+	
+	We have that $d_{H^s}( g_n, g)$ converges to $0$, as $n\to\infty$, if and only if
+	$ g_n^{-1}$ converges to $ g^{-1}$ in $H^s$.
+	
+	Finally, if, as $n\to\infty$, $u_n$ converges to $u$ strongly in $L^2([0,1],H^s)$ then
+	$ g_n$ converges to $ g$ and $ g_n^{-1}$ converges to $ g^{-1}$ in the distance $d_{H^s}$.
+\end{teo}
+
 We have $\dot{u}(t)=\partial_t\varphi \circ \varphi^{-1}(t)$. Fix two images $I$ and $I'$ that are `sufficiently smooth'. Introduce the notation
 \[
 U(\varphi)= \frac{1}{2\sigma^2}\|I\circ \varphi^{-1}-I'\|^2_{L^2}.
@@ -508,7 +641,7 @@ U(\varphi)= \frac{1}{2\sigma^2}\|I\circ \varphi^{-1}-I'\|^2_{L^2}.
 
 \begin{lem}
 \label{lem:impliesweak}
-If $\varphi_1^n\to \varphi_1$ and $(\varphi_1^n)^{-1}\to (\varphi_1)^{-1}$ on compact sets and the sequence $\{|D\varphi^n|_\infty\}_\N$ is bounded we have $U\varphi^n)\to U(\varphi)$.
+If $\varphi_1^n\to \varphi_1$ and $(\varphi_1^n)^{-1}\to (\varphi_1)^{-1}$ on compact sets and the sequence $\{|D\varphi^n|_\infty\}_\N$ is bounded we have $U(\varphi^n)\to U(\varphi)$.
 \end{lem}
 \begin{proof}
 Choose a function $f$ with compact support which satisfies $\|I-f\|_{L^2}<\varepsilon$. Then, leaving out the subscript $1$,
@@ -563,16 +696,10 @@ E(u^*) \ &= |u|^2_{L^2} + U(\varphi)\\
 \end{align*} 
 \end{proof}
 
-For an admissible vector space $V\in C_0^1(\Omega,\R^d)$ we let $G_V$ denote the set of diffeomorphisms provided by flows associated to elements $v\in \mathcal{X}_1^1(T,\Omega)$ at time $t=1$, that is, $G_V=\{\varphi_{01}^v,\ v\in \mathcal{X}_V^1(T,\Omega)\}.$ In Younes (2010), chapter 8, it is proven that $G_V$ is a group for the composition of functions. Trouvé proved that
-the function
-\[
-d_V(\psi,\phi)=\inf\{\|v\|_{\mathcal{X}_V^1},\ \phi=\psi\circ\varphi_{01}^v,\ v\in \mathcal{X}_V^1(T,\Omega)\}
-\]
-is  a  distance  on $G_V$, and that $(G_V,d_V)$ is a complete metric space.
 
 Let $C_0^q(\Omega,\R^d)$ be the set of functions $f$ in $C^q(\overline{\Omega},\R^d)$ with vanishing derivatives up to order $q$ on $\partial\Omega$ (defined by letting $f=0$ on the complement to $\Omega$). Then, compact sets are described by Ascoli's theorem. Continuity for uniform convergence on compact sets means that if $\varphi^n\to\varphi$ on compact subsets of $\Omega$ and the same holds for all partial derivatives up to order $p$, then $F(\varphi^n)\to F(\varphi)$ for all functionals $F$.
 
-\begin{defin}
+\begin{defin} (Again.)
 Given a sequence $\{\varphi^n\}_\N$ in $\mathcal{G}_\mathcal{H}$ we say that $\varphi^n$ converges weakly to $\varphi$ as $n\to\infty$ if there exists a positive constant $C$ such that $\|D\varphi^n\|_{L^\infty}\leq C$ and $\|D(\varphi^n)^{-1}\|_{L^\infty}\leq C$ for all $n$ and $\varphi^n\to\varphi$ and $(\varphi^n)^{-1}\to\varphi^{-1}$ uniformly on compact subsets of $\overline{\Omega}$.
 \end{defin}
 
@@ -602,15 +729,26 @@ By Lemma~\ref{lem:minim}, we can consider a minimizing sequence to $\tilde{E}$. 
 \[
 U(\varphi_{01}^{v_n})\to U(\varphi_{01}^v).
 \]
-Thus $\tilde{E}(v)=\min E$.
+Thus $\tilde{E}(v)=\inf E$.
 \end{proof}
 
-Let us now consider the same results as the above, but with a slightly different problem:
+Fix a Riemannian manifold ($M$,$g$) and let $\varphi_*$ denote the tangent map (push forward) of a diffeomorphism $\varphi$. Let us now consider the same results as the above, but with a slightly different problem, namely
+%
 \begin{equation}
-\min\left\{\left(\lambda\|I\circ\varphi^{-1}-I'\|_{L^2}+d_\mathcal{H}(\varphi_*g,\id)\right) : g\in G_\mathcal{H} \right\}.
+\label{prob:min-pushforward}
+\min\left\{\left(\lambda\|I\circ\varphi^{-1}-I'\|_{L^2}+d_{\mathrm{Met}(M)}(\varphi_*g,g)\right) : \varphi\in G_\mathcal{H} \right\}.
 \end{equation}
+%
+Here, $d_{\mathrm{Met}(M)}$ is a distance function on the space of metrics on $M$, Met($M$).
+We want to prove the following conjecture.
 
+\begin{con}
+The minimization problem~(\ref{prob:min-pushforward}) admits a solution.
+\end{con}
 
+We still have results for the first term of~(\ref{prob:min-pushforward}). If $\{\varphi^n\}_\N$ is a sequence in $G_\mathcal{H}$ that converges weakly to $\varphi\in G_\mathcal{H}$, then $U(\varphi^n)\to U(\varphi)$, where $U(\psi)=\lambda\|I\circ\psi^{-1}-I'\|_{L^2}$.
+
+[Does this work?] Let $\{\varphi\}_\N\in G_\mathcal{H}$ be a sequence that converges weakly to $\varphi$. Is then $d_{\mathrm{Met}(M)}(\varphi_*g,g)\leq \liminf d_{\mathrm{Met}(M)}(\varphi^n_*g,g)$?
 
 
 \subsection[Met embedded]{Met embedded in the space of symmetric tensors}
@@ -620,9 +758,16 @@ We define the inner product of two tangent vectors $S,T$, that is, two symmetric
 \]
 where Einstein summation is understood. This inner product in invariant under the pullback action of $\Diff(M)$, that is,
 \[
-(\phi^*S,\phi^*T)_{\phi^*\g}=(S,T)_\g.
+(\phi^*S,\phi^*T)_{\phi^*\g}=(S,T)_\g
 \]
-Pullback is a right action, whereas the push forward of a diffeomorphism on a tensor in $C^\infty(S^2T^*M)$ is a left action since $(\phi\circ\varphi)_*=(\phi)_*\circ(\varphi)_*$. 
+and is therefore called canonical. Pullback is a right action, whereas the push forward of a diffeomorphism on a tensor in $C^\infty(S^2T^*M)$ is a left action since $(\phi\circ\varphi)_*=(\phi)_*\circ(\varphi)_*$. 
+
+[Compact support? Is that assumed for the metrics?]
+The tangent space to the space of Riemannian metrics is a pre-Hilbert space (a possibly non-complete vector space equipped with an inner product), whose completion is a Sobolev space of order $0$, depending on $g$ if $M$ is not compact.
+
+\begin{oss}
+Since $(\cdot,\cdot)$ is only a weak Riemannian metric, all objects which are only implicitly given a priori lie in the Sobolev completions of the relevant spaces. In particular this applies to the formula for the Levi-Civita metric, which gives uniqueness but not existence of the Levi-Civita covariant derivative.
+\end{oss}
 
 \begin{teo}
 	The momentum map associated to  the co-tangent lifted (left) action  of $\Diff(M)$ on $\Met(M)$ is given by
@@ -672,6 +817,46 @@ Pullback is a right action, whereas the push forward of a diffeomorphism on a te
 
 \newpage
 \appendix
+\section{Calculus of variations}
+We paraphrase theory from~\cite[Chapter 17]{grinfeld2014mathematical}.
+
+The Banach space structure admits a directional derivative of functional $F:V\to\R$ at $u\in V$ in the direction of $e\in V$, defined as
+\[
+DF_e(u) = \lim_{\varepsilon\to 0_+}\frac{F(u+\varepsilon e)-F(u)}{\varepsilon}
+\]
+whenever the limit exists. If it exists, we say that $F$ is directionally differentiable. If $DF(u):V\to\R$ is also a linear and continuous functional, then we define the Gâteaux derivative $F'\in V^*$ by
+\[
+\langle F'(u),e\rangle=DF_e(u).
+\]
+If $F'$ is  continuous, we say that $F$ is  continuously differentiable. A critical point is such that $F'(u)=0$. This provides an abstract formulation of the Euler-Lagrange equations.
+
+
+In a reflexive Banach space, every convex, bounded and closed set is weakly compact. This follows quite immediately from Banach-Alauglo's theorem, which states that a convex, closed and bounded set is weak*-compact in the dual space $X^*$ of a Banach space $X$. If $X$ is reflexive, then the weak topology on $X$ is homeomorphic to the weak* topology on  $X^{**}$, viewed as the dual of $X^*$. 
+
+\begin{teo}
+Let $X$ be a Fréchet space, $Y$ a normed space, and $H$ a set of continuous linear mappings of $X$ into $Y$. If for every $x$ in $X$
+\[
+\sup_{h\in H} \|h(x)\|\quad\mathrm{is\ finite,}
+\]
+then the family $H$ is equicontinuous.
+\end{teo}
+
+\subsection{Direct method}
+The Bolzano–Weierstrass theorem, which states that a lower (resp. upper) semicontinuous functional on a compact set attains its minimum (resp. maximum), underlies the \textit{direct method}, invented essentially in~\cite{tonelli1915methode}.
+
+Direct methods usually do not provide an explicit minimizing sequence but they prove \textit{existence} of minimizers.  The main idea is that you can construct a minimizing sequence by minimizing your functional on the finite dimensional subspace of your original infinite dimensional space.
+
+\begin{teo}
+Let $V$ have a pre-dual and $F:V\to\R$ we weakly* lower semicontinuous, smooth and coercive. Then $F'=0$ has a solution.
+\end{teo}
+
+\begin{exam}
+Consider
+\[
+U(v)=\int_0^R \left(\frac{1}{4}|v'(t)|^2+\frac{1}{4}(v(t)^2-1)^2\right)dt
+\]
+\end{exam}
+
 \section{Manifolds}
 \subsection{Tangent and cotangent bundles}
 If $\pi:E\to M$ from a topological space $E$ into a smooth manifold $M$ has an inverse, the image $\pi^{-1}(p)$ of $p\in M$ is called a \textit{fiber} of $\pi$. It is often denoted $E_p$. A surjective smooth map $\pi: E\to M$ is said to be \textit{locally trivial} of rank $r$ if
@@ -796,5 +981,9 @@ This metric is right-invariant when restricted to the subgroup $S\Diff(M)$ of
 volume-preserving diffeomorphisms, although it is not right-invariant on the
 whole group $\Diff(M)$. Indeed, the change of variables in the integral
 would give the Jacobian det$(\partial \eta/dx)$ as an extra factor, which, however, is identically equal to 1 for a volume-preserving map $\eta\in S\Diff(M)$. Note that for a flat manifold $M$ this metric is a flat metric on $\Diff(M)$; a neighborhood of the identity $\id\in\Diff(M)$ with the metric $\langle\cdot,\cdot\rangle_\Diff$ is isometric to a neighborhood in the pre-Hilbert space of smooth ``vector-function'' $\eta:M\to M$ with the $L^2$ inner product $\langle\cdot,\cdot\rangle_{L^2(M)}$.
+
+\newpage
+\bibliographystyle{apalike} %{nar}
+\bibliography{refs}
 
 \end{document}
