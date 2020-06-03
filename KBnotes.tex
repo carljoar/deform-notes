@@ -51,6 +51,9 @@
 \newcommand{\Vect}{\ensuremath{\mathrm{Vect}}}
 \newcommand{\id}{\ensuremath{\mathrm{id}}}
 \newcommand{\lie}{\ensuremath{\mathcal{L}}}
+\newcommand{\cD}{\ensuremath{\mathcal{D}}}
+\newcommand{\cM}{\ensuremath{\mathcal{M}}}
+\newcommand{\cS}{\ensuremath{\mathcal{S}}}
 \newcommand{\Ad}{\ensuremath{\mathrm{Ad}}}
 \newcommand{\ad}{\ensuremath{\mathrm{ad}}}
 \newcommand{\tr}{\ensuremath{\mathrm{tr}}}
@@ -91,11 +94,21 @@ A \textit{smooth manifold} modeled on the vector space $E$ is a Hausdorff  topol
 %
 There are several possible choices of vector space $E$, for instance Hilbert spaces, Banach spaces and Fréchet spaces.
 
-\textit{Fréchet spaces} are complete locally convex Hausdorff metrizable vector spaces, and a \textit{Fréchet manifold} is a Hausdorff space with a coordinate atlas taking values in a Fréchet space in such a way that all transition functions are smooth maps. Vector fields, tangent spaces, differential forms, principal bundles, and the like on a Fréchet manifold can be defined in the same way as for finite-dimensional manifolds. For example, a tangent vector at some point $p$ on a manifold $M$ is defined as an equivalence class of smooth parametrized curves $a^p:\R\to M$ such that $a^p(0)=p$. The collection of a such equivalence classes at $p$ is the tangent space at $p$, $T_pM$, and the union of the tangent spaces
+\textit{Fréchet spaces} are complete locally convex Hausdorff metrizable vector spaces, and a \textit{Fréchet manifold} is a Hausdorff space with a coordinate atlas taking values in a Fréchet space in such a way that all transition functions are smooth maps. Vector fields, tangent spaces, differential forms, principal bundles, and the like on a Fréchet manifold can be defined in the same way as for finite-dimensional manifolds, see e.g.~\cite{filipovic2003existence}. For example, a tangent vector at some point $p$ on a manifold $M$ is defined as an equivalence class of smooth parametrized curves $a^p:\R\to M$ such that $a^p(0)=p$. The collection of a such equivalence classes at $p$ is the tangent space at $p$, $T_pM$, and the union of the tangent spaces
 \[
 TM:=\bigcup_{p\in M}T_pM,
 \]
 the \textit{tangent bundle} of $M$, can be given the structure of a Fréchet manifold. The dual of a Fréchet space need not be a Fréchet space. Thus, we define 1-forms in the Fréchet setting as smooth maps $\alpha: TM\to\R$ such that the restriction $\alpha|_{T_pM}:T_pM\to\R$ is a smooth map. Differential forms of higher degree are defined analogously.
+
+Specifically, a topological vector space $X$ is a Fréchet space if and only if it satisfies the following three properties:
+%
+\begin{enumerate} 
+\item It is locally convex.
+\item Its topology can be induced by a translation-invariant metric, i.e. a metric $d: X\times X \to\R$ such that $d(x, y) = d(x+a, y+a)$ for all $a,x,y \in X$. This means that a subset $U$ of $X$ is open if and only if for every $u\in U$ there exists an $\varepsilon > 0$ such that $\{v : d(v, u) < \varepsilon\}$ is a subset of $U$.
+\item Any (hence every) translation-invariant metric inducing the topology is complete; in other words, $X$ is a complete topological vector space.
+\end{enumerate}
+
+There is no natural notion of distance between two points of a Fréchet space: many different translation-invariant metrics may induce the same topology. 
 
 Vector fields act on real-valued functions on $M$ via the directional derivative:
 \[
@@ -251,6 +264,8 @@ By the smoothness of $\exp$, the tangent space at $p'$ on the orbit $G.p$ can be
 \begin{oss}
 	The exponential map of $\Diff(M)$ is in general neither locally surjective nor locally injective. [arXiv:1807.11290]
 \end{oss}
+
+It is known that for a finite dimensional Riemannian manifold, if for some point the exponential map is defined in the whole tangent space, then every other point can be joined with that by a minimizing geodesic (Hopf-Rinow-theorem).
 
 A group action $\theta:G\times M\to M$ induces an \textit{infinitesimal group action}. Fix $p\in M$ and consider $\theta^p:G\to M$. The corresponding tangent map $\theta^p_*:TG\to T_pM$ is called the infinitesimal action of the Lie group $G$ on $M$. The map is smooth in $p$, so it induces an action $TG\to TM$. We will denote this action $\xi.X$. 
 
@@ -762,6 +777,10 @@ where Einstein summation is understood. This inner product in invariant under th
 \]
 and is therefore called canonical. Pullback is a right action, whereas the push forward of a diffeomorphism on a tensor in $C^\infty(S^2T^*M)$ is a left action since $(\phi\circ\varphi)_*=(\phi)_*\circ(\varphi)_*$. 
 
+The condition of being a \textit{weak} Riemannian metric is less stringent than the condition of being a \textit{strong} Riemannian metric, since strong non-degeneracy implies weak non-degeneracy but not vice versa. More precisely, any strong Riemannian metric provides an isomorphism between the tangent and cotangent spaces $T_mM$ and $T_m^*M$, respectively, for all $m\in M$ whereas weak Riemannian metrics are merely injective linear maps from $T_mM$ to $T_m^*M$ \cite{abraham2002}. In other words, if the tangent spaces are complete with respect to the scalar product induced by the metric, the metric is called strong. Otherwise, it is called weak.  
+
+In the case of a proper Fréchet space (where the topology does not come from any single norm), only weak Riemannian metrics are possible \cite{clarke2009metric}.
+
 [Compact support? Is that assumed for the metrics?]
 The tangent space to the space of Riemannian metrics is a pre-Hilbert space (a possibly non-complete vector space equipped with an inner product), whose completion is a Sobolev space of order $0$, depending on $g$ if $M$ is not compact.
 
@@ -794,7 +813,7 @@ Since $(\cdot,\cdot)$ is only a weak Riemannian metric, all objects which are on
 	\[
 	\alpha_g:\xi\mapsto \frac{1}{2}\lie_\xi g.
 	\]
-	Then (Smolentsev, Journal of Mathematical Sciences, Vol. 142, No. 5, 2007),
+	Then \cite{smolentsev2007spaces},
 	\[
 	\langle\alpha_g(\xi),\omega\rangle=\langle\xi,\delta_g\omega\rangle,
 	\]
@@ -814,6 +833,62 @@ Since $(\cdot,\cdot)$ is only a weak Riemannian metric, all objects which are on
 \end{proof}
 
 \todo[inline]{Check if $$\xi.S=-\lie_\xi(\varphi_*S),\quad \varphi=\varphi_1,\ \partial_t|_{t=0}\varphi_t=\xi$$ or $$\xi.S=-\lie_\xi(\varphi_*S),\quad \varphi=\varphi_1,\ \partial_t|_{t=1}\varphi_t=\xi$$ Also check if $\lie_\xi$ and $\varphi_*$ commute because $\varphi$ is generated by $\xi$.}
+
+
+\subsection[Appl. space of metrics]{Application to the space of metrics}
+Consider a smooth Riemannian manifold $M$ of dimension $n$ with a fixed metric $g$. Fix two images $I,I':M\to\R$ that are `sufficiently smooth'. Introduce the notation
+\[
+U(\varphi)= \frac{1}{2\sigma^2}\|I\circ \varphi^{-1}-I'\|^2_{L^2}.
+\]
+The space of metrics on $M$ is an open, convex, positive cone in the Fréchet space of all smooth, symmetric 2-forms.
+Consider the distance $d$ defined as the infimum of the Ebin metric over the curves that connect $h$ and $k$ in $\Met(M)$. The Ebin metric is given by
+\[
+(h,k)_g = \int_M\tr(g^{-1}hg^{-1}k)\Vol_g.
+\]
+It is invariant under the pullback action of the diffeomorphism group $\cD$. It is positive definite and therefore, it defines a linear injective mapping from the tangent space of $\Met(M)$ to its dual, but the same linear mapping is in fact never surjective~\cite{clarke2009metric}. Hence, the Ebin metric is a weak structure.
+
+The result that we aim for is the following existence theorem: The minimization problem
+\[
+\min_{\varphi\in \cD}\{ U(\varphi)+d(\varphi_*g,g)\}
+\]
+for some distance function $d$ on the space of Riemannian metrics has a solution in the group of diffeomorphisms $\cD$. 
+
+\subsubsection*{Diffeomorphisms and metrics}
+We always assume that $g$ is fixed on $M$, which is without boundary, and further that $M$ is compact. The group $\cD$ of smooth diffeomorphisms of a compact manifold $M$ is a strong ILH-Lie group modelled on the space $\{\Gamma(TM),\Gamma^s(TM)\}$, where $\Gamma(TM)$ is the Fréchet space of smooth vector spaces and $\Gamma^s(TM)$ is the Hilbert space of vector fields of
+Sobolev class $H^s$ for integers $s>\dim M +5$. There are more choices of smoothness of the diffeomorphisms, see~\cite{smolentsev2007spaces}. 
+
+Let $\cS$ denote set of symmetric (0,2)-tensors based at $x\in M$ and let $\cM_x$ be those tensors that induce a positive-definite scalar product on $T_xM$. The following completeness result holds: 
+
+\begin{teo}[{or Theorem 4.13 of~\cite{clarke2010riemannian}}]
+	For each $x\in M$, there exists a metric (in the sense of metric spaces) denoted by $\theta_x^g$ on the completion of $\cM_x$ such that the topology of the completion of $(\cM,d)$ agrees with the $L^1$ topology of $\theta_x^g$, that is, for each $\g_0,\g_1\in \overline{(\cM,d)}$, if
+	\[
+	\Theta_M(\g_0,\g_1):=\int_M \theta_x^g(\g_0,\g_1)\Vol_g,
+	\]
+	then the topology induced by $\Theta_M$ agrees with the topology of $\overline{(\cM,d)}$ and $\overline{(\cM,d)}$ is complete with respect to $\Theta_M$.
+\end{teo}
+
+As with any metric space, the completion of $(M,d)$ is a quotient space of the set of Cauchy sequences in $M$. We define a pseudometric, which for simplicity is also denoted by $d$, on Cauchy sequences in $M$ by 
+\[
+d(\{\g_k\},\{\tilde{\g}_k\})=\lim_{k\to\infty} d(\g_k,\tilde{\g}_k).
+\]
+Both $\theta_x^g$ and $\Theta_M$ extend their respective spaces in this way.
+
+\subsubsection*{The direct method}
+We sketch the general idea of the `direct method.' For details, see section 4.2 of~\cite{chang2005methods}. A functional $f:X\to\R\cup\{+\infty\}$ is said to be weakly coercive if the following holds: For a sequence $(x_j)$ in $X$ there is a constant $C$ such that
+\[
+f(x_j)<C \implies \exists (x_{k_j}) : x_{k_j}\rightharpoonup x,
+\]
+that is, boundedness of $f$ implies that there is a subsequence that converges weakly. If
+\[
+x_j\rightharpoonup x \implies f(x)\leq \liminf_j f(x_j)
+\]
+then $f$ is said to be weakly lower semi-continuous (wlsc).
+
+\begin{teo}
+	Let $X$ be a Banach space and assume that the functional  $f:X\to\R\cup\{+\infty\}$ is weakly coercive. If $f$ is also wlsc then $\min\{f(x):x\in X\}$ admits a solution.
+\end{teo}
+
+
 
 \newpage
 \appendix
@@ -988,7 +1063,7 @@ whole group $\Diff(M)$. Indeed, the change of variables in the integral
 would give the Jacobian det$(\partial \eta/dx)$ as an extra factor, which, however, is identically equal to 1 for a volume-preserving map $\eta\in S\Diff(M)$. Note that for a flat manifold $M$ this metric is a flat metric on $\Diff(M)$; a neighborhood of the identity $\id\in\Diff(M)$ with the metric $\langle\cdot,\cdot\rangle_\Diff$ is isometric to a neighborhood in the pre-Hilbert space of smooth ``vector-function'' $\eta:M\to M$ with the $L^2$ inner product $\langle\cdot,\cdot\rangle_{L^2(M)}$.
 
 \newpage
-\bibliographystyle{apalike} %{nar}
+\bibliographystyle{apalike} %{nar} %{alpha}
 \bibliography{refs}
 
 \end{document}

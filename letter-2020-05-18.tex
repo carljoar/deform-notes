@@ -1,0 +1,171 @@
+\documentclass{article}
+\usepackage[a5paper, margin=0.5in]{geometry}
+\usepackage{amsmath,amsfonts,amssymb,amsthm,amsbsy}
+\usepackage{parskip}
+\usepackage{cite}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true,allcolors=black}
+
+\theoremstyle{plain}
+\begingroup
+\newtheorem{teo}{Theorem}[section]
+\newtheorem{prop}[teo]{Proposition}
+\newtheorem{cor}[teo]{Corollary}
+\newtheorem{lem}[teo]{Lemma}
+\newtheorem{con}[teo]{Conjecture}
+\endgroup
+
+\theoremstyle{definition}
+\begingroup
+\newtheorem{defin}[teo]{Definition}
+\newtheorem{oss}[teo]{Remark}
+\newtheorem{exam}[teo]{Example}
+\newtheorem{claim}{Claim}
+\endgroup
+
+\numberwithin{equation}{section}
+\renewcommand{\theequation}{\thesection.\arabic{equation}}
+\renewcommand{\thefootnote}{\fnsymbol{footnote}}
+
+\newcommand{\N}{\ensuremath{\mathbb{N}}}
+\newcommand{\Z}{\ensuremath{\mathbb{Z}}}
+\newcommand{\R}{\ensuremath{\mathbb{R}}}
+\newcommand{\g}{\ensuremath{\textsl{g}}}
+\newcommand{\Alt}{\ensuremath{\mathrm{Alt}}}
+\newcommand{\Diff}{\ensuremath{\mathrm{Diff}}}
+\newcommand{\Met}{\ensuremath{\mathrm{Met}}}
+\newcommand{\Div}{\ensuremath{\mathrm{div}}}
+\newcommand{\Vol}{\ensuremath{\mathrm{vol}}}
+\newcommand{\id}{\ensuremath{\mathrm{id}}}
+\newcommand{\Ad}{\ensuremath{\mathrm{Ad}}}
+\newcommand{\ad}{\ensuremath{\mathrm{ad}}}
+\newcommand{\tr}{\ensuremath{\mathrm{tr}}}
+\newcommand{\cD}{\ensuremath{\mathcal{D}}}
+\newcommand{\cL}{\ensuremath{\mathcal{L}}}
+\newcommand{\cM}{\ensuremath{\mathcal{M}}}
+\newcommand{\cS}{\ensuremath{\mathcal{S}}}
+\newcommand{\mf}{\ensuremath{\mathfrak}}
+
+\title{Gradient Flows on Riemannian Manifolds}
+\author{CJK et al.}
+\begin{document}
+\section*{Finding minimizers}
+Consider a smooth Riemannian manifold $M$ of dimension $n$ with a fixed metric $g$. Fix two images $I,I':M\to\R$ that are `sufficiently smooth'. Introduce the notation
+\[
+U(\varphi)= \frac{1}{2\sigma^2}\|I\circ \varphi^{-1}-I'\|^2_{L^2}.
+\]
+The result that we aim for is the following existence theorem: The minimization problem
+\[
+\min_{\varphi\in \cD}\{ U(\varphi)+d(\varphi_*g,g)\}
+\]
+for some distance function $d$ on the space of Riemannian metrics has a solution in the group of diffeomorphisms $\cD$. 
+
+\subsection*{Diffeomorphisms and metrics}
+We always assume that $g$ is fixed on $M$, which is without boundary, and further that $M$ is compact. The group $\cD$ of smooth diffeomorphisms of a compact manifold $M$ is a strong ILH-Lie group modelled on the space $\{\Gamma(TM),\Gamma^s(TM)\}$, where $\Gamma(TM)$ is the Fréchet space of smooth vector spaces and $\Gamma^s(TM)$ is the Hilbert space of vector fields of
+Sobolev class $H^s$ for integers $s>\dim M +5$. There are more choices of smoothness of the diffeomorphisms, see~\cite{smolentsev2007spaces}. 
+
+Let $\cS$ denote set of symmetric (0,2)-tensors based at $x\in M$ and let $\cM_x$ be those tensors that induce a positive-definite scalar product on $T_xM$. The following completeness result holds: 
+
+\begin{teo}[{or Theorem 4.13 of~\cite{clarke2010riemannian}}]
+For each $x\in M$, there exists a metric (in the sense of metric spaces) denoted by $\theta_x^g$ on the completion of $\cM_x$ such that the topology of the completion of $(\cM,d)$ agrees with the $L^1$ topology of $\theta_x^g$, that is, for each $\g_0,\g_1\in \overline{(\cM,d)}$, if
+\[
+\Theta_M(\g_0,\g_1):=\int_M \theta_x^g(\g_0,\g_1)\Vol_g,
+\]
+then the topology induced by $\Theta_M$ agrees with the topology of $\overline{(\cM,d)}$ and $\overline{(\cM,d)}$ is complete with respect to $\Theta_M$.
+\end{teo}
+
+As with any metric space, the completion of $(M,d)$ is a quotient space of the set of Cauchy sequences in $M$. We define a pseudometric, which for simplicity is also denoted by $d$, on Cauchy sequences in $M$ by 
+\[
+d(\{\g_k\},\{\tilde{\g}_k\})=\lim_{k\to\infty} d(\g_k,\tilde{\g}_k).
+\]
+Both $\theta_x^g$ and $\Theta_M$ extend their respective spaces in this way.
+
+\subsection*{The direct method}
+We sketch the general idea of the `direct method.' For details, see section 4.2 of~\cite{chang2005methods}. A functional $f:X\to\R\cup\{+\infty\}$ is said to be weakly coercive if the following holds: For a sequence $(x_j)$ in $X$ there is a constant $C$ such that
+\[
+f(x_j)<C \implies \exists (x_{k_j}) : x_{k_j}\rightharpoonup x,
+\]
+that is, boundedness of $f$ implies that there is a subsequence that converges weakly. If
+\[
+x_j\rightharpoonup x \implies f(x)\leq \liminf_j f(x_j)
+\]
+then $f$ is said to be weakly lower semi-continuous (wlsc).
+
+\begin{teo}
+Let $X$ be a Banach space and assume that the functional  $f:X\to\R\cup\{+\infty\}$ is weakly coercive. If $f$ is also wlsc then $\min\{f(x):x\in X\}$ admits a solution.
+\end{teo}
+
+\subsubsection*{Application to LDDMM}
+
+\begin{lem}
+	\label{lem:impliesweak}
+	If $\varphi^n\to \varphi$ and $(\varphi^n)^{-1}\to (\varphi)^{-1}$ on compact sets and the sequence $\{|D\varphi^n|_\infty\}_\N$ is bounded we have $U(\varphi^n)\to U(\varphi)$.
+\end{lem}
+\begin{proof}
+	Choose a function $f$ with compact support which satisfies $\|I-f\|_{L^2}<\varepsilon$. Then, 
+	%
+	\begin{multline*}
+	\|I\circ (\varphi^n)^{-1} - I\circ \varphi^{-1}\|\\
+	=\|I\circ (\varphi^n)^{-1}- f\circ(\varphi^n)^{-1}+f\circ \varphi^{-1}- I\circ \varphi^{-1} -f\circ \varphi^{-1}+f\circ(\varphi^n)^{-1}\|\\
+	\leq \|I\circ (\varphi^n)^{-1}- f\circ(\varphi^n)^{-1}\|+\|f\circ \varphi^{-1}- I\circ \varphi^{-1}\|+\|f\circ \varphi^{-1}-f\circ(\varphi^n)^{-1}\|
+	\end{multline*}
+	%
+	By change of variables, $\|I\circ (\varphi^n)^{-1}- f\circ(\varphi^n)^{-1}\|=\|\sqrt{|\det D\varphi^n|}(I-f)\|$ and similarly, $\|I\circ \varphi^{-1}-f\circ\varphi^{-1}\|=\|\sqrt{|\det D\varphi|}(I-f)\|$. Apply that $\{|D\varphi^n|_\infty\}_\N$ is bounded and
+	\[
+	\|f\circ \varphi^{-1}-f\circ(\varphi^n)^{-1}\|\leq \left(\int_\Omega |f'|^2_\infty|(\varphi^n)^{-1}(x)-\varphi^{-1}(x)|^2dx\right)^{1/2}
+	\]
+	\[
+	=|f'|_\infty\left(\int_{\mathrm{supp}(f)} |(\varphi^n)^{-1}(x)-\varphi^{-1}(x)|^2dx\right)^{1/2}.
+	\]
+	We get
+	%
+	\begin{align*}
+	\|I\circ (\varphi^n)^{-1}- f\circ(\varphi^n)^{-1}\|&\ \leq C_1 \varepsilon \\
+	\|f\circ \varphi^{-1}- I\circ \varphi^{-1}\| &\ \leq C_2 \varepsilon \\
+	\|f\circ \varphi^{-1}-f\circ(\varphi^n)^{-1}\|&\ \leq |f'|_\infty\|(\varphi^n)^{-1}-\varphi^{-1}\|_{L^2(\mathrm{supp}\,f)} 
+	\end{align*}
+	%
+	for constants $C_1\geq \sqrt{|\det D\varphi^n|}$ and $C_2\geq \sqrt{|\det D\varphi|}$. Because of the uniform convergence of the diffeomorphisms, for large $n$, $|U(\varphi^n)-U(\varphi)|\leq C_3\varepsilon$ for some constant $C_3$. [Comment: add steps.]
+\end{proof}
+
+%We have $\partial_t\varphi_t= u_t\circ \varphi_t$.
+
+\begin{teo}
+	Let $\mathcal H$ be an admissible space  and $I,I'\in L^2(\Omega)$. Then there exists a minimizer to
+	\[
+	E(u)=\frac{1}{2}\int_0^1 |\dot{u}|_{\mathcal H}^2 dt + U(\varphi).
+	\]
+\end{teo}
+
+\begin{proof}
+	Consider a minimizing sequence $\{u_n\}_\N \in L^2([0,1],\mathcal{H})$ such that $E(u_n)\to \inf_u E(u)$. Since the functional $U$ is bounded from below, the sequence $\{u_n\}$ is bounded in the Hilbert space $L^2([0,1],\mathcal{H})$. Since bounded sets in Hilbert spaces are weakly compact, we can extract a subsequence that converges to some $u$. We show that $u$ is a minimizer. We have $\inf_u E(u)\leq E(u)$ by the definition of infimum, so it remains to show the converse.
+	
+	The Cauchy-Schwartz inequality on the Hilbert space $L^2([0,1],\mathcal{H})$ provides the following limit result:
+	\[
+	\langle u,u_n\rangle\leq |u|_{L^2}\,|u_n|_{L^2} \implies |u|^2\leq \liminf |u_n|^2_{L^2}.
+	\]
+	 
+	When $\varphi^n\to \varphi$ and $(\varphi^n)^{-1}\to (\varphi)^{-1}$ on compact sets and the sequence $\{|D\varphi^n|_\infty\}_\N$ is bounded we have weak convergence by Lemma~\ref{lem:impliesweak}. 
+	Therefore,
+	\begin{align*}
+	E(u^*) \ &= |u|^2_{L^2} + U(\varphi)\\
+	&\leq \liminf |u_n|^2_{L^2} + U(\varphi)\\
+	&= \liminf |u_n|^2_{L^2} + U(\varphi^n) = \lim_{n\to\infty} E(u_n)\\
+	&\leq \inf_n E(u_n).
+	\end{align*} 
+\end{proof}
+
+We wish to adapt this to our problem on the space of metrics.
+
+\subsection*{Weak structures}
+Consider the distance $d$ defined as the infimum of the Ebin metric over the curves that connect $h$ and $k$ in $\Met(M)$. The Ebin metric is given by
+\[
+(h,k)_g = \int_M\tr(g^{-1}hg^{-1}k)\Vol_g.
+\]
+It is invariant under the pullback action of the diffeomorphism group $\cD$. It is positive definite and therefore, it defines a linear injective mapping from the tangent space of $\Met(M)$ to its dual, but the same linear mapping is in fact never surjective~\cite{clarke2009metric}. Hence, the Ebin metric is a weak structure.
+
+
+	
+\bibliographystyle{alpha} % or nar or apalike
+\bibliography{refs}
+\end{document}

@@ -1,0 +1,132 @@
+\documentclass[a5paper,11pt,twoside]{article}
+\usepackage[lmargin=0.5in,rmargin=0.5in,bmargin=0.3in,tmargin=0.7in]{geometry}
+\usepackage{amsmath,amsfonts,amssymb,amsthm}
+\usepackage{color}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true,allcolors=black}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[RO]{\rightmark}
+\fancyhead[LE]{\leftmark}
+\fancyhead[RE,LO]{\thepage}
+\fancyfoot[CE,CO]{}
+\fancyfoot[LE,RO]{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+
+\theoremstyle{plain}
+\begingroup
+\newtheorem{teo}{Theorem}[section]
+\newtheorem{prop}[teo]{Proposition}
+\newtheorem{cor}[teo]{Corollary}
+\newtheorem{lem}[teo]{Lemma}
+\endgroup
+
+\newcommand{\N}{\ensuremath{\mathbb{N}}}
+\newcommand{\R}{\ensuremath{\mathbb{R}}}
+\newcommand{\X}{\ensuremath{\mathfrak{X}}}
+\newcommand{\Diff}{\ensuremath{\mathrm{Diff}}}
+\newcommand{\id}{\operatorname{id}}
+
+\theoremstyle{definition}
+\begingroup
+\newtheorem{defin}[teo]{Definition}
+\newtheorem{oss}[teo]{Remark}
+\newtheorem{exam}[teo]{Example}
+\newtheorem{claim}{Claim}
+\endgroup
+
+
+
+\title{Gradient flows regularized by the Riemannian stress tensor}
+\author{Carl-Joar Karlsson  \\ 
+	\small Department of Mathematical Sciences \\
+	\small Chalmers University of Technology and The University of Gothenburg\\
+	\small SE-41296 Gothenburg, Sweden}
+
+\begin{document}
+\maketitle
+\thispagestyle{empty}
+
+\section[Calculus of variations]{Calculus of variations on diffeomorphisms}
+We fix an open subset $\Omega$ in $\R^d$. Diffeomorphisms on $\Omega$ form a group under composition of functions. We denote this by $\Diff(\Omega)$.
+
+\subsection{LDDMM}
+
+\begin{defin}
+	A Banach space $V$ is called \textit{admissible} if it is embedded in $C_0^1(\Omega,\R^d)$, i.e., 
+	\[
+	\exists C>0: \ \forall v\in V\ \|v\|_V\geq C(\|v\|_\infty+\|Dv\|_\infty).
+	\]
+\end{defin}
+
+We say that a time dependent vector in $V$ belongs to the class $\X_V^p$ on $\Omega$ in the following sense:
+\[
+\X_V^p(\Omega)=\left\{v\in V:\ \int_0^1\|v(t)\|_V^p<\infty\right\}.
+\]
+The flow of $v$ defines a 1-parameter group of diffeomorphisms by the equation $\partial_t\varphi^v(t)=v\circ\varphi^v(t)$ and 
+\[
+G_V=\{\varphi\in \Diff(M): \varphi=\varphi^v(1)\ \mathrm{for\ some\ } v\in\X_V^1(\Omega)\}.
+\]
+Define a distance $d$ on $G_V$ by
+\[
+d(\psi,\phi)=\inf\{\|v\|_{\X_V^1}:\ \phi=\psi\circ\varphi^v(1)\}.
+\]
+
+\begin{teo}[Trouvé]
+$(G_V,d)$ is a complete metric space.
+\end{teo}
+
+
+
+\begin{teo}
+Let $V$ be an admissible Hilbert space embedded in $C_0^{p+1}(\Omega,\R^d)$ and assume that $U:G_V\to\R$ is bounded from below and continuous with respect to uniform convergence on compact sets of derivatives up to order $p$. Then
+\[
+\exists \varphi\in G_V:\ E(\varphi)=\min\{E(\phi):\ \phi\in G_V\}\quad \mathrm{for\ } E(\phi)=U(\phi)+d(\id,\phi)^2.
+\]
+\end{teo}
+
+Continuity for uniform convergence on compact sets means that if $\varphi_n\to\varphi$ uniformly on compact subsets of $\Omega$ and the same is true for all partial derivatives up to order $p$, then $U(\varphi_n)\to U(\varphi)$. This is the reason for requiring that $V$ be embedded in $C_0^p(\Omega)$. The below discussion explains why $V$ needs to be embedded in $C^{p+1}_0(\Omega)$.
+
+Define the set $\X_1^1(\Omega)$ of absolutely integrable functions from $[0,1]$ to $C_0^1(\Omega,\R^d)$. An element of $\X_1^1(\Omega)$ is a time dependent vector field $v(t,\cdot)$ such that for each $t$, $v(t):=v(t,\cdot)\in C_0^1(\Omega,\R^d)$ and
+\[
+\|v\|_{\X_1^1}:=\int_0^1\|v(t)\|_{1,\infty}dt<\infty,
+\]
+where $\|v(t)\|_{1,\infty}=\|v\|_\infty+\|Dv\|_\infty$.
+
+\begin{lem}
+If $v\in\X_1^1(\Omega)$ and $v^n$ is a bounded sequence in $\X_1^1(\Omega)$ which weakly converges to some element $v\in\X_1^1(\Omega)$, then, for all $t$ and for all compact subsets $Q$ of $\overline{\Omega}$,
+\[
+\lim_{n\to\infty}\max_{x\in Q}\left|\varphi^{v^n}(t)(x)-\varphi^{v}(t)(x)\right|=0.
+\]
+\end{lem}
+
+The above lemma can be generalized to higher orders of derivatives by proving the following estimate:
+\[
+\|\varphi^v(t)-\varphi^{u}(t)\|_{p,\infty}\leq C\left(\int_0^1\|u(t)\|_{p+1,\infty}dt\right)\int_0^t\|v-u\|_{p,\infty} dt
+\]
+That is, the variation in the $(p,\infty)$-norm of diffeomorphisms is controlled by the $(p+1,\infty)$-norm of one of the vector fields and the $(p,\infty)$-norm of both of the vector fields.
+
+
+\subsection{Gradient flows}
+\begin{defin}
+	Let $V$ be an admissible Hilbert space embedded in $C_0^p(\Omega,\R^d)$. We define the Eulerian differential $dU(\phi)\in V^*$ by
+	\[
+	dU(\phi)(v)=\partial_\varepsilon U(\varphi^v(\varepsilon)\circ \phi)|_{\varepsilon=0},\quad\mathrm{for\ all\ } v\in V,
+	\]
+	and we define the $V$-gradient $\nabla^VU(\phi)\in V$ by
+	\[
+	\langle \nabla^VU(\phi),v\rangle =dU(\phi)(v)\quad\forall v\in V.
+	\]
+\end{defin}
+
+The following proposition shows that we need a smoother embedding (by one order) to define the gradient at a time dependent vector field. In short, we can let $v=v(0,\cdot)$.
+
+\begin{prop}
+	If $V$ is an admissible Hilbert space embedded in $C_0^{p+1}(\Omega,\R^d)$ then $$dU(\phi)(v(0,\cdot))=\partial_\varepsilon U(\varphi^{v(0,\cdot)}(\varepsilon)\circ \phi).$$
+\end{prop}
+
+\end{document}
