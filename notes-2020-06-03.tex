@@ -54,12 +54,36 @@
 \section[Calculus of variations]{Calculus of variations on diffeomorphisms}
 We fix an open subset $\Omega$ in $\R^d$. Diffeomorphisms on $\Omega$ form a group under composition of functions. We denote this by $\Diff(\Omega)$.
 
-\subsection{LDDMM}
+If we let $U$ denote an open subset of a Banach space $V$ we may define a class of time dependent vector fields $[0,1]\times \overline{U}\to V$ that vanish on $\partial U$ and are Lipschitz with respect to the Banach space variable. Denote by $C(t)$ this Lipschitz constant. Furthermore, assume that
+\[
+\int_0^1\|v(r,x)\|_Vdr+\int_0^1 C(r)dr<\infty,
+\]
+for some fixed $x\in U$. Assume that $v$ belongs to this class of vector fields. We define the flow of $v$ as the function $(t,x)\mapsto\varphi^v(t)(x)$, where $\varphi^v(t)(x)$ is the solution to 
+\[ \partial_t y=v(t,y),\quad y(0)=x. \]
+The flow of $v$ is a homeomorphism of $U$ at all times. This is a consequence of Grönwall's lemma:
+
+\begin{lem}[Grönwall's]
+\label{gronwalls}
+For two functions $u,\alpha:I\to \R$, where $I$ is an interval containing zero and $u$ is bounded, assume that for some integrable function $g$,
+\[
+u(t)\leq g(t)+\left|\int_0^t\alpha(s)u(s)ds\right|,\quad \forall t\in I.
+\]
+Then, for all $t\in I$,
+\[
+u(t)\leq g(t)+\left|\int_0^t g(s)\alpha(s)\exp[\int_0^s\alpha(r)dr]ds\right|.
+\]
+If $g$ is constant, then
+\[
+u(t)\leq g\,\exp\left[\int_0^t\alpha(s)ds\right].
+\]
+\end{lem}
+
+\subsection{The analysis of LDDMM}
 
 \begin{defin}
 	A Banach space $V$ is called \textit{admissible} if it is embedded in $C_0^1(\Omega,\R^d)$, i.e., 
 	\[
-	\exists C>0: \ \forall v\in V\ \|v\|_V\geq C(\|v\|_\infty+\|Dv\|_\infty).
+	\exists C>0: \ \forall v\in V\quad \|v\|_V\geq C(\|v\|_\infty+\|Dv\|_\infty).
 	\]
 \end{defin}
 
@@ -89,13 +113,19 @@ Let $V$ be an admissible Hilbert space embedded in $C_0^{p+1}(\Omega,\R^d)$ and 
 \]
 \end{teo}
 
-Continuity for uniform convergence on compact sets means that if $\varphi_n\to\varphi$ uniformly on compact subsets of $\Omega$ and the same is true for all partial derivatives up to order $p$, then $U(\varphi_n)\to U(\varphi)$. This is the reason for requiring that $V$ be embedded in $C_0^p(\Omega)$. The below discussion explains why $V$ needs to be embedded in $C^{p+1}_0(\Omega)$.
+Continuity for uniform convergence on compact sets means that if $\varphi_n\to\varphi$ uniformly on compact subsets of $\Omega$ and the same is true for all partial derivatives up to order $p$, then $U(\varphi_n)\to U(\varphi)$. This is the reason for requiring that $V$ be embedded in $C_0^p(\Omega)$. 
+The below discussion explains why $V$ needs to be embedded in $C^{p+1}_0(\Omega)$.
+
 
 Define the set $\X_1^1(\Omega)$ of absolutely integrable functions from $[0,1]$ to $C_0^1(\Omega,\R^d)$. An element of $\X_1^1(\Omega)$ is a time dependent vector field $v(t,\cdot)$ such that for each $t$, $v(t):=v(t,\cdot)\in C_0^1(\Omega,\R^d)$ and
 \[
 \|v\|_{\X_1^1}:=\int_0^1\|v(t)\|_{1,\infty}dt<\infty,
 \]
-where $\|v(t)\|_{1,\infty}=\|v\|_\infty+\|Dv\|_\infty$.
+where $\|v(t)\|_{1,\infty}=\|v(t,\cdot)\|_\infty+\|Dv(t,\cdot)\|_\infty$. Since $\|v\|_{1,\infty}$ is an upper bound for the Lipschitz constant of $v$, the flow of $v$ is defined, and
+%
+\begin{equation}
+|\varphi^v(t)(x)-\varphi^v(t)(y)|\leq |x-y|\exp\left(\int_0^t\|v(s)\|_{1,\infty}ds\right).
+\end{equation}
 
 \begin{lem}
 If $v\in\X_1^1(\Omega)$ and $v^n$ is a bounded sequence in $\X_1^1(\Omega)$ which weakly converges to some element $v\in\X_1^1(\Omega)$, then, for all $t$ and for all compact subsets $Q$ of $\overline{\Omega}$,
@@ -103,15 +133,134 @@ If $v\in\X_1^1(\Omega)$ and $v^n$ is a bounded sequence in $\X_1^1(\Omega)$ whic
 \lim_{n\to\infty}\max_{x\in Q}\left|\varphi^{v^n}(t)(x)-\varphi^{v}(t)(x)\right|=0.
 \]
 \end{lem}
-
 The above lemma can be generalized to higher orders of derivatives by proving the following estimate:
 \[
 \|\varphi^v(t)-\varphi^{u}(t)\|_{p,\infty}\leq C\left(\int_0^1\|u(t)\|_{p+1,\infty}dt\right)\int_0^t\|v-u\|_{p,\infty} dt
 \]
 That is, the variation in the $(p,\infty)$-norm of diffeomorphisms is controlled by the $(p+1,\infty)$-norm of one of the vector fields and the $(p,\infty)$-norm of both of the vector fields.
 
+\subsubsection{Variation with respect to the vector field}
+We show that the solution to the equation
+\[
+\partial_t W(t)=\left(Dv\circ \varphi^v(t)\right)W(t)+h\circ \varphi^v(t)
+\]
+is
+\[
+\left.\partial_\varepsilon\right|_{\varepsilon=0}\varphi^{v+\varepsilon h}(t)=\lim_{\varepsilon\to 0}\frac{1}{\varepsilon}\left(\varphi^{v+\varepsilon h}(t)-\varphi^v(t)\right).
+\]
+Define
+\[
+a^\varepsilon(t)=\frac{1}{\varepsilon}\left(\varphi^{v+\varepsilon h}(t)-\varphi^v(t)\right)-W(t).
+\]
+Since $\partial_t\varphi^{v+\varepsilon h}=(v+\varepsilon h)\circ\varphi^{v+\varepsilon h}(t)$, we can express $a^\varepsilon(t)$ in the following way:
+%
+\begin{multline*}
+a^\varepsilon(t)=\int_0^t \frac{1}{\varepsilon}\left(v\circ\varphi^{v+\varepsilon h}(r)-v\circ\varphi^v(r)\right)dr+\int_0^t h\circ \varphi^{v+\varepsilon h}(r)dr \\-\int_0^t\partial_rW(r)dr
+\end{multline*}
+\begin{multline*}
+=\int_0^t \frac{1}{\varepsilon}\left(v\circ\varphi^{v+\varepsilon h}(r)-v\circ\varphi^v(r)\right)dr+\int_0^t h\circ \varphi^{v+\varepsilon h}(r)dr \\-\int_0^t\left(\left(Dv\circ \varphi^v(r)\right)W(r)+h\circ \varphi^v(r)\right)dr
+\end{multline*}
+\begin{multline*}
+=\int_0^t \frac{1}{\varepsilon}\left(v\circ\varphi^{v+\varepsilon h}(r)-v\circ\varphi^v(r)\right)dr\\+\int_0^t \left(h\circ \varphi^{v+\varepsilon h}(r)-h\circ \varphi^v(r)\right)dr \\-\int_0^t\left(Dv\circ \varphi^v(r)\right)W(r)dr
+\end{multline*}
+\begin{multline*}
+=\int_0^t \frac{1}{\varepsilon}\left(v\circ\varphi^{v+\varepsilon h}(r)-v\circ\varphi^v(r)\right)dr\\+\int_0^t \left(h\circ \varphi^{v+\varepsilon h}(r)-h\circ \varphi^v(r)\right)dr \\-\int_0^t\left(Dv\circ \varphi^v(r)\right)\left(\frac{1}{\varepsilon}\left(\varphi^{v+\varepsilon h}(r)-\varphi^v(r)\right)-a^\varepsilon(r)\right)dr
+\end{multline*}
+\begin{multline*}
+=\int_0^t\left(Dv\circ \varphi^v(r)\right)a^\varepsilon(r)dr\\+\frac{1}{\varepsilon}\int_0^t (v+\varepsilon h)\circ\left(\varphi^{v+\varepsilon h}(r)-\varphi^v(r)\right)dr \\-\frac{1}{\varepsilon}\int_0^t\left(Dv\circ \varphi^v(r)\right)\left(\varphi^{v+\varepsilon h}(r)-\varphi^v(r)\right)dr
+\end{multline*}
+%\begin{multline*}
+%=\int_0^t\big(Dv\circ \varphi^v(r)\big)a^\varepsilon(r)dr\\+\frac{1}{\varepsilon}\int_0^t (v+\varepsilon h- Dv\circ \varphi^v(r))\circ\left(\varphi^{v+\varepsilon h}(r)-\varphi^v(r)\right)dr.
+%\end{multline*}
+For $\delta>0$, define $\mu(t,\delta)=\max\{|Dv(t,x)-Dv(t,y)|: |x-y|\leq \delta\}.$ We have
+\[
+|v(t,x)-v(t,y)-Dv(t,x)(x-y)|\leq \mu(t,|x-y|)|x-y|.
+\]
+Then,
+%
+\begin{multline*}
+|a^\varepsilon(t)|\leq \left|\int_0^t\left(Dv\circ \varphi^v(r)\right)a^\varepsilon(r)dr\right|\\+\frac{1}{\varepsilon}\int_0^t \mu(t,|\varphi^{v+\varepsilon h}(r)-\varphi^v(r)|)\left|\varphi^{v+\varepsilon h}(r)-\varphi^v(r)\right|dr 
+\end{multline*}
+\begin{multline*}
+\leq \int_0^t\|v(r)\|_{1,\infty}|a^\varepsilon(r)|dr\\+\frac{1}{\varepsilon}\int_0^t \mu(t,|\varphi^{v+\varepsilon h}(r)-\varphi^v(r)|)\left|\varphi^{v+\varepsilon h}(r)-\varphi^v(r)\right|dr 
+\end{multline*}
 
-\subsection{Gradient flows}
+To proceed, we show that $|\varphi^{v+\varepsilon h}(t)(x)-\varphi^v(t)(x)|=\mathcal{O}(\varepsilon)$ using Grönwall's lemma and the following inequality:
+%
+\begin{multline*}
+|\varphi^{v+\varepsilon h}(t)(x)-\varphi^v(t)(x)|\\ \leq  \varepsilon\int_0^t\|h(r)\|_\infty dr+ \int_0^t\|v(r)\|_{1,\infty}\left|\varphi^{v+\varepsilon h}(r)(x)-\varphi^v(r)(x)\right|dr .
+\end{multline*}
+%
+That is, apply Grönwall's lemma (Lemma~\ref{gronwalls}) with $$u=|\varphi^{v+\varepsilon h}(\cdot)(x)-\varphi^v(\cdot)(x)|.$$
+We obtain
+%
+\begin{multline*}
+|\varphi^{v+\varepsilon h}(t)(x)-\varphi^v(t)(x)|\leq \\  \varepsilon\int_0^t\|h(r)\|_\infty dr 
++ \varepsilon\left|\int_0^t\|v(r)\|_{1,\infty}\left(\int_0^r\|h(s)\|_\infty ds\right)e^{\int_0^r \|v(s)\|_{1,\infty}ds} dr\right|.
+\end{multline*}
+%
+This leads to the estimate
+%
+\begin{equation}
+\label{estimate}
+|a^\varepsilon(t)|\leq \int_0^t\|v(r)\|_{1,\infty}|a^\varepsilon(r)|dr + C\int_0^t\mu(r,C\varepsilon)dr,
+\end{equation}
+%
+where $C$ is independent of $\varepsilon$. Since $\mu(r,\delta)\to 0$ for every fixed $r$ and since $\mu(r,\delta)\leq 2\|v(r)\|_{1,\infty}$, it follows from the dominated convergence theorem that
+\[
+\lim_{\varepsilon\to 0}\int_0^t \mu(r,C\varepsilon)dr=0.
+\]
+Grönwall's lemma on~(\ref{estimate}) therefore implies that $|a^\varepsilon(t)|\to 0$ as $\varepsilon\to 0$, which means that the solution to
+\[
+\partial_t W(t)=\left(Dv\circ \varphi^v(t)\right)W(t)+h\circ \varphi^v(t)
+\]
+(for $W$ unknown) is
+\[
+\left.\partial_\varepsilon\varphi^{v+\varepsilon h}(t)\right|_{\varepsilon=0}.
+\]
+In fact, we can prove the following theorem.
+
+\begin{teo}
+Let $v,h\in \X_1^1(\Omega)$. Then, for $x\in\Omega$,
+\[
+\left.\partial_\varepsilon\varphi^{v+\varepsilon h}(t)\right|_{\varepsilon=0}=D\varphi^v(t)\int_0^t\left(\big(D\varphi^v(-r)\big)h\right)\circ \varphi^v(r) dr.
+\]
+\end{teo}
+
+\begin{proof}
+Write $W(t)=D\varphi^v(t)(x)A(t)$, where $A(0)=0$. Then
+\begin{multline*}
+\partial_tW(t)=\partial_t\big(D\varphi^v(t)(x)A(t)\big)=D\big(v\circ \varphi^v(t)\big)A(t)+D\varphi^v(t)(x)\partial_tA(t)\\
+=\big(Dv\circ \varphi^v(t)\big)W(t)+D\varphi^v(t)(x)\partial_tA(t).
+\end{multline*}
+%
+Compare this to the defining equation for $W(t)$, that is, to
+\[
+\partial_t W(t)=\left(Dv\circ \varphi^v(t)\right)W(t)+h\circ \varphi^v(t).
+\]
+We conclude that
+\[
+\partial_tA(t)=\big(D\varphi^v(t)(x)\big)^{-1}h\circ \varphi^v(t)
+\]
+Recall that
+\begin{multline*}
+\id_\Omega=D\left([\varphi^v(t)]^{-1}\circ\varphi^v(t)\right)=\left(D[\varphi^v(t)]^{-1}\circ \varphi^v(t)\right)D\varphi^v(t) \\
+\implies \big(D\varphi^v(t)(x)\big)^{-1}=D[\varphi^v(t)]^{-1}\circ \varphi^v(t)=D[\varphi^v(-t)]\circ \varphi^v(t),
+\end{multline*}
+which implies that (omitting the square brackets)
+\[
+\partial_tA(t)=\big(D\varphi^v(-t)h\big)\circ \varphi^v(t)
+\]
+or
+\[
+A(t)=\int_0^t\big(D\varphi^v(-r)h\big)\circ \varphi^v(r) dr.
+\]
+This yields the formula in the theorem.
+\end{proof}
+
+
+
+\subsection{Gradient flows in admissible Hilbert spaces}
 \begin{defin}
 	Let $V$ be an admissible Hilbert space embedded in $C_0^p(\Omega,\R^d)$. We define the Eulerian differential $dU(\phi)\in V^*$ by
 	\[
