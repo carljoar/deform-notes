@@ -29,6 +29,7 @@
 \newcommand{\R}{\ensuremath{\mathbb{R}}}
 \newcommand{\X}{\ensuremath{\mathfrak{X}}}
 \newcommand{\Diff}{\ensuremath{\mathrm{Diff}}}
+\newcommand{\Met}{\ensuremath{\mathrm{Met}}}
 \newcommand{\id}{\operatorname{id}}
 
 \theoremstyle{definition}
@@ -91,7 +92,7 @@ We say that a time dependent vector in $V$ belongs to the class $\X_V^p$ on $\Om
 \[
 \X_V^p(\Omega)=\left\{v\in V:\ \int_0^1\|v(t)\|_V^p<\infty\right\}.
 \]
-The flow of $v$ defines a 1-parameter group of diffeomorphisms by the equation $\partial_t\varphi^v(t)=v\circ\varphi^v(t)$ and 
+The flow of $v$ defines a 1-parameter group of diffeomorphisms by the equation $\partial_t\varphi^v(t)=v\circ\varphi^v(t)$ and the following, too, is a group:
 \[
 G_V=\{\varphi\in \Diff(M): \varphi=\varphi^v(1)\ \mathrm{for\ some\ } v\in\X_V^1(\Omega)\}.
 \]
@@ -100,14 +101,14 @@ Define a distance $d$ on $G_V$ by
 d(\psi,\phi)=\inf\{\|v\|_{\X_V^1}:\ \phi=\psi\circ\varphi^v(1)\}.
 \]
 
-\begin{teo}[Trouvé]
+\begin{teo}[Trouvé, 1998]
 $(G_V,d)$ is a complete metric space.
 \end{teo}
 
 
 
 \begin{teo}
-Let $V$ be an admissible Hilbert space embedded in $C_0^{p+1}(\Omega,\R^d)$ and assume that $U:G_V\to\R$ is bounded from below and continuous with respect to uniform convergence on compact sets of derivatives up to order $p$. Then
+Let $V$ be an admissible Hilbert space embedded in the space $C_0^{p+1}(\Omega,\R^d)$ and assume that $U:G_V\to\R$ is bounded from below and continuous with respect to uniform convergence on compact sets of derivatives up to order $p$. Then
 \[
 \exists \varphi\in G_V:\ E(\varphi)=\min\{E(\phi):\ \phi\in G_V\}\quad \mathrm{for\ } E(\phi)=U(\phi)+d(\id,\phi)^2.
 \]
@@ -117,9 +118,9 @@ Continuity for uniform convergence on compact sets means that if $\varphi_n\to\v
 The below discussion explains why $V$ needs to be embedded in $C^{p+1}_0(\Omega)$.
 
 
-Define the set $\X_1^1(\Omega)$ of absolutely integrable functions from $[0,1]$ to $C_0^1(\Omega,\R^d)$. An element of $\X_1^1(\Omega)$ is a time dependent vector field $v(t,\cdot)$ such that for each $t$, $v(t):=v(t,\cdot)\in C_0^1(\Omega,\R^d)$ and
+Define the set $\X_1^t(\Omega)$ of absolutely integrable functions from $[0,t]$ to $C_0^1(\Omega,\R^d)$. An element of $\X_1^t(\Omega)$ is a time dependent vector field $v(t,\cdot)$ such that for each $t$, $v(t):=v(t,\cdot)\in C_0^1(\Omega,\R^d)$ and
 \[
-\|v\|_{\X_1^1}:=\int_0^1\|v(t)\|_{1,\infty}dt<\infty,
+\|v\|_{\X_1^t}:=\int_0^t\|v(t)\|_{1,\infty}dt<\infty,
 \]
 where $\|v(t)\|_{1,\infty}=\|v(t,\cdot)\|_\infty+\|Dv(t,\cdot)\|_\infty$. Since $\|v\|_{1,\infty}$ is an upper bound for the Lipschitz constant of $v$, the flow of $v$ is defined, and
 %
@@ -127,20 +128,23 @@ where $\|v(t)\|_{1,\infty}=\|v(t,\cdot)\|_\infty+\|Dv(t,\cdot)\|_\infty$. Since 
 |\varphi^v(t)(x)-\varphi^v(t)(y)|\leq |x-y|\exp\left(\int_0^t\|v(s)\|_{1,\infty}ds\right).
 \end{equation}
 
-\begin{lem}
-If $v\in\X_1^1(\Omega)$ and $v^n$ is a bounded sequence in $\X_1^1(\Omega)$ which weakly converges to some element $v\in\X_1^1(\Omega)$, then, for all $t$ and for all compact subsets $Q$ of $\overline{\Omega}$,
+\begin{lem}\label{pointwise}
+If $v\in\X_1^T(\Omega)$ and $v^n$ is a bounded sequence in $\X_1^T(\Omega)$ which weakly converges to some element $v\in\X_1^1(\Omega)$, then, for all $t\in[0,T]$ and for all compact subsets $Q$ of $\overline{\Omega}$,
 \[
 \lim_{n\to\infty}\max_{x\in Q}\left|\varphi^{v^n}(t)(x)-\varphi^{v}(t)(x)\right|=0.
 \]
 \end{lem}
 The above lemma can be generalized to higher orders of derivatives by proving the following estimate:
-\[
+%
+\begin{equation} 
+\label{eq:estimate}
 \|\varphi^v(t)-\varphi^{u}(t)\|_{p,\infty}\leq C\left(\int_0^1\|u(t)\|_{p+1,\infty}dt\right)\int_0^t\|v-u\|_{p,\infty} dt
-\]
+\end{equation}
+%
 That is, the variation in the $(p,\infty)$-norm of diffeomorphisms is controlled by the $(p+1,\infty)$-norm of one of the vector fields and the $(p,\infty)$-norm of both of the vector fields.
 
 \subsubsection{Variation with respect to the vector field}
-We show that the solution to the equation
+Lemma~\ref{pointwise} and~(\ref{eq:estimate}) are justified in this section. We first show that the solution to the equation
 \[
 \partial_t W(t)=\left(Dv\circ \varphi^v(t)\right)W(t)+h\circ \varphi^v(t)
 \]
@@ -185,7 +189,7 @@ Then,
 \leq \int_0^t\|v(r)\|_{1,\infty}|a^\varepsilon(r)|dr\\+\frac{1}{\varepsilon}\int_0^t \mu(t,|\varphi^{v+\varepsilon h}(r)-\varphi^v(r)|)\left|\varphi^{v+\varepsilon h}(r)-\varphi^v(r)\right|dr 
 \end{multline*}
 
-To proceed, we show that $|\varphi^{v+\varepsilon h}(t)(x)-\varphi^v(t)(x)|=\mathcal{O}(\varepsilon)$ using Grönwall's lemma and the following inequality:
+To proceed, we show that $|\varphi^{v+\varepsilon h}(t)(x)-\varphi^v(t)(x)|=\mathcal{O}(\varepsilon)$ using Grön\-wall's lemma and the following inequality:
 %
 \begin{multline*}
 |\varphi^{v+\varepsilon h}(t)(x)-\varphi^v(t)(x)|\\ \leq  \varepsilon\int_0^t\|h(r)\|_\infty dr+ \int_0^t\|v(r)\|_{1,\infty}\left|\varphi^{v+\varepsilon h}(r)(x)-\varphi^v(r)(x)\right|dr .
@@ -242,14 +246,14 @@ We conclude that
 \[
 \partial_tA(t)=\big(D\varphi^v(t)(x)\big)^{-1}h\circ \varphi^v(t)
 \]
-Recall that
+Recall that $\varphi^v(-t):\Omega\to\Omega$ is the inverse of $\varphi^v(t)$, and
 \begin{multline*}
 \id_\Omega=D\left([\varphi^v(t)]^{-1}\circ\varphi^v(t)\right)=\left(D[\varphi^v(t)]^{-1}\circ \varphi^v(t)\right)D\varphi^v(t) \\
 \implies \big(D\varphi^v(t)(x)\big)^{-1}=D[\varphi^v(t)]^{-1}\circ \varphi^v(t)=D[\varphi^v(-t)]\circ \varphi^v(t),
 \end{multline*}
 which implies that (omitting the square brackets)
 \[
-\partial_tA(t)=\big(D\varphi^v(-t)h\big)\circ \varphi^v(t)
+\partial_tA(t)=\big(D\varphi^v(-t)\circ \varphi^v(t)\big)\big(h\circ  \varphi^v(t)\big)=\big(D\varphi^v(-t)h\big)\circ \varphi^v(t)
 \]
 or
 \[
@@ -258,11 +262,56 @@ A(t)=\int_0^t\big(D\varphi^v(-r)h\big)\circ \varphi^v(r) dr.
 This yields the formula in the theorem.
 \end{proof}
 
+\begin{proof}[Proof of Lemma~\ref{pointwise}]
+We compute
+\begin{align*}
+\left|\varphi^u(t)(x)-\varphi^v(t)(x)\right| =& \left|\int_0^t u\circ \varphi^u(r)(x)-v\circ \varphi^v(r)(x)\ dr\right|\\
+\leq & \left|\int_0^t u\circ \varphi^u(r)(x)-v\circ \varphi^u(r)(x)\ dr\right|\\
+&\quad +\int_0^t \left|v\circ \varphi^u(r)(x)-v\circ \varphi^v(r)(x)\right| dr\\
+\leq & \left|\int_0^t u\circ \varphi^u(r)(x)-v\circ \varphi^u(r)(x)\ dr\right|\\
+&\quad +\int_0^t\|v(r)\|_{1,\infty} \left|\varphi^u(r)(x)-\varphi^v(r)(x)\right| dr
+\end{align*}
+We apply Grönwall's lemma. In the language of Grönwall's lemma, we use
+\[
+u(t)=\left|\varphi^u(t)(x)-\varphi^v(t)(x)\right|,\qquad \alpha(t)=\|v(t)\|_{1,\infty}
+\]
+and
+\[
+g(t)=\left|\int_0^t u\circ \varphi^u(r)(x)-v\circ \varphi^u(r)(x)\ dr\right|.
+\]
+Then
+\[
+u(t)\leq g(t)+\left|\int_0^t \alpha(s) g(s) e^{\int_0^s\alpha(r)dr}ds\right|.
+\]
+Moreover,
+\[
+g(t)\leq \int_0^t\|u(r,\cdot)-v(r,\cdot)\|_\infty dr
+\]
+This yields
+\begin{multline*}
+\left|\varphi^u(t)(x)-\varphi^v(t)(x)\right|\leq\\
+\left(1+\int_0^t \|v(s)\|_{1,\infty}e^{\int_0^s\|v(r)\|_{1,\infty}dr}ds\right)\int_0^t\|u(r,\cdot)-v(r,\cdot)\|_\infty dr,
+\end{multline*}
+which shows that $v\mapsto\varphi^v(t)$ is Lipschitz for $\|\cdot\|_{\X_1^t}$. Next, consider the linear map
+\[
+u\mapsto \int_0^t u\circ \varphi^v(r)\,dr,
+\]
+which is continuous, because
+\[
+\left|\int_0^t u\circ \varphi^v(r)\,dr\right|\leq \int_0^t\|u(r)\|_{1,\infty}dr\leq \|u\|_{\X_1^t}
+\]
+[TODO. Younes~L., \textit{Shapes and diffeomorphisms}, 2010, p. 170.]
+\end{proof}
 
 
 \subsection{Gradient flows in admissible Hilbert spaces}
+Whenever $V$ is an admissible Hilbert space continuously embedded in $C_0^p(\Omega,\R^d)$, the group $G_V$ is a subset of 
+\[
+G_{p,\infty}=\{\varphi\in\Diff(\Omega): \|\varphi-\id\|_{p,\infty}<\infty, \|\varphi^{-1}-\id\|_{p,\infty}<\infty\}.
+\]
+
 \begin{defin}
-	Let $V$ be an admissible Hilbert space embedded in $C_0^p(\Omega,\R^d)$. We define the Eulerian differential $dU(\phi)\in V^*$ by
+	Let $V$ be an admissible Hilbert space continuously embedded in $C_0^p(\Omega,\R^d)$. We define the Eulerian differential $dU(\phi)\in V^*$ by
 	\[
 	dU(\phi)(v)=\partial_\varepsilon U(\varphi^v(\varepsilon)\circ \phi)|_{\varepsilon=0},\quad\mathrm{for\ all\ } v\in V,
 	\]
@@ -272,10 +321,84 @@ This yields the formula in the theorem.
 	\]
 \end{defin}
 
-The following proposition shows that we need a smoother embedding (by one order) to define the gradient at a time dependent vector field. In short, we can let $v=v(0,\cdot)$.
+The kernel $K$ of $V$ provides the relation $\nabla^VU(\phi)=KdU(\phi).$
+
+\begin{defin}
+A function $U:G_{p,\infty}\to \R$ is called $(p,\infty)$-Lipschitz if for all $\varphi\in G_{p,\infty}$ there exists positive constants $\varepsilon(\varphi)$ and $C(\varphi)$ such that
+\begin{multline*}
+\|\psi-\varphi\|_{p,\infty}<\infty\quad\mathrm{and}\quad \|\phi-\varphi\|_{p,\infty}<\infty\\
+\implies |U(\psi)-U(\phi)|\leq C(\varphi)\|\psi-\phi\|_{p,\infty}
+\end{multline*}
+\end{defin}
+
+The following proposition shows that we need a smoother embedding (by one order, again because of~(\ref{eq:estimate}) to define the gradient at a time dependent vector field. In short, we can let $v(0,\cdot)=v$.
 
 \begin{prop}
-	If $V$ is an admissible Hilbert space embedded in $C_0^{p+1}(\Omega,\R^d)$ then $$dU(\phi)(v(0,\cdot))=\partial_\varepsilon U(\varphi^{v(0,\cdot)}(\varepsilon)\circ \phi).$$
+\label{prop:gradient}
+	Assume that $U$ is $(p,\infty)$-Lipschitz and that $V$ is an admissible Hilbert space continuously embedded in  $C_0^{p+1}(\Omega,\R^d)$. For time dependent vector fields $v$ such that
+	\[
+	\lim_{\varepsilon\to 0}\frac{1}{\varepsilon}\int_0^\varepsilon\|v(t,\cdot)-v(0,\cdot)\|_Vdt=0
+	\]
+	we have
+	\[
+	dU(\phi)(v(0,\cdot))=\left.\partial_\varepsilon U(\varphi^{v(0,\cdot)}(\varepsilon)\circ \phi)\right|_{\varepsilon=0}.
+	\]
 \end{prop}
+
+To the gradient, we associate a gradient descent process, namely, the flow defined by
+\[
+\partial_t\varphi(t)=-\nabla^V U(\varphi(t)).
+\]
+Whenever the integral curve of this vector field is finite, we obtain a curve in $G_V$ along which $U$ decreases, since, assuming proposition~\ref{prop:gradient} applies,
+\[
+\partial_tU(\varphi(t))=\langle \nabla^VU(\varphi(t)),\partial_t\varphi(t)\rangle=-\|\nabla^VU(\varphi(t))\|^2_V.
+\]
+
+
+\subsection{Regularizing on the space of metrics}
+Let $(M,g)$ be a Riemannian manifold. Introduce the distance $d$ on the space of metrics. We want to minimize
+%
+\begin{equation}
+\label{mainfunctional}
+E(\varphi)=\frac{1}{2\sigma^2}\|I\circ\varphi^{-1}-J\|_{L^2}^2+ d(\varphi_*g,g)^2,
+\end{equation}
+%
+where $I,J:M\to\R$ are `sufficiently smooth' functions and $\varphi_*$ is the tangent map, or push-forward, of $\varphi$. 
+
+Notice that $E\geq 0$, which means that we can consider a sequence of metrics $(h^k)_{k=1}^\infty$, generated as
+\[ h^k=\varphi^k_*g,\]
+such that $E(\varphi^k)\to \inf E$ as $k\to\infty$. We would like to show that a minimizer of $E$ exists on the orbit of the push-forward action on the space of metrics.
+
+QUESTION: In which space should variations be considered? In $\Diff(M)$? Or is the variation just a variation of $t$ (that is, of $\varphi(t)$)? A flow of a vector field is given by 
+%
+\begin{equation} 
+\label{eq:vectorgenerator}
+\partial_t\varphi^v(t)=v\circ\varphi^v(t)
+\end{equation}
+%
+and that defines an orbit $h(t)=\varphi^v_*(t)g$, but if we consider a variation on the diffeomorphisms, we are `free' from the vector field equation~(\ref{eq:vectorgenerator}).  On the other hand, the gradient provides the structure of the vector field, namely
+\[
+\partial_t\varphi^\xi(t)=\xi\circ\varphi^\xi(t),\quad \xi=A^{-1}J(dE).
+\]
+
+Here, $\langle p,v\cdot q\rangle=\langle J,v\rangle$ defines the momentum map $J:T^*Q\to\mathfrak g^*$.
+
+Is a variation on the space of metrics equivalent to a variation on the group of diffeomorphisms? I suppose that would be dependent on the functional. If the functional is 'degenerate' in some way (in one of the spaces), then that is a problem.
+
+FORMULATION ATTEMPT: For
+\[
+h(t)=\varphi_*(t)g\quad \exists t_0 : h(t_0)\mathrm{\ minimizes\ }E.
+\]
+
+FORMULATION ATTEMPT: The flow of $\partial_t\varphi(t)=\nabla E(\varphi)$, where $E$ is given by~(\ref{mainfunctional}), defines an orbit...
+
+FORMULATION ATTEMPT: For a sequence of metrics $h^k$ on the orbit of the push-forward action $\Diff(M)\times \Met(M)\to\Met(M)$ there exists a metric $h\in(h^k)$ such that 
+\[
+E(\varphi)=\inf E,\quad \mathrm{where\ } h=\varphi_*g.
+\]
+
+The functional $E$ has an infimum on $G_V$, since it is bounded from below.
+Consider a minimizing sequence $h^k=\varphi^k_*g$, that is, a sequence such that \[E(\varphi^k)\to\inf E\quad\mathrm{as}\ k\to\infty.\]
+Then
 
 \end{document}
