@@ -1322,8 +1322,10 @@ d(\psi,\phi)=\inf\{\|v\|_{\X_V^1}:\ \phi=\psi\circ\varphi^v(1)\}.
 \end{teo}
 
 
+We will prove the following theorem using a number of lemmas stated in the below.
 
 \begin{teo}
+\label{teo:minimizerLDDMM}
 	Let $V$ be an admissible Hilbert space embedded in the space $C_0^{p+1}(\Omega,\R^d)$ and assume that $U:G_V\to\R$ is bounded from below and continuous with respect to uniform convergence on compact sets of derivatives up to order $p$. Then
 	\[
 	\exists \varphi\in G_V:\ E(\varphi)=\min\{E(\phi):\ \phi\in G_V\}\quad \mathrm{for\ } E(\phi)=U(\phi)+d(\id,\phi)^2.
@@ -1341,6 +1343,7 @@ Define the set $\X_1^t(\Omega)$ of absolutely integrable functions from $[0,t]$ 
 where $\|v(t)\|_{1,\infty}=\|v(t,\cdot)\|_\infty+\|Dv(t,\cdot)\|_\infty$. Since $\|v\|_{1,\infty}$ is an upper bound for the Lipschitz constant of $v$, the flow of $v$ is defined, and
 %
 \begin{equation}
+\label{eq:phi-Lipschitz}
 |\varphi^v(t)(x)-\varphi^v(t)(y)|\leq |x-y|\exp\left(\int_0^t\|v(s)\|_{1,\infty}ds\right).
 \end{equation}
 
@@ -1359,7 +1362,59 @@ The above lemma can be generalized to higher orders of derivatives by proving th
 %
 That is, the variation in the $(p,\infty)$-norm of diffeomorphisms is controlled by the $(p+1,\infty)$-norm of one of the vector fields and the $(p,\infty)$-norm of both of the vector fields.
 
-\subsubsection{Variation with respect to the vector field}
+
+\begin{proof}[Proof of Lemma~\ref{pointwise}]
+	We compute
+	\begin{align*}
+	\left|\varphi^u(t)(x)-\varphi^v(t)(x)\right| =& \left|\int_0^t u\circ \varphi^u(r)(x)-v\circ \varphi^v(r)(x)\ dr\right|\\
+	\leq & \left|\int_0^t u\circ \varphi^u(r)(x)-v\circ \varphi^u(r)(x)\ dr\right|\\
+	&\quad +\int_0^t \left|v\circ \varphi^u(r)(x)-v\circ \varphi^v(r)(x)\right| dr\\
+	\leq & \left|\int_0^t u\circ \varphi^u(r)(x)-v\circ \varphi^u(r)(x)\ dr\right|\\
+	&\quad +\int_0^t\|v(r)\|_{1,\infty} \left|\varphi^u(r)(x)-\varphi^v(r)(x)\right| dr
+	\end{align*}
+	We apply Grönwall's lemma. In the language of Grönwall's lemma, we use
+	\[
+	u(t)=\left|\varphi^u(t)(x)-\varphi^v(t)(x)\right|,\qquad \alpha(t)=\|v(t)\|_{1,\infty}
+	\]
+	and
+	\[
+	g(t)=\left|\int_0^t u\circ \varphi^u(r)(x)-v\circ \varphi^u(r)(x)\ dr\right|.
+	\]
+	Then
+	\[
+	u(t)\leq g(t)+\left|\int_0^t \alpha(s) g(s) e^{\int_0^s\alpha(r)dr}ds\right|.
+	\]
+	Moreover,
+	\[
+	g(t)\leq \int_0^t\|u(r,\cdot)-v(r,\cdot)\|_\infty dr
+	\]
+	This yields
+	\begin{multline}\label{eq:v-Lipschitz}
+	\left|\varphi^u(t)(x)-\varphi^v(t)(x)\right|\leq\\
+	\left(1+\int_0^t \|v(s)\|_{1,\infty}e^{\int_0^s\|v(r)\|_{1,\infty}dr}ds\right)\int_0^t\|u(r,\cdot)-v(r,\cdot)\|_\infty dr,
+	\end{multline}
+	%
+	which shows that $v\mapsto\varphi^v(t)$ is Lipschitz for $\|\cdot\|_{\X_1^t}$. Next, consider the linear map
+	\[
+	u\mapsto \int_0^t u\circ \varphi^v(r)\,dr,
+	\]
+	which is continuous, because
+	\[
+	\left|\int_0^t u\circ \varphi^v(r)\,dr\right|\leq \int_0^t\|u(r)\|_{1,\infty}dr\leq \|u\|_{\X_1^t}
+	\]
+	When $\Omega$ is bounded, the convergence is uniform on $\Omega.$ Indeed, since the Lipschitz constant in~(\ref{eq:phi-Lipschitz}) is a function of $\|v^n(t)\|_{\X_1^t}$ there exists a constant $K$ such that 
+	\[
+	\left| \varphi^{v^n}(t)(x)-\varphi^{v^n}(t)(y)\right| \leq K|x-y|
+	\]
+	for all $n\in\N$ and for all $x,y\in\Omega$. Therefore, $\left\{\varphi^{v^n}(t)\right\}$ is equicontinuous, and a similar argument shows that it is bounded. Ascoli's theorem thus implies that $\left\{\varphi^{v^n}(t)\right\},\ n=0,1,2,...$ is relatively compact w.r.t. uniform convergence. The subsequence that convergence uniformly must be $\varphi^{v}(t)$ since that is the pointwise limit. If $\Omega$ is not bounded, this argument holds on compact subsets.
+\end{proof}
+
+\begin{proof}[Proof of Theorem \ref{teo:minimizerLDDMM}]
+See page 254 of Younes, \textit{Shapes and diffeomorphisms}, 2010, Springer.
+\end{proof}
+
+
+\subsection{Variations with respect to the vector field}
 Lemma~\ref{pointwise} and~(\ref{eq:estimate}) are justified in this section. We first show that the solution to the equation
 \[
 \partial_t W(t)=\left(Dv\circ \varphi^v(t)\right)W(t)+h\circ \varphi^v(t)
@@ -1478,46 +1533,8 @@ In fact, we can prove the following theorem.
 	This yields the formula in the theorem.
 \end{proof}
 
-\begin{proof}[Proof of Lemma~\ref{pointwise}]
-	We compute
-	\begin{align*}
-	\left|\varphi^u(t)(x)-\varphi^v(t)(x)\right| =& \left|\int_0^t u\circ \varphi^u(r)(x)-v\circ \varphi^v(r)(x)\ dr\right|\\
-	\leq & \left|\int_0^t u\circ \varphi^u(r)(x)-v\circ \varphi^u(r)(x)\ dr\right|\\
-	&\quad +\int_0^t \left|v\circ \varphi^u(r)(x)-v\circ \varphi^v(r)(x)\right| dr\\
-	\leq & \left|\int_0^t u\circ \varphi^u(r)(x)-v\circ \varphi^u(r)(x)\ dr\right|\\
-	&\quad +\int_0^t\|v(r)\|_{1,\infty} \left|\varphi^u(r)(x)-\varphi^v(r)(x)\right| dr
-	\end{align*}
-	We apply Grönwall's lemma. In the language of Grönwall's lemma, we use
-	\[
-	u(t)=\left|\varphi^u(t)(x)-\varphi^v(t)(x)\right|,\qquad \alpha(t)=\|v(t)\|_{1,\infty}
-	\]
-	and
-	\[
-	g(t)=\left|\int_0^t u\circ \varphi^u(r)(x)-v\circ \varphi^u(r)(x)\ dr\right|.
-	\]
-	Then
-	\[
-	u(t)\leq g(t)+\left|\int_0^t \alpha(s) g(s) e^{\int_0^s\alpha(r)dr}ds\right|.
-	\]
-	Moreover,
-	\[
-	g(t)\leq \int_0^t\|u(r,\cdot)-v(r,\cdot)\|_\infty dr
-	\]
-	This yields
-	\begin{multline*}
-	\left|\varphi^u(t)(x)-\varphi^v(t)(x)\right|\leq\\
-	\left(1+\int_0^t \|v(s)\|_{1,\infty}e^{\int_0^s\|v(r)\|_{1,\infty}dr}ds\right)\int_0^t\|u(r,\cdot)-v(r,\cdot)\|_\infty dr,
-	\end{multline*}
-	which shows that $v\mapsto\varphi^v(t)$ is Lipschitz for $\|\cdot\|_{\X_1^t}$. Next, consider the linear map
-	\[
-	u\mapsto \int_0^t u\circ \varphi^v(r)\,dr,
-	\]
-	which is continuous, because
-	\[
-	\left|\int_0^t u\circ \varphi^v(r)\,dr\right|\leq \int_0^t\|u(r)\|_{1,\infty}dr\leq \|u\|_{\X_1^t}
-	\]
-	[TODO. Younes~L., \textit{Shapes and diffeomorphisms}, 2010, p. 170.]
-\end{proof}
+
+
 
 \section{Banach space theory \label{app:Banach}}
 This exposition follows \cite{lang1999} roughly. The inverse function theorem and the existence theorem for differential equations are based on the next result.
