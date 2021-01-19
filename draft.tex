@@ -1,0 +1,1819 @@
+%\documentclass{article}
+\documentclass[a5paper,10pt,twoside]{article}
+\usepackage[lmargin=0.5in,rmargin=0.5in,bmargin=0.3in,tmargin=0.7in]{geometry}
+
+\usepackage{mathtools,amssymb,amsthm}
+\usepackage{tikz-cd,hyperref}
+
+% short commands
+\newcommand{\N}{\ensuremath{\mathbb{N}}}
+\newcommand{\R}{\ensuremath{\mathbb{R}}}
+\newcommand{\bbH}{\ensuremath{\mathbb{H}}}
+\newcommand{\dx}{\ensuremath{\,\mathrm{d}x}}
+\newcommand{\cL}{\ensuremath{\mathcal{L}}}
+\newcommand{\cD}{\ensuremath{\mathcal{D}}}
+\newcommand{\cM}{\ensuremath{\mathcal{M}}}
+\newcommand{\X}{\ensuremath{\mathfrak{X}}}
+\newcommand{\Met}{\ensuremath{\mathrm{Met}}}
+\newcommand{\eps}{\varepsilon}
+\newcommand{\eqdef}{\ensuremath{\overset{\mathrm{def}}{=}}}
+
+\DeclareMathOperator*{\Tr}{Tr}
+\DeclareMathOperator*{\Orb}{Orb}
+\DeclareMathOperator*{\Ver}{Ver}
+\DeclareMathOperator*{\Hor}{Hor}
+\DeclareMathOperator*{\Div}{div}
+\DeclareMathOperator*{\rd}{d}
+\DeclareMathOperator*{\id}{id}
+\DeclareMathOperator*{\im}{im}
+
+% all this for the stupid double angle (see metrics on M)
+\makeatletter
+\newsavebox{\@brx}
+\newcommand{\llangle}[1][]{\savebox{\@brx}{\(\m@th{#1\langle}\)}%
+	\mathopen{\copy\@brx\kern-0.5\wd\@brx\usebox{\@brx}}}
+\newcommand{\rrangle}[1][]{\savebox{\@brx}{\(\m@th{#1\rangle}\)}%
+	\mathclose{\copy\@brx\kern-0.5\wd\@brx\usebox{\@brx}}}
+\makeatother
+
+\theoremstyle{plain}
+\begingroup
+\newtheorem{teo}{Theorem}[section]
+\newtheorem{prop}[teo]{Proposition}
+\newtheorem{cor}[teo]{Corollary}
+\newtheorem{lem}[teo]{Lemma}
+\endgroup
+
+\theoremstyle{definition}
+\begingroup
+\newtheorem{defn}[teo]{Definition}
+\newtheorem{exam}[teo]{Example}
+\newtheorem{claim}{Claim}
+\newtheorem{question}{Question}
+\endgroup
+
+\theoremstyle{remark}
+\begingroup
+\newtheorem{rem}[teo]{Remark}
+\newtheorem*{note}{Note}
+\newtheorem{case}{Case}
+\endgroup 
+
+\hypersetup{colorlinks=true,allcolors=black}
+
+% header appearance 
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[RO]{\rightmark}
+\fancyhead[LE]{\leftmark}
+\fancyhead[RE,LO]{\thepage}
+\fancyfoot[CE,CO]{}
+\fancyfoot[LE,RO]{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+\title{Gradient flow on manifold of Sobolev diffeomorphisms}
+\author{Tracey\and Carl-Joar \and Klas}
+
+\begin{document}
+\maketitle
+\tableofcontents
+\thispagestyle{empty}
+\setcounter{page}{0}
+\newpage
+	
+\section{Infinite-dimensional manifolds}
+A \emph{smooth manifold} modelled on the topological vector space $E$ is a Hausdorff topological space $M$ together with a family of \emph{charts} $(u_\alpha, U_\alpha)_{\alpha \in A}$, such that
+\begin{enumerate}
+	\item
+	$U_\alpha \subseteq M$ are open sets, $\bigcup_{\alpha \in A} U_\alpha = M$;
+	\item
+	$u_\alpha : U_\alpha \to u_\alpha(U_\alpha) \subseteq E$ are homeomorphisms onto open sets $u_\alpha(U_\alpha)$;
+	\item \label{eq:charts_smooth}
+	$u_\beta \circ u_\alpha^{-1} : u_\alpha(U_\alpha \cap U_\beta) \to u_\beta(U_\alpha \cap U_\beta)$ are $C^\infty$-smooth.
+\end{enumerate}
+
+In this definition it does not matter, whether $E$ is finite or infinite-dimensional. In fact, if $E$ is finite-dimensional, then $E = \R^n$ for some $n \in \N$ and we recover the definition of a finite-dimensional manifold.
+
+\subsection{Choice of a modelling space}
+
+There are several classes of infinite-di\-men\-sio\-nal vector spaces to choose from. With increasing generality our space $E$ can be a
+\begin{enumerate}
+	\item Hilbert space;
+	\item Banach space;
+	\item Fr\'echet space;
+	\item convenient locally convex vector space.
+\end{enumerate}
+%
+All topological vector spaces are assumed to be Hausdorff. A \emph{Fr\'echet space} is a locally convex topological vector space $X$, whose topology can be induced by a complete, translation-invariant metric, i.e. a metric $d :X\times X \to \R$ such that $d(x+h,y+h)=d(x,y)$. Alternatively a Fr\'echet space can be characterized as a Hausdorff topological space, whose topology may be induced by a countable family of seminorms $\|\cdot\|_n$, i.e., finite intersections of the sets $\{ y \,:\, \| x - y \|_n < \eps\}$ with some $x$, $n$, $\eps$ form a basis of the topology, and the topology is complete with respect to this family.
+
+There are some advantages of working in the category of Banach manifolds rather than Fréchet manifolds. The main advantage of Banach manifolds is that strong theorems from finite-dimensional analysis, such as the inverse function theorem, hold in Banach spaces but not necessarily in Fréchet spaces. However, some of the Lie groups we will be considering, such as the group of $C^\infty$-smooth diffeomorphism, are not Banach manifolds but Fréchet manifolds.
+
+Typically, once we identify a dual space of an infinite-dimensional manifold, it is not obvious that the dual is in the same category as the manifold itself. Thus it is standard procedure to work in the so called smooth dual, the restriction of the dual to the category of the primal manifold.
+
+\section{Sobolev mappings on compact manifolds}
+Our goal here is to cover the subject the geometry of the infinite dimensional
+manifold formed by the $H^s$-maps of a smooth compact manifold.
+Here $s$ is a sufficiently large integer and  $H^s$ denotes the Sobolev class.
+The Sobolev space $H^k(\R^n)$ is the space of functions in $L^2(\R^n)$ such that, for $j\leq k$, $D^ju$, regarded a priori as a distribution, belongs to $L^2(\R^n)$. This space can be
+characterized in terms of the Fourier transform, and such a characterization leads to a notion of $H^s(\R^n)$ for all real numbers $s$. 
+There is an invariance under coordinate transformations, permitting an invariant
+notion of $H^s(M)$ whenever $M$ is a compact manifold.
+
+The exposition in this section follows~\cite{glilikh1997}.
+
+Let $M$ and $N$ be compact, smooth manifolds with no boundary and dimension $d$. For $s>d/2$, there are well-defined $H^s$-Sobolev maps from $N$ to $M$. The set of such maps, $H^s(M,N)$, is given a manifold structure via the natural projection $\pi: TN\to N$ and
+%
+\begin{equation}
+T_\varphi H^s(M,N)=\{ f\in H^s(M,TN): \pi\circ f=\varphi\}.
+\end{equation}
+%
+With the standard Sobolev inner product, it is a $C^\infty$-smooth Hilbert manifold. It is continuously embedded in $C^k(M,N)$ for $s>d/2+k.$
+
+Let $E$ be a vector bundle over a compact Riemannian manifold
+$M$. Then one can easily define the space $H^s(E)$ of $H^s$-sections of $E$ for any
+non-negative $s$. In particular, one may take the tangent bundle $TM$, the vector
+bundle of $k$-forms,  etc.
+
+Later, we consider flows using notions of infinite-dimensional Riemannian
+geometry as typical analogs of classical mechanical systems.
+
+\subsection{Diffeomorphisms}
+Let $M$ be an oriented compact manifold without boundary. Fix $s > n/2 +1.$ 
+The space $H^s(M, M)$ contains the subset $\cD^s$ formed by $H^s$-maps
+which are $C^1$-diffeomorphisms. In \cite{ebin1970groups}, it is proven that $\cD^s$ is a manifold. It is easy to see that $\cD^s$ is an open set and thus a Hilbert manifold.
+Moreover, it is a group under the composition map. 
+The tangent space at the identity, $T_{\id}\cD^s,$ is the space
+of all $H^s$-vector fields on $M$ (that is, $H^s$-sections of the tangent bundle). 
+The whole tangent bundle $T\cD^s$ can be identified with the subset of $H^s(M, TM)$
+formed by
+maps which, when composed with the natural projection to $M$, give elements
+of $\cD^s$. In particular,
+%
+\begin{equation}
+\label{tangentspace}
+T_\varphi\cD^s = \left\{U\in H^s(M,TM): \pi\circ U=\varphi\right\}=\left\{\xi\circ \varphi :\xi\in T_{\id}\cD^s\right\}.
+\end{equation}
+%
+Note that the composition $\varphi\circ\psi$ of two $H^s$-maps may not belong to $H^s$.
+However, if $s > n/2 + 1$ and $\varphi$ is a (local) diffeomorphism, $\varphi\circ\psi$ belongs to $H^s$, provided that $\psi$ is an $H^s$-map to a compact manifold or, as above, a section of a vector bundle.
+
+Consider the maps $\alpha_\varphi: H^s(M, N) \to H^s(M, N)$ and $\omega_\psi: \cD^s\to H^s(M, N)$ defined by $\varphi\in\cD^s$ and $\psi\in H^s(M, N)$ via composition as
+ $\alpha_\varphi(f) = f\circ \varphi$ and $\omega_\psi (h) = \psi\circ h.$
+
+\begin{quote} 
+\textbf{The `alpha-lemma.'} The map $\alpha_\varphi$ is $C^\infty$-smooth and its derivative has the form $\alpha_\varphi$.
+\end{quote}
+
+\begin{quote} 
+\textbf{The `omega-lemma.'} The map $\omega_\psi$ is continuous. If $\psi\in H^{s+k}$, then $\omega_\psi$ is $C^k$-smooth and its derivative has the form $\omega_{d\psi}$. In particular, if $\psi$ is $C^\infty$-smooth, so is $\omega_\psi$.
+\end{quote}
+
+Proofs of both lemmas can be found, for example, in~\cite{marsden1970}. The lemmas
+are still true if we replace $H^s(M,N)$ by the space $H^s(M,E)$ of sections of a
+vector bundle $E$ over $M$. In particular, $\psi$ may be a scalar
+function on $M$, a map to $\R^n$, etc.
+
+Let $\varphi\in\cD^s$. Consider the right and left translations $R_\varphi$ and $L_\varphi$ on $\cD^s$, where $R_\varphi(\psi) = \psi\circ\varphi$ and $L_\varphi(\psi) = \varphi\circ\psi$. Using the $\alpha$- and $\omega$-lemmas, one can easily prove the following results.
+
+\begin{teo}
+The right translation $R_\varphi$ is $C^\infty$-smooth, and its tangent map is, for any $\psi\in \cD^s$,
+\[
+TR_\varphi: T_\psi\cD^s\ni U\mapsto U\circ \varphi\in T_{\psi\circ\varphi}\cD^s
+\]
+\end{teo}
+
+\begin{teo}
+The left translation $L_\varphi$ is continuous. Let $\varphi\in \cD^{s+k}$. Then $L_\varphi$ is $C^k$-smooth and $TL_\varphi:T\cD^s\ni V\mapsto d\varphi\circ V\in T\cD^{s}$.
+\end{teo}
+
+\begin{teo}
+	\label{teo:inversion}
+The inversion map $\varphi\mapsto \varphi^{-1}$ is continuous on $\cD^s$. Its restriction  $\cD^{s+k}\to\cD^s$ to $\cD^{s+k}$ is $C^k$-smooth.
+\end{teo}
+
+Here we do not consider the manifold of $C^\infty$-maps. This
+manifold is modeled on a locally convex (but not Banach) space. As a consequence,
+introducing a smooth structure on it requires some additional analysis.
+Left translations on the group of $C^\infty$-diffeomorphisms are $C^\infty$-smooth.
+For a detailed account of the properties of the group of $C^\infty$-diffeomorphisms the reader should consult~\cite{ebin1970groups}.
+
+Using the fact that right translation is smooth, one may define right-invariant
+vector fields on $\cD^s$. Then the $\alpha$- and $\omega$-lemmas yield the following result, which has no finite-dimensional analog.
+
+\begin{teo}
+Let $\xi\in T_{\id}\cD^s$ be a vector field on $M$ and $\tilde{\xi}$ the right-invariant
+vector field on $\cD^s$ given by $\tilde{\xi}_\varphi = \xi\circ\varphi$. Then $\tilde{\xi}$ is $C^k$-smooth if and only if $\xi\in H^{s+k}(TM)$.
+\end{teo}
+
+
+\subsection{Flows}
+Let us now turn to the question of the existence of integral curves of a
+right-invariant vector field on $\cD^s$.
+
+\begin{teo}
+\label{teo:ODE-existence}
+Let $s>\frac{1}{2}\dim M +1$ and $\tilde{\xi}$ be a $C^1$-smooth right-invariant vector field on $\cD^s$. Then for any $\varphi\in\cD^s$ there exists a unique integral curve $\gamma_\varphi(t)$ defined everywhere in $\R$ with the initial condition $\gamma_\varphi(0)=\varphi$. In particular, $\gamma_{\id}(t)=\gamma(\id,t)$ is the flow of $\tilde{\xi}_{\id}=\xi$ and $\gamma_{\varphi}(t)=\gamma_{\id}(t)\circ\varphi$.
+Furthermore, if $s>\frac{1}{2}\dim M +2$ then this assertion holds for any continuous $\tilde{v}$ on $\cD^s$.
+\end{teo}
+
+The first assertion of the theorem follows from the existence and uniqueness
+theorem for ordinary differential equations with a smooth right-hand side
+on $\cD^s$ and from the compactness of $M$. Under the hypothesis of the second
+assertion, the field $\tilde{v}$ can be $C^1$-smoothly extended to $\cD^{s-1}$. To prove
+that $\gamma_{\id}(t)$ actually belongs to $\cD^s$, one uses the fact that solutions of a
+differential equation depend smoothly on initial conditions.
+
+Motivated by the analogy with finite-dimensional groups, we call the space
+$T_{\id}\cD^s$ the Lie algebra of $\cD$.
+Theorem~\ref{teo:ODE-existence} enables us to introduce the group exponential map from
+$T_{\id}\cD^s$ to $\cD^s$ provided that $s > n/2 + 2$. To define this map, consider
+an integral curve $\gamma_{\id}(t)$ of $\tilde{\xi}$, which  is a one-parameter subgroup
+of $\cD$. The group exponential map is then $T_{\id}H^s(M)\ni \tilde{\xi}\mapsto \gamma_{\id}(1)\in\cD^s$. This exponential map is continuous, but not smooth. Note
+also that its image covers no $H^s$-neighborhood of $\id\in\cD^s$.
+
+\subsection{Smooth operators and vector bundles}
+Let $M$ be a compact manifolds without boundary and let $\pi:E\to M$ be a vector bundle. Consider a smooth vector bundle $\xi_\pi:H^\alpha(M,E)\to H^\alpha(M,M)$, where $\xi_\pi(f)=\pi\circ f$ and $\alpha>\dim M/2 +1.$ Assume that $s\geq \alpha$ and restrict $\xi_\pi$ to $\cD^s\subset H^\alpha(M,M)$. In this way, we obtain the vector bundle
+%
+\begin{align}
+\bar{\pi}:\Phi_s^\alpha(E)\to\cD^s,& \nonumber\\
+\mathrm{where\ \ } &\Phi_s^\alpha(E)=\left\{f\in H^\alpha(M,E):\pi\circ f\in\cD^s\right\}.
+\end{align}
+%
+The fiber over $\varphi\in \cD^s$ is $\Phi_s^\alpha(E)_\varphi=\{f\circ\varphi:f\in H^\alpha(E)\}$.
+Let $\Phi_s^\alpha(E_1)$ and $\Phi_s^\alpha(E_2)$ be two such bundles and consider an operator $P$ from $H^\alpha(E_1)_{\id}$ to $H^\alpha(E_2)_{\id}$. Define
+%
+\begin{equation}
+\tilde{P}_\varphi = R_\varphi P R_{\varphi^{-1}}: \Phi_s^\alpha(E_1)_\varphi\to \Phi_s^\alpha(E_2)_\varphi.
+\end{equation}
+
+In general, the operator $P$ is not smooth. Neither is a right-invariant subbundle
+of $\Phi_s^\alpha(E)$. Our next goal is to find a condition which guarantees that
+these objects are smooth.
+
+Let $\bbH$ be a finite-dimensional subspace of $\Phi_s^\alpha(E)=H^\alpha(E)$ such that all elements of $\bbH$ are $C^\infty$-smooth section of $E$. Denote by $\tilde{\bbH}$ the family of subspaces in the fibers of $\Phi_s^\alpha(E)$ such that $\tilde{\bbH}_\varphi=\left\{v\circ\varphi:v\in\bbH \right\}.$
+
+\begin{teo}
+Let $p:\Phi_s^\alpha(E)_{\id}\to\bbH$ be a continuous projection.
+The spaces $\ker \tilde{p}$ and $\tilde{\bbH}=\im \tilde{p}$ are smooth sub-bundles of $\Phi_s^\alpha(E)$. The map $\tilde{p}:\Phi_s^\alpha(E)\to\tilde{\bbH}$ is a smooth morphism of vector bundles.
+\end{teo}
+
+\begin{proof}
+This proof is due to~\cite{ebin1970groups}. Observe that the right-invariant section $\tilde{v}$ is, by the $\omega$-lemma, $C^\infty$-smooth for every $v\in\bbH$. Hence, $\bbH$ is smooth. Let us fix an inner product on $H^\alpha$, denoted by $G$, such that $p$ is orthogonal with respect to $G$. Using right translations, we can extend $G$ to all fibers of $\Phi_s^\alpha(E)$. As a result, we obtain a metric on $\Phi_s^\alpha(E)$, which is smooth by the $\omega$-lemma. Therefore, $\tilde{p}$ is the orthogonal projection on $\bbH$ and the smoothness of $\tilde{p}$ follows from the smoothness of $\bbH$ and the metric.
+\end{proof}
+
+Consider $E=\Lambda^k$, the bundle of $k$-forms on $M$, for $0\leq k\leq\dim M$ and let $d$ denote the differential and $\delta$ the co-differential.
+
+\begin{teo}
+\label{teo:smooth-d-operator}
+For $s>\dim M/2 +1$, the operators 
+\[
+\tilde{d}:\Phi_s^\alpha(\Lambda^k)\to \Phi_s^{\alpha-1}(\Lambda^{k+1})
+\]
+and
+\[
+\tilde{\delta}: \Phi_s^\alpha(\Lambda^k)\to \Phi_s^{\alpha-1}(\Lambda^{k-1})
+\]
+are $C^\infty$-smooth homomorphisms of vector bundles.
+\end{teo} 
+
+The proof is based on local formulas for these operators and on the smoothness of composition of $H^s$-maps, see~\cite{ebin1970groups}. 
+
+\begin{proof}
+Locally, $\tilde{d}_\varphi(f)$ is a rational combination of $f,Df,\varphi,D\varphi$ for a fixed base point $\varphi\in\cD^s$. Smoothness is therefore evident as multiplication of $H^s$-maps is smooth.
+\end{proof}
+
+\begin{rem} 
+\label{rem:smooth-d-operator}
+Properly refined, the theorem remains valid for any differential operator of order $q$ with $s>\dim M / 2+q$. In essence, we need to write the operator of order $q$, $B_q$, as a product of operators of order one, $B_q=B_1^{(1)}B_1^{(2)}\dots B_1^{(q)}$ and apply Theorem~\ref{teo:smooth-d-operator} to each first order differential operator.
+\end{rem}
+
+\subsection{Lots of Riemannian structure on the space of diffeomorphisms}
+In this section, we introduce a Riemannian metric on $\cD^s$, which arises
+from a Riemannian metric on $M$. This metric is weak, i.e., it gives rise to the
+$H^0$-topology, which is weaker than the original $H^s$-topology. In spite of this,
+the Levi-Civitá connection and the geodesic spray of the metric exist and are
+naturally related to those of the metric on $M.$
+
+Assume that $M$ is a closed Riemannian manifold with metric $g$.
+
+\textbf{Khesin, 2009.} A (weak) Riemannian metric at each point $\varphi\in \cD$ of the diffeomorphism
+group is defined in the following straightforward way: given
+$\xi,\eta\in T_{\id}\cD$, the inner product of two vectors $\xi\circ\varphi,\eta\circ\varphi\in T_\varphi\cD$ is
+%
+\begin{equation}
+\label{weak-metric-non-invariant}
+G_\varphi(\xi\circ\varphi,\eta\circ\varphi)=\int_M g\big( \xi\circ\varphi(m),\eta\circ\varphi(m)\big)\mu(m),
+\end{equation}
+%
+where $\mu$ is the Riemannian volume form on $M$. This metric is right-invariant when restricted to the subgroup  of volume-preserving diffeomorphisms, although it is not right-invariant on the whole group $\cD$. (Indeed, the change of variables in the integral 
+would give the Jacobian $\det(D\varphi)$ as an extra factor, which, however, is
+identically equal to 1 for a volume-preserving map in $\cD$.
+
+\textbf{Gliklikh, 1997.} Let $T\cD^s$ be as in~(\ref{tangentspace}) with projection map $\pi$, and construct its metric as
+%
+\begin{equation}
+\label{weak-metric}
+G_\varphi(u,v)=\int_M g\big( U(m),V(m)\big)_{\varphi(m)}\mu(m),\quad \forall U,V\in T_\varphi\cD^s,
+\end{equation}
+%
+where $\mu$ is the Riemannian volume form induced by the metric on $M$. Recall from the definition of the tangent space $T\cD^s$ that $\pi\circ U(m)=\pi\circ V(m)=\varphi(m)$. Therefore, $U(m)$ and $V(m)$ are vectors in the tangent space $T_{\varphi(m)}M$. By the $\omega$-lemma, $G$ is smooth.
+If $B(T_\varphi\cD^s,T_\varphi\cD^s)$ is the vector bundle of bilinear maps over the tangent spaces of $\cD^s$ then the map $\varphi\mapsto G_\varphi$ is a section of $B(T_\varphi\cD^s,T_\varphi\cD^s)$. To say that the metric is smooth is to say that this is a smooth section. See Lang [1972], chapter 3, for details on this bundle.
+
+\begin{question}
+	The (weak) metric (\ref{weak-metric}) is right invariant.
+\end{question}
+
+\begin{proof}
+	Fix two vectors $u,v\in T\cD^s$.
+	Right invariance of the Riemannian structure $G$ is the relation $G_{\id}(u,v)=G_\varphi(TR_\varphi u,TR_\varphi v)$. Since $TR_\varphi u=u\circ\varphi$ we have by the change of coordinates formula
+	\begin{multline}
+	G_{\varphi}(TR_\varphi u,TR_\varphi v)=\int_M g\big( TR_\varphi u(m),TR_\varphi v(m)\big)_{\varphi(m)}\mu_{\varphi^*h}(m)=
+	\\
+	= \int_M g_{\varphi(m)}( u\circ\varphi(m),v\circ\varphi(m))\mu_{\varphi^*h}(m)
+	= \int_M g_{m}( u(m),v(m))\mu_h(m),
+	\end{multline}
+	that is precisely, $G_{\id}(u,v)=G_\varphi(TR_\varphi u,TR_\varphi v)$.
+\end{proof}
+
+\textbf{Carl-Joar, 2020.} A (weak) Riemannian metric on the diffeomorphism group is defined in the following way: For any two vectors $\xi\circ\varphi\in T_{\varphi}\cD$
+and $\eta\circ\varphi\in T_{\varphi}\cD$,
+\[
+G_{\varphi}(\xi\circ\varphi,\eta\circ\varphi)=\int_{M}g_{\varphi(\cdot)}(\xi\circ\varphi,\eta\circ\varphi)\mu_{\varphi^{*}g}.
+\]
+Is this metric right-invariant? In other words, does it satisfy
+\[
+G_{\varphi}(TR_\varphi\xi,TR_\varphi\eta)=G_{\id}(\xi,\eta)?
+\]
+Right-translation is the map $R_{\varphi}:\cD\ni\psi\mapsto\psi\circ\varphi\in \cD$
+which has tangent map $TR_{\varphi}:U\mapsto U\circ\varphi$ so the
+pullback metric is 
+\[
+\varphi^{*}g(\xi,\eta)=g(\varphi(\cdot))(TR_{\varphi}\xi,TR_{\varphi}\eta)
+\]
+Let $U=\xi\circ\varphi$ and $V=\eta\circ\varphi$. Recall that $U(m)\in T_{\varphi(m)}M$
+\[
+G_{\varphi}(U,V)=\int_{M}g_{\varphi(\cdot)}(U,V)\mu_{\varphi^{*}g}
+=\int_{M}\varphi^{*}[g_{m}(\xi(m),\eta(m))\mu_{g}(m)]=
+\]
+\[
+=\int_{M}g_{m}(\xi(m),\eta(m))\mu_{g}(m)=\int_M g(\xi,\eta)\mu_g=G_{\id}(\xi,\eta)
+\]
+%
+which establishes right-invariance by the change-of-variables formula
+for integrals. We may simply define $G_\varphi(U,V)=G_{\id}(U\circ\varphi^{-1},V\circ\varphi^{-1})$ for all $U,V\in T_\varphi\cD$.
+
+\begin{defn}\label{def:A-metric}
+Let $G_{\id}(\xi,\eta)=\int_M g(A\xi,\eta)\mu_g$ for a positive definite, symmetric, elliptic linear differential operator $A$. Then define the metric on $\cD$ by $G_\varphi(U,V)=G_{\id}(U\circ\varphi^{-1},V\circ\varphi^{-1})$.
+\end{defn}
+
+
+The Hodge decomposition metric~(\ref{weak-metric}) ... [TODO]
+
+From the construction of charts on $\cD^s$, see \cite[page 105]{marsden1970}, there is a map $\overline{\exp}: T\cD^s\to\cD^s$ defined by $\overline{\exp}(U)=\exp\circ U$, where $\exp$ is the Riemannian exponential $TM\to M$ of $(M,g)$. If $\xi\in T_{\id}\cD^s$ and $t\mapsto \exp(t\xi)$ is a geodesic through $\id$ in the direction of $\xi$ then  $t\mapsto \overline{\exp}(tU)(m)=\exp(tU(m))$ is the geodesic starting at $m\in M$ in the direction of $U(m).$ Suppose we have a family of geodesic curves $t\mapsto a_t(m)$ starting at $m\in M$ where for $t_0\in\R$ close to zero, the map $m\mapsto a_{t_0}(m)$ is a diffeomorphism (so that $t\mapsto a_t$ is a curve in $\cD^s$.) Then since the length of a curve in $\cD^s$  given by our weak metric is an integral over $M$ of the lengths of each curve $t\mapsto a_t(m)$, this length is minimized. The curves $t\mapsto \overline{\exp}(t U)(m)$ satisfy this, so $t\mapsto \exp(t\xi)$ is a geodesic on $\cD^s.$
+
+Denote by $\pi_1$ the natural projection $TTM\to TM$ and let $K:TTM\to TM$ be the connector \cite{gil1992the} of the Levi-Civitá connection of $\llangle\ ,\ \rrangle.$ It is possible to prove that 
+%
+\begin{equation}
+TT\cD^s = \left\{v\in H^s(M,TTM):\pi_1\circ v\in T\cD^s\right\}.
+\end{equation}
+%
+We introduce more `bar maps.' Let the map $\overline{K}:TT\cD^s\to T\cD^s$ be defined by $\overline{K}(v)=K\circ v$.
+
+\begin{teo}
+The map $\overline{K}$ induces the Levi-Civitá connection of $G$.
+\end{teo}
+
+The connection itself is, by definition, the distribution $\ker \overline{K}$ on $T\cD^s$. Then the covariant derivative $\bar{\nabla}$ is given by the formula $\bar{\nabla}_v u=\overline{K}\circ  Tu(v)$ for vector fields $u$ and $v$ in $T\cD^s$. Thus, the proof of the above theorem has been reduced to checking the characteristic properties of the
+Levi-Civita connection. The reader interested in a detailed argument should
+consult~\cite{ebin1970groups}.
+
+Let $Z$ be the spray\footnote{see chapter 4 of~\cite{lang1999}} of the Levi-Civitá connection of the metric on $M$. As with $T\cD^s$, the tangent space $T_XT\cD^s$ consists of $H^s$-maps $Y:M\to TTM$ which cover $X,$ that is $\pi_1\circ Y=X$. We have $\pi_1\circ Z=\id$, so $Z(X)=T_XT\cD^s.$ In particular, $Z$ is a vector field on $T\cD^s.$ In coordinates,
+%
+\begin{equation}
+Z(X,U)=\left((X,U),\left(U,-\Gamma^i_{\,jk}U^jU^k\right)\right).
+\end{equation}
+
+\begin{teo}
+Let $\overline{Z}$ be defined by $\overline{Z}(v)=Z\circ v$ for any $v\in T\cD^s$. Then $\overline{Z}$ is the spray of the Levi-Civitá connection of $G$, defined in~(\ref{weak-metric}).
+\end{teo}
+
+\begin{rem} 
+If $Z$ is a $C^r$ map then $\overline{Z}$ is a $C^r$ map by the omega-lemma.
+\end{rem}
+
+It is easy to see that our method enables one to define a weak
+Riemannian metric (along with the connection, the spray, etc.) on the whole
+space $H^s(M, M)$. In this case, $\overline{\exp}$ is defined on the entire tangent bundle. In other words, $\overline{Z}$ is complete, i.e., the geodesics extend to $(-\infty,\infty)$.
+
+The map $\overline{K}$ is right-invariant on $\cD^s$. So is $\bar{\nabla}$, the spray $\overline{Z}$ and $\overline{\exp}$.
+
+
+\section{Momentum maps and gradient flows on group orbits}
+In this section we develop a framework for Riemannian gradient flows confined
+to group orbits. To this end, let $Q$ be a (Fréchet \cite{hamilton1982inverse}) manifold, possibly infinite-dimensional.
+We denote by $\cD$ a group which acts from the left on $Q$, and we encourage the reader to think of $\cD$ as the group of diffeomorphisms from the above sections. We use the notation $\ell(\varphi,q)=\varphi.q$ to denote the action of a group element $\varphi$ on $q\in Q$.
+
+\begin{defn}
+A Lie group is a smooth manifold $\cD$ with a group structure
+such that the multiplication $\cD\times\cD\to \cD$ and the inversion $\cD\to\cD$ are smooth maps.
+\end{defn}
+
+\begin{rem}
+By Theorem~\ref{teo:inversion}, we immediately see that $\cD^s$, which we considered in the beginning, is not a Lie group in the sense of the above definition, but it is a topological group, because the group operations are continuous \cite{ebin1970groups}.
+\end{rem}
+
+\begin{defn}[Lie group actions]
+	\label{def:liegroupaction}
+Let $Q$ be a manifold and let $\cD$ be a Lie group. A left action of a Lie group $\cD$ on $Q$ is a smooth map $\ell:\cD\times Q\to Q$ such that (i) there is an identity element $\id$, that is $\ell(\id,q)=q$ for all $q\in Q$, and (ii) $\ell(\varphi,\ell(\psi,q))=\ell(\varphi\psi,q)$ for all $\varphi,\psi\in\cD$ and all $q\in Q$. 
+\end{defn}
+
+Let $\ell_\varphi:Q\to Q$ be the map $\ell_\varphi:q\mapsto \ell(\varphi,q)$. Definition~\ref{def:liegroupaction} can now be rephrased by saying that the map $\varphi\mapsto \ell_\varphi$ is a homomorphism of $\cD$ into the group of diffeomorphisms of $Q$. In the special but important case where $Q$ is a Banach space and each $\ell_\varphi$ is a continuous linear transformation, the action $\ell$ is called a \textit{representation} of $\cD$ on $Q$.
+
+The action is called \emph{transitive}, if for any two points $q_1,q_2 \in Q$ there exists $\varphi \in \cD$ with $\varphi.q_1 = q_2$; the action is called \emph{effective}, if $	\varphi.q = \psi.q$  for all $q$ in $Q$ implies $\varphi = \psi.$ In other words, an effective action allows us to distinguish group elements based on their action on the space. The action is called \textit{free} if it has no fixed points, that is, $\ell(\varphi,q)=q$ implies $\varphi=\id$.
+
+\begin{defn}
+The \textit{orbit} of $q\in Q$ under the left action of $\cD$ is the space $\Orb(q)=\left\{\varphi.q: \varphi\in\cD\right\}.$ Another common notation for the same is $\cD.q$.
+\end{defn}
+
+In finite dimensions one can show that $\Orb(q)$ is an immersed submanifold of $Q$ (Abraham and Marsden [1978, p. 265]).
+
+If $\tilde{\xi}$ and $\tilde{\eta}$ are left-invariant vector fields on $\cD$ defined by left translation ($\tilde{\xi}=TL_\varphi \xi$ for $\xi\in T_{\id}\cD$), then $[\tilde{\xi},\tilde{\eta}]$ is also left-invariant. (Does this justify the terminology `Lie algebra'?)
+
+\begin{defn}
+For $\xi \in T_{\id}\cD$, the map $\ell^\xi:\R\times Q\to Q$ defined by $\ell^\xi(t,q)=\ell(\exp t\xi,q)$ is an $\R$-action on $Q$. In other words it defines a flow on $Q$. The vector field $\xi_\ell: Q\to TQ$ given by 
+$$
+\xi_\ell = \partial_t |_{t=0}\, \ell(\exp t\xi,\cdot)
+$$ 
+is called the \textit{infinitesimal generator} of the action $\ell$. (They are sometimes also referred to as the \textit{fundamental vector field} of the action.)
+\end{defn}
+
+
+\begin{prop}
+	\label{prop:tangent-orbit}
+The tangent space at $q\in Q$ to an orbit $\cD.q_0$ is
+\[
+T_q\Orb(q_0)=\left\{\xi_\ell(q):\xi\in T_{\id}\cD \right\},
+\]
+where $\Orb(x_0)$ is endowed with the manifold structure making $\cD/\cD_{q_0}\to\Orb(q_0)$ into a diffeomorphism. Here, $\cD_{q_0}=\left\{\varphi\in\cD:\ell_\varphi(q_0)=q_0\right\}$, the stabilizer of $\ell$ at $q_0\in Q$.
+\end{prop}
+
+\begin{prop}
+Let the Lie group $\cD$ act on the left via $\ell$ on the manifold $Q$. Then the infinitesimal generator map $T_{\id}\cD\ni\xi\mapsto\xi_\ell\in\mathfrak{X}(Q)$, where $\mathfrak{X}(Q)$ is the Lie algebra of vector fields on $Q$ is a Lie algebra antihomomorphism, that is, $(a\xi+b\eta)_\ell=a\xi_\ell+b\eta_\ell$ for all real constants $a$ and $b,$ and $$[\xi_\ell,\eta_\ell]=-[\xi,\eta]_\ell$$ for all $\xi,\eta\in T_{\id}\cD$.
+\end{prop}
+
+In view of this proposition one defines a left Lie algebra action of a manifold $Q$ as a Lie algebra antihomomorphism $T_{\id}\cD\ni \xi\mapsto \xi_\ell\in\mathfrak{X}(Q)$ such that the mapping $T_{\id}\cD\times Q\ni (\xi,q)\mapsto \xi_\ell(q)\in TQ$ is smooth.
+
+
+Since $\cD$ acts on $Q$ from the left, the action map induces a Riemannian structure
+on $\Orb(q_0)$. To see this, we need the notion of horizontal vectors on $\cD$.
+
+\begin{defn}
+	The vertical distribution associated with the action $\ell$ of $\cD$ on $q_0\in Q$ is the sub-bundle of $T\cD$ given by 
+	\[
+	{\Ver}_\varphi = \left\{TR_\varphi \xi\in T_\varphi\cD: TR_\varphi(\xi_\ell q_0)=0 \right\}.
+	\]
+	If $(\, ,\,)$ is a right-invariant metric on $\cD$, then the corresponding horizontal distribution at $\varphi\in\cD$, $\Hor_\varphi$, is given by the orthogonal complement to $\Ver_\varphi$.
+\end{defn}
+
+\begin{prop}
+Assume that $\Orb(q_0)$ is a submanifold of $Q.$ Then any right-invariant Riemannian metric $(\, ,\,)$ on $\cD$ induces a Riemannian metric $G$ on $\Orb(q_0)$ fulfilling
+\[
+G_{\varphi.q_0}(U(q_0),U(q_0)) = ( \xi,\xi)_{\id}\quad \forall\, U=TR_\varphi \xi \in{\Hor}_\varphi.
+\]
+\end{prop}
+
+\begin{proof}
+Since $\Orb(q_0)$ is a manifold, the map $\ell_{q_0}:\cD\ni\varphi\mapsto \varphi.q_0\in Q$ is a submersion; it is smooth and its derivative is surjective at every point. Its tangent map is therefore a linear isomorphism $\Hor_\varphi\to T_{\varphi.q_0}\Orb(q_0)$. For any $(q,\dot{q})\in T\Orb(q_0)$ we may find an element $\varphi\in\cD$ such that $q=\varphi.q_0$ by the definition of $\Orb(q_0)$. Define the metric $G$ at $q$ by 
+%
+\begin{equation}
+G_q(\dot{q},\dot{q})=\big( (T_\varphi \ell_{q_0})^{-1}\dot{q},(T_\varphi \ell_{q_0})^{-1}\dot{q}\big)_\varphi.
+\end{equation}
+%
+By the right-invariance of $(\, ,\,)$, this metric fulfills the criterion of the proposition. Indeed, $(T_\varphi \ell_{q_0})^{-1}\dot{q}=TR_\varphi\xi$.
+\end{proof}
+
+
+\subsection{The action of diffeomorphisms}
+Let us now be serious about the suggestion to view $\cD$ as the group of diffeomorphisms on $Q$. The group operation is composition and the Lie algebra of $\cD$, as a vector space, consists of vector fields on $Q$. Indeed, the flow of a vector field is a curve in $\cD$ and its tangent vector at $t=0$ is the given vector field.
+
+\begin{exam}
+Here are three examples of actions of $\cD$.
+\begin{enumerate}
+	\item The action $\ell:\cD\times Q\to Q$ is given by $\ell(\varphi,x)=\varphi(x)$.
+	\item After a number of calculations, it can be shown that the adjoint action of $\cD$ on its Lie algebra is given by push-forward.
+	\item If we identify the dual space $\mathfrak{X}(Q)^*$ with one-form densities by means of integration, then the change-of-variables formula shows that the co-adjoint action is given by push-forward of one-form densities.
+\end{enumerate}
+\end{exam}
+
+The Lie algebra bracket on $\cD$ is minus the Jacobi-Lie bracket of vector fields, and one can say that the Jacobi-Lie bracket gives the right (as opposed to left) Lie algebra structure on $\cD$.
+
+
+\subsection{Momentum maps on Poisson manifolds}
+Let $P$ be a Poisson manifold and let $\cD$ be any group which acts smoothly on $P$ by canonical transformations via a left action $\ell$. By canonical we mean that the map $\ell_\varphi:P\to P$ satisfies
+%
+\begin{equation}
+\ell_\varphi^*\{F_1,F_2\}=\left\{\ell_\varphi^*F_1,\ell_\varphi^*F_2\right\}
+\end{equation}
+%
+for any smooth functions $F_1,F_2$ on $P$ and any $\varphi\in\cD$. If $P$ is a symplectic manifold with symplectic form $\omega$, then the action is canonical if and only if it is symplectic, that is, $\ell_\varphi^*\omega=\omega$ for all $\varphi\in\cD$.
+
+Recall that on Lie groups, the infinitesimal generator of the action corresponding to a Lie algebra element $\xi\in T_{\id}\cD$ is the vector field $\xi_\ell$ on $P$ obtained by differentiating the action with respect to $\varphi$ at the identity in the direction $\xi$. By the chain rule,
+%
+\begin{equation}
+\xi_\ell(x)=\left.\frac{d}{dt}\right|_{t=0}\ell(\exp t\xi,x).
+\end{equation}
+%
+We will need two general identities, see~\cite{marsden1999mechanics} for proofs. The first says that the flow of $\xi_\ell$ is $\phi_t=\ell(\exp t\xi,\cdot)$. Second, 
+\[
+\ell_{\varphi^{-1}}^*\xi_\ell=(\mathrm{Ad}_\varphi \xi)_\ell,
+\]
+where $\mathrm{Ad}$ is the adjoint action. This gives further $[\xi_\ell,\eta_\ell]=-[\xi,\eta]_\ell$.
+
+Given a symplectic form $\omega$, any function $H\in C^\infty(P)$ gives rise to a vector field $X_H$ defined by the relation $dH(Y)=\omega(X_H,Y)$, or equivalently using the contraction $\iota$
+%
+\begin{equation}
+dH=\iota_{X_H}\omega.
+\end{equation}
+%
+Conversely, a vector field $X$ specifies a function $H$ up to a constant. The vector field $X_H$ and the function $H$ are known as a Hamiltonian vector field and a Hamiltonian function, respectively.
+Assume that there is a global Hamiltonian $J(\xi)$, that is, a smooth function on $P$ such that
+%
+\begin{equation}
+\label{globalhamiltonian}
+X_{J(\xi)}=\xi_\ell.
+\end{equation}
+%
+Here, we can replace the assumption of a left Lie group action by a canonical left Lie algebra action $\xi\mapsto\xi_\ell$. In the Poisson manifold context, this means that
+%
+\begin{equation}
+\xi_\ell \{F_1,F_2\}=\{\xi_\ell(F_1),F_2\}+\{F_1,\xi_\ell(F_2)\}
+\end{equation}
+%
+and in the symplectic manifold context, it means that $\cL_{\xi_\ell}\omega=0.$ Recall that for a left Lie algebra action, the map $T_{\id}\cD\ni \xi\mapsto \xi_\ell \in\mathfrak{X}(P)$ is a Lie algebra antihomomorphism.
+
+\begin{defn}
+Let a  Lie algebrag act canonically from the left on the Poisson manifold $P.$ Suppose there is a linear map $J$ from $T_{\id}\cD$ into the smooth functions on $P$ such that~(\ref{globalhamiltonian}) holds for all $\xi\in T_{\id}\cD$. The map $J:T^*P\to T_{\id}^*\cD$ defined by
+\[
+\langle J(\omega),\xi\rangle=J(\xi)(\omega)
+\]
+for all $\xi \in T_{\id}\cD$ and all $\omega\in T^*P$ is called the momentum map of the action.
+\end{defn}
+
+\begin{rem}
+Giving a momentum map is equivalent to specifying a linear map $J$ from $T_{\id}\cD$ into the smooth functions on $P$ such that the following diagram commutes:
+\begin{center}
+	\begin{tikzcd}
+		C^\infty(P) \arrow[rr, "F\mapsto X_F "] &                                                       & \mathcal{P}(Q) \\
+		& T_{\id}\cD \arrow[lu, "J"] \arrow[ru, "\xi\mapsto\xi_\ell"'] &               
+	\end{tikzcd}
+\end{center}
+%
+Here, $ \mathcal{P}(Q)$ is the Lie algebra of infinitesimal Poisson automorphisms of $P$.
+\end{rem}
+
+\begin{exam}[Angular momentum]
+Let the group SO($3$) act on the configuration space $Q=\R^3$ by matrix multiplication, that is, $\ell(A,q)=Aq.$ Notice that if $(q,u)\in T_q Q$ then $T_q\ell_A(q,u)=(Aq,Au)$.  $A.(q,u)=(Aq,Au).$ We will show that the lifted action action to $P=T^*\R^3\simeq \R^6$ is 
+%
+\begin{equation}
+T_{Aq}^*\ell_{A^{-1}}(q,p) :=A.(q,p)= (Aq,Ap)
+\end{equation}
+%
+if we identify covectors with vectors using the Euclidean inner product. If $(q,p)\in T^*_q\R^3$ and $(Aq,u)\in  T_{Aq}\R^3$, we have  
+%
+\begin{multline}
+\langle  A.(q,p), (Aq,u)\rangle
+\eqdef \left\langle (q,p),A^{-1}.(Aq,u)\right\rangle =\\
+= \langle p,A^{-1}u\rangle = \langle Ap,u\rangle = \langle (Aq,Ap),(Aq,u)\rangle,
+\end{multline}
+%
+which is what we wanted to show.
+
+Differentiating with respect to $A$, we find that the infinitesimal generator corresponding to $\xi\in\mathfrak{so}(3)$ is
+%
+\begin{equation} 
+\xi_\ell. (q,p)=(\xi q,\xi p)=(\check{\xi}\times q,\check{\xi}\times p),
+\end{equation}
+%
+where $\check{\ }:\mathfrak{so}(3)\to\R^3$, 
+$$
+\begin{pmatrix}
+0 & -z &y\\
+z & 0 & -x\\
+-y & x & 0
+\end{pmatrix}
+\mapsto
+\begin{pmatrix}x\\y\\z\end{pmatrix}.
+$$ 
+is the inverse of the `hat isomorphism,'  which maps the Lie bracket to the vector cross product.  In order to find the momentum map, we solve
+%
+\begin{equation}
+\frac{\partial J(\xi)}{\partial q}=-\xi p,\qquad \frac{\partial J(\xi)}{\partial p}=\xi q
+\end{equation}
+%
+such that $J(\xi)$ is linear in $\xi$. A solution is given by
+%
+\begin{equation}
+J(\xi)(q,p)=\langle \xi q,p\rangle = \langle \check{\xi}\times q,p\rangle = \langle q\times p,\check{\xi}\rangle,
+\end{equation}
+%
+that is, $J(q,p)=q\times p.$
+\end{exam}
+
+\subsection{Momentum maps via cotangent lifts	}
+\begin{defn}
+Given two manifolds $Q$ and $S$ and a diffeomorphism $f:Q\to S$, the cotangent lift $T^*f:T^*S\to T^*Q$ of $f$ is defined by
+$$
+\langle T^*f(\alpha),v\rangle = \langle \alpha,Tf(v)\rangle,
+$$
+where $\alpha\in T_s^*S,$ $v\in T_qQ$ and $s=f(q)$.
+\end{defn}
+
+It follows that the resulting map $T^*f$ is symplectic.
+
+\begin{defn}
+Given a momentum map $J$, we call $J$ infinitesimally equivariant if the following commutation relation holds: $J([\xi,\eta])=\left\{J(\xi),J(\eta)\right\}$.  We say that $J$ is equivariant if
+\[
+\mathrm{Ad}_{\varphi^{-1}}^*\circ J = J\circ \ell_\varphi.
+\]
+\end{defn}
+
+Equivariance in the example studied above (angular momentum) is the relation $Aq\times Ap=A(q\times p)$. If $A\in \mathrm{O}(3)\setminus\mathrm{SO}(3)$ this is no longer satisfied. A minus sign appears on the right-hand side, a fact sometimes phrased by stating that angular momentum is a pseudo-vector. On the other hand, letting $\mathrm{O}(3)$ act on $\R^3$ by matrix multiplication, $J$ is given by the same formula and so is the momentum map of a lifted action, and these are \textit{always} equivariant. We have an apparent contradiction. What is wrong? The answer is that the adjoint action and the isomorphism $\hat{\ }:\R^3\to\mathfrak{so}(3)$ are related by $A\hat{q}A^{-1}=-\hat{(Aq)}$ on the component of $-\id$ in O$(3)$. This justifies the term equivariant for $J(q,p)$.
+ 
+%We define functions on cotangent  bundles associated to vector fields on the base. 
+Given a manifold $Q$, define the map
+%
+\begin{equation}
+ j:\mathfrak{X}(Q)\ni v\mapsto \langle \cdot,v(\cdot)\rangle \in \Omega^0(T^*Q).
+\end{equation}
+%
+The function $j(v):T^*Q\to\R$ is called the momentum function. For reference, see chapter 12 of \cite{marsden1999mechanics}.
+
+Because of the following proposition, the Hamiltonian vector field $v_{j(v)}$ on $T^*Q$ is called the cotangent lift of $v\in\mathfrak{X}(Q)$ to $T^*Q$. [TODO: adapt or explain notation of this proposition]
+
+\begin{prop}\label{prop:lifted-flow}
+If $v\in\mathfrak{X}(Q)$ has flow $\phi_t$, then the flow of $v':=v_{j(v)}$  on $T^*Q$ is $T^*\phi_{-t}$.
+\end{prop}
+
+Perhaps the most important result for the computation of momentum maps is the following theorem about \textit{momentum maps of lifted actions}.
+
+\begin{teo}
+\label{teo:cotangent-momentum-map}
+Suppose that the Lie algebra $\mathfrak g$ acts on the left on the manifold $Q,$ so that $\mathfrak g$ acts on $P=T^*Q$ on the left by the canonical action $\xi_\ell=\xi_\ell'$, where $\xi_\ell'$ is the cotangent lift of $\xi_\ell$ to $T^*Q$.  This $\mathfrak{g}$-action on $T^*Q$ is Hamiltonian with infinitesimally equivariant momentum map $J$ given by 
+%
+\begin{equation}
+\label{def:cotangent-momentum-map}
+\langle J(q,\alpha_q),\xi\rangle = \langle \alpha_q, \xi_\ell(q)\rangle 
+\end{equation}
+%
+If $\mathfrak{g}$ is the Lie algebra of a Lie group that acts on $Q$ and hence on $T^*Q$ by cotangent lift, then $J$ is equivariant.
+\end{teo}
+
+\begin{rem}
+The above theorem can be read as follows: The image of the infinitesimal action, $\xi_\ell(q),$ is  a linear function of $\xi$, and thus we may write it as such explicitly. The corresponding linear operator acting on $\xi\in\mathfrak{g}$ is the momentum map $J:T^*Q\to \mathfrak{g}^*.$
+\end{rem}
+
+\begin{proof}
+For the case of Lie group actions, the theorem follows directly from Proposition \ref{prop:lifted-flow}, since  that result implies that the infinitesimal generator is given by $\xi_\ell=v_{j(\xi_\ell)}$ and thus a momentum map is given by $J(\xi)=j(\xi_\ell)$.
+
+For the case of Lie algebra actions, we need first to verify that the cotangent lift indeed gives a canonical action. For $\xi,\eta\in\mathfrak{g}$ and an action on $Q$ denoted by $\ell$ with corresponding action $\ell'$ on $P=T^*Q$, we have
+%
+\begin{equation}
+[\xi,\eta]_{\ell'}=[\xi,\eta]'_\ell=-[\xi_\ell,\eta_\ell]'= -[\xi_\ell',\eta_\ell']=-[\xi_{\ell'},\eta_{\ell'}]
+\end{equation}
+%
+and hence, $\xi\mapsto \xi_{\ell'}$ is a left algebra action. This actions is canonical, because for any smooth functions $F,H$ on $P$ we have
+$$
+\xi_{\ell'}\{F,H\}=\left\{\xi_{\ell'}[F],H\right\}+\left\{F,\xi_{\ell'}[H]\right\}
+$$
+by the Jacobi identity for the Poisson bracket. By Proposition~\ref{prop:lifted-flow}, the $\mathfrak{g}$-action on $P$ admits a momentum map $J(\xi)=j(\xi_\ell).$ It remains only to show equivariance.
+\end{proof}
+
+For example, let the group of smooth diffeomorphisms on $Q$ act on $T^*Q$ by cotangent lift. Then the infinitesimal generator of $v\in\mathfrak{X}(Q)=\mathfrak{g}$ is $v'=v_{j(v)}$ by Proposition~\ref{prop:lifted-flow}. Hence the corresponding momentum map $J: T^*Q\to\mathfrak{g}^*$ is given by $J(v)=j(v)$.
+
+As a matter of fact, any infinitesimally equivariant momentum map for a left Hamiltonian action a Lie algebra on a Poisson manifold $P$ is a Poisson map, see \cite{marsden1999mechanics}.
+
+
+\subsection{Smooth duals}
+The Lie algebra of the general linear group GL($n,\R$) is denoted $\mathfrak{gl}(n,\R)$. For a compact manifold $Q$ with some fixed volume form $\mu$, we can
+define a non-degenerate group-invariant inner product on $\mathfrak{gl}(n,\R)$ as
+%
+\begin{equation}
+ \langle X,Y\rangle = \int_M \Tr(X(x)\cdot Y(x))\,\mu(x)
+\end{equation}
+%
+This inner product can be used to identify $\mathfrak{gl}(n,\R)$ with a subspace of the dual of $\mathfrak{gl}(n,\R)$. This subspace is called the smooth (or regular) dual.
+
+
+The smooth dual of the Lie algebra of vector fields on $M$ can be naturally identified with the space $\Omega^1(M)\otimes_{C^\infty(M)}\Omega^d(M)$. Elements of this space are linear combinations of tensor products of 1-forms with $d$-forms on $M$, where given a 1-form $\alpha$ and an $d$-form $\mu$ we identify the elements $f\cdot\alpha\otimes\mu$ with $\alpha\otimes f\cdot\mu$ for any smooth function $f.$ The pairing between vector fields on $M$ and elements of this space is given by
+%
+\begin{equation}
+\langle \xi,\alpha\otimes\mu\rangle =\int_M \iota_\xi(\alpha) \,\mu.
+\end{equation}
+%
+The naturality of the pairing means that the coadjoint action of $\cD$ the change of coordinates by a diffeomorphism.
+
+\subsection{Omori's theorem}
+There are already at this point a number of complications as soon as we enter the world of infinite dimensions. One is the following:
+
+\begin{teo}[Omori, 1978]
+	If a connected Banach--Lie group $\cD$ acts effectively, transitively and smoothly on a compact manifold, then $\cD$ must be a finite-dimensional Lie group.
+\end{teo}
+
+
+\section{The space of Riemannian metrics}
+Let $(M,g)$ be a $C^\infty$-smooth, closed, orientable Riemannian manifold of dimension $d.$ Denote by  $S_2M$ the bundle of symmetric 2-forms on $M$. The inner products in fibers of these bundles are determined by the Riemannian structure $g,$ as described in the following.
+
+Let $S_2^s=H^s(S_2M)$ be the Hilbert space of symmetric 2-forms of class $H^s$ for $s>d/2$. Denote by $C^0\Met(M)$ the space of continuous Riemannian metrics. For $s>d/2,$ let $\Met^s(M)=H^s(S_2M)\cap C^0\Met(M)$. Since $H^s\subseteq C^0(S_2M)$ and the embedding in continuous, we have that $\Met^s(M)$ is open in $S_2^s$. It is in fact an open, convex, positive cone. In particular, the space $\Met^s(M)$ is a smooth Hilbert manifold \cite{smolentsev2007spaces}.
+
+The following defines a weak Riemannian structure $G$ on $S_2^s$ for $s>d/2$. Let $g_{ij}$ be the local coordinate matrix of $g\in\Met^s(M).$ Then
+%
+\begin{equation}
+\label{Met-metric}
+G_g(a,b)=\int_Mg(a,b)\mu_g=\int_M g^{ik}g^{jl}a_{ij}b_{kl} \mu_g,\qquad a,b\in S_2^s
+\end{equation}
+%
+where the Einstein summation convention is assumed and upper indices on $g$ refer to the inverse matrix in coordinates. The map $\mathrm{vol}:g\mapsto\mu_g$ is smooth, and 
+%
+\begin{equation}
+\Met^s(M)\ni g\mapsto \Tr(g^{-1}ag^{-1}b)\in H^s(M,\mathbb{R})
+\end{equation}
+%
+for fixed $a,b\in S_2^s$ is smooth by Theorem 1.2 in \cite{smolentsev2007spaces}, originally stated in Palais, \textit{Foundations of Global Non-linear Analysis} (1968):
+
+\begin{quote}
+	Let $E$ and $F$ be vector bundles over $M$ and $f:E\to F$ a $C^\infty$-map which preserves fibers. If $s>\dim M/2+1,$ then the map $H^s(E)\ni g\mapsto f\circ g\in H^s(F)$ is a map of class $C^\infty.$
+\end{quote}
+
+
+
+Now we must
+apply the integration, which is a linear continuous operation. Hence $G_g$ depends smoothly on the metric $g$. Moreover, this weak Riemannian structure determines the smooth Riemannian connection
+on the Hilbert manifold $\Met^s(M)$, and therefore also the exponential map $T_g\Met^s(M)=S_2^s\to\Met^s(M)$.
+	
+\subsection{Pullback metrics}
+For a fixed $\varphi\in \cD^s,$ the pullback map $\Met^s(M)\ni g\mapsto\varphi^*g\in\Met^s(M)$ can be extended to the space $S_2^s$ as a continuous linear mapping. The metric~(\ref{Met-metric}) is invariant under the pullback action.
+
+For a smooth metric $g$, the mapping
+%
+\begin{equation}
+\label{pullback}
+\varphi\ni\cD^{s+1}\mapsto \varphi^*g\in\Met^s(M)
+\end{equation}
+%
+is a smooth mapping of Hilbert manifolds. The image of the mapping is the orbit $\Orb(g)$ of the metric $g$ under the action of the diffeomorphism group. The tangent space at $g$ of the orbit consists of symmetric 2-forms $h$ of the form $h=\cL_vg$, where $v$ is a vector field on $M$ of class $H^{s+1}$. The Berger-Ebin decomposition implies that the tangent space of the orbit is closed in the space $S_2^s$. However, we cannot conclude
+that the orbit is a submanifold. First, the map~(\ref{pullback}) is not a bijection since an element $g$ may possess the nontrivial isotropy group (isometry group). Second, the closedness of the orbit must also be proved. These problems are solved in \cite{ebin1967space}.
+
+\begin{teo}[\cite{ebin1967space}]
+	Let $s>d/2+2$ and let $I_g$ be the isometry group of a metric $g\in\Met(M)$. The pullback $\cD^{s+1}/I_g\to\Met^s(M)$ is smooth and injective, and its image is a smooth, closed submanifold to $\cD^{s+1}/I_g.$
+\end{teo}
+
+\begin{figure}
+	\centering
+	\includegraphics[width=\columnwidth]{3mfld.eps}
+	\caption{\label{fig:3mfld} The three manifolds. A vector $\xi\in T_{\id}\cD^s$ induces a vector on $Q$ via the action $\ell$, and $\xi(m)$ for $m\in M$ is a section of $TM$ by  construction of the tangent space of $\cD^s$. }
+\end{figure}
+
+\subsection{Push-forward metrics}
+The \textit{push-forward} defines a left action of $\cD^s$ on $\Met^s(M)$ by
+$$
+(\varphi_*g)_m(u,v)=g_{\varphi^{-1}(m)}\left(d\varphi^{-1}u,d\varphi^{-1}v\right),\quad m\in M,\ u,v\in T_{m}M
+$$
+
+\begin{question}
+For a fixed $\varphi\in \cD^s,$ the map $\ell_\varphi:\Met^s(M)\ni g\mapsto\varphi_*g\in\Met^s(M)$ can be extended to the space $S_2^s$ as a continuous linear mapping.
+\end{question}
+
+Recall the definition of the infinitesimal generator $\xi_\ell$ on $\Met^s(M)$ from the action $\ell:\cD^s\times\Met^s(M)\to\Met^s(M)$. On $\cD^s$ we have the exponential map $\overline{\exp}:T\cD^s\to\cD^s$ defined by $\overline{\exp}(\eta)=\exp\circ\eta$, where $\exp$ is the Riemannian exponential $TM\to M$ and thus
+%
+\begin{equation}
+\xi_\ell = \left.\frac{d}{dt}\right|_{t=0}\ell(\overline{\exp}t\xi,\cdot).
+\end{equation}
+%
+By the corollary of \cite[Theorem 23.3]{glilikh1997}, the exponential map $\overline{\exp}$ exists in a neighborhood of the zero section in $T\cD^s$, and it is $C^\infty$-smooth. The general properties of smooth exponential maps yield that $\overline{\exp}$ maps a neighborhood of the origin in $T_{\id}\cD^s$ onto a neighborhood of $\id\in\cD^s.$
+
+\begin{lem}\label{lem:Lie-derivative}
+	The infinitesimal generator corresponding to the push-forward action is given by (minus) the Lie derivative $-\cL_\xi$, for $\xi\in\cD^s.$
+\end{lem}
+
+\begin{proof}
+	A vector field (time-dependent?) $\xi\in T_{\id}\cD^s$ generates a one-parameter group $\varphi$ and we have the relation $\partial_{t}\varphi(t)=\xi\circ\varphi(t)$. Also $\varphi(s+t)=\varphi(s)\circ\varphi(t)$ which implies $\varphi^{-1}(t)=\varphi(-t),$ and $\varphi(t)_*$ is the inverse of $\varphi(t)^*.$
+	We differentiate the action at the identity map the action on a metric $g$; 
+	\[
+	\xi_\ell(g)=\left.\frac{d}{dt}\right|_{t=0}\varphi(t)_{*}g=-\left.\frac{d}{ds}\right|_{s=0}\varphi(s)^{*}g=-\mathcal{L}_{\xi}(g),
+	\]
+	where $\varphi(0)=\id:M\ni m\mapsto m\in M$.
+\end{proof}
+
+%Recall that for any Riemannian manifold $M$ with volume form $\mu$,  the divergence of a vector field $v$ is a function on $M$ that `measures the rate of change of the volume form' under the flow generated by $v$. Thus it is defined by
+%
+%\begin{equation}
+%\cL_v\mu = (\Div v)\mu.
+%\end{equation}
+
+\begin{question}
+If $\xi$ were time-dep. we get something more complicated?
+\end{question}
+
+By this lemma, the tangent space of the diffeormorphic push-forward action orbit, $T_g\Orb(g)$, is the set of symmetric (0,2)-tensors of the form $-\cL_\xi g.$ In particular, we have the following:
+
+\begin{prop}
+For a smooth metric $g$ on $M$, the map $\cD^{s+1}\to \Met^s(M)$ given by push-forward, is a smooth mapping of  Hilbert manifold. The image (the orbit) has tangent space
+%
+\begin{equation}
+T_g\Orb(g)=\left\{h=-\cL_\xi g: \xi\in T_{\id}\cD^{s+1}\right\}
+\end{equation}
+\end{prop}
+
+\begin{question}
+	What is $T_h\Orb(g)$, the tangent space at a point $h\in \Orb(g)$, not equal to $g$?
+	See Proposition~\ref{prop:tangent-orbit}, but also, since $\varphi(s+t)=\varphi(s)\circ\varphi(t)$ and $(\varphi\circ\psi)_*=\varphi_*\psi_*$,
+	\[
+	\frac{d}{dt}\varphi(t)_*g = \left.\frac{d}{ds}\right|_{s=0}\varphi(t+s)_*g = \left.\frac{d}{ds}\right|_{s=0}\varphi(t)_*\varphi(s)_*g = -\varphi(t)_*\cL_\xi g .
+	\]
+\end{question}
+
+\begin{prop}
+\label{prop:Met-momentum-map}
+	Let $\mu$ be any fixed volume form on $(M,g)$ and let $Q=\Met^s(M)$. With the (standard) pairings between $T^*_gQ$ and $T_gQ$, and $T^*M$ and $TM$, which are
+	\[
+	\langle f,\xi\rangle=\int_M f(\xi)\mu 
+	\]
+	and
+	\[
+	\langle \alpha,h\rangle =\int_M \alpha^{ij}h_{ij}\mu_g,
+	\]
+	respectively, the momentum map associated with the co-tangent lifted action of $\cD^s$ on $\Met^s(M)$, i.e., $J:T^*Q\to H^s(TM)^*$, mapping to the $H^s$ sections of $TM$, is given by $J(g,\alpha)=2\Div(\alpha)^\flat$, where $ ^\flat$ is the musical isomorphism $X\mapsto g(X,\cdot)$ and the divergence of a (2,0)-tensor is $\Div(\alpha)=\Tr(X\mapsto\nabla_X\alpha),$ or in coordinates $$ \Div(\alpha)^i=\sum_j\nabla_j\alpha^{ij}.$$
+\end{prop}
+
+\begin{proof}
+The momentum map is defined via $\langle J(g,\alpha_g),\xi\rangle = \langle \alpha, \xi_\ell(g)\rangle $ of Theorem~\ref{teo:cotangent-momentum-map}. Recall from~(\ref{tangentspace}) that $\xi\in T_{\id}\cD^s$ is an $H^s$-section of $TM$. At $T_mM$ we may write  in coordinates  $\xi(m)=\xi^ie_i$ for a basis $e_1,...,e_d$. Since $\Met^s(M)$ is open in $S_2^s$ the tangent space is $T\Met^s(M)\simeq TS_2^s\simeq S_2^s.$ By Lemma \ref{lem:Lie-derivative}, we compute for any $\alpha\in T^*_gQ$
+%
+\begin{equation}
+\langle \alpha,\xi_\ell(g)\rangle = -\int_M \alpha^{ij}(\cL_\xi g)_{ij}\mu_g
+\end{equation}
+%
+If $\nabla$ is the connection which is compatible with $g$ and $\nabla_{i}$
+is the covariant derivative in the direction of $\partial/\partial x^{i}$
+for local coordinates $x^{1},...,x^{d}$ on $M$, then $(\cL_{\xi}g)_{ij}=\nabla_{i}\xi_{j}+\nabla_{j}\xi_{i}.$
+Here, $\xi_{k}=g_{kl}\xi^{l}.$ Since the 2-form $\alpha$ is symmetric,
+$\alpha^{ij}\nabla_{i}\xi_{j}=\alpha^{ij}\nabla_{j}\xi_{i}$ and therefore
+\[
+-\int_{M}\alpha^{ij}(\cL_{\xi}g)_{ij}\mu_{g}=-2\int_{M}\alpha^{ij}\nabla_{i}\xi_{j}\mu_{g}.
+\]
+Integration by parts is standard, as $M$ has no boundary and $\mu_g$ is the volume form of $g$. Hence
+%
+\begin{equation}
+-2\int_{M}\alpha^{ij}\nabla_{i}\xi_{j}\mu_{g}= 2\int_{M}\nabla_{i}\alpha^{ij}\xi_{j}\mu_{g}
+\end{equation} 
+%
+The volume form transformation formula, see [ref], gives the standard volume form on $M$ via the determinant of $g_{ij}$, which we denote by $|g|,$ as follows:
+%
+\begin{equation}
+2\int_{M}g_{jk}\nabla_{i}\alpha^{ij}\xi^{j} \sqrt{|g|}\mu=\int_Mg(2\sqrt{|g|}\Div(\alpha),\xi)\mu=\langle 2\sqrt{|g|}\Div(\alpha)^\flat,\xi\rangle.
+\end{equation}
+%
+Here, we used $\xi_{k}=g_{kl}\xi^{l}$ again.
+\end{proof}
+
+\begin{question}
+If we consider the above proof with the pairing between $T^*Q$ and $T Q$ at any metric $h$, we have
+%
+\begin{equation}
+\langle \alpha,\xi_\ell(h)\rangle = -\int_M \alpha^{ij}(\cL_\xi h)_{ij}\mu_g
+\end{equation}
+%
+but the connection $\nabla$ is compatible with either $g$ or $h$, so either integration by parts fail, or $(\cL_{\xi}g)_{ij}=\nabla_{i}\xi_{j}+\nabla_{j}\xi_{i}$ does not hold. Right?
+
+We resolve this problem by introducing the pairing $\langle \alpha,h\rangle=G_{\pi_Q(h)}(a,h)$ where $a=hh\alpha$ is the (0,2)-form of $\alpha$ and $\pi_Q:T\Met^s(M)\to\Met^s(M)$ is the bundle projection onto the base point. Then $\pi_Q\xi_\ell(g)=g.$ 
+
+Note that \url{https://core.ac.uk/download/pdf/4887416.pdf} has 
+the operator $\pi_Q$ at page 57.
+\end{question}
+
+
+
+
+\section{Gradient flows}
+
+\begin{defn}
+	To any function $E:M\to\R$ on a Riemannian manifold $(M,g)$, the \textit{gradient} $\nabla E$ is the  vector field to which  the differential $dE$ is dual.
+\end{defn}
+
+We would like to study equations of the form
+\[
+\dot{x} = -\nabla E(x),
+\]
+in particular, we want to know if solutions exist and if the solutions are smooth, local or global, etc.
+
+
+Recall that on a Riemannian, infinite-dimensional manifold $\cD$, which is also a group, with a right-invariant metric $G$ we may need to work in the `smooth dual'. We can identify this via a positive definite, $L^2$-symmetric, elliptic, linear differential operator $A:T_{\id}\cD\to T_{\id}^*\cD.$  By $L^2$-symmetric we mean self-adjoint under the $L^2$-pairing, that is,
+%
+\begin{equation}
+ \langle A\xi,\eta\rangle=\int_M A \xi(\eta)\mu_g=\int_M A\eta(\xi)\mu_g = \langle A\eta,\xi\rangle
+\end{equation}
+%
+for all $\xi,\eta\in T_{\id}\cD.$ 
+For historical reasons dating back to Euler, $A$ is called the \textit{inertia operator} of the $L^2$-inner product on $(M,g)$, which we denote by round brackets,
+%
+\begin{equation} 
+\label{def:A-product}
+(\xi,\eta)=\langle A\xi,\eta\rangle=\int_M (A \xi)\eta\,\mu_g.
+\end{equation}
+%
+This determines the right-invariant metric $G$ by right translation on $T\cD$, that is, 
+%
+\begin{equation} 
+\label{weak-A-metric}
+G_\varphi(U,V)=G_{\id}(TR_{\varphi^{-1}}U,TR_{\varphi^{-1}}V)=(\xi,\eta)
+\end{equation}
+%
+where $U=\xi\circ\varphi$ and $V=\xi\circ\varphi$.
+
+Alternatively, we may think of the inertia operator as a $k$-th order differential operator $A:\mathfrak{X}^s(M)\to\mathfrak{X}^{s-k}(M)$, where $\mathfrak{X}(M)$ is the space of vector fields of class $H^s$ on $M$, and use the metric to identify the dual space as 
+%
+\begin{equation}
+ (\mathfrak{X}^s)^*(M)=\left\{Y^\flat: Y=AX,\ X\in\mathfrak{X}(M) \right\}
+\end{equation}
+%
+which gives $(\mathfrak{X}^s)^*(M) \simeq  \mathfrak{X}^{s-k}(M)$, where the isomorphism is the flat map defined via the metric. The natural pairing is
+%
+\begin{equation}
+\langle Y^\flat,X\rangle = \int_M g(Y,X)\mu_g,\quad Y^\flat=g(Y,\cdot),
+\end{equation}
+%
+which gives the inner product [Sobolev smoothness of $X$ and $Z$ is...?]
+%
+\begin{equation}
+(X,Z)=\int_M g(AX,Z)\mu_g,\quad X,Z\in\mathfrak{X}(M).
+\end{equation}
+%
+
+\begin{question}
+Is $\mathfrak{X}(M)$ different from the tangent bundle? Are they related (in an easy way)? It is an algebra with vector field commutator, and elements in  $\mathfrak{X}(M)$ are sections of the tangent bundle.
+\end{question}
+
+\begin{question}
+Is the map  $A^\flat:=A\circ\flat$ an okay equivalent to the above? Whereas $A^\flat$ acts on the metric, $A$ will not.
+\end{question}
+
+\subsection{A summary of the dual identifications}
+We may `transport' the operator $A$ to any point $\varphi\in\cD$. We define a map $T_\varphi\cD\to T_\varphi^*\cD$ via $A$ by
+%
+\begin{equation}
+A_\varphi = TR_{\varphi}\circ A\circ TR_{\varphi^{-1}}.
+\end{equation}
+%
+The map
+%
+\begin{align}
+\tilde{A}:T\cD^s\,&\to T\cD^s\upharpoonright\cD^{s-1} \nonumber \\
+(\varphi,\dot{\varphi})\,&\mapsto (\varphi,A_\varphi(\dot{\varphi}))
+\end{align}
+%
+is a smooth bundle map if $A$ is smooth by Theorem~\ref{teo:smooth-d-operator} and Remark~\ref{rem:smooth-d-operator}.
+
+We are given $(M,g)$.
+\begin{itemize}
+	\item The dual of $TM$ is identified via $^\flat:TM\ni X\mapsto g(X,\cdot)\in T^*M.$
+	\item The dual of $TS_2^s$ is identified via $g$ as well, applied twice, one for each entry of the (0,2)-form considered.
+	\item The dual of $T_\varphi\cD^s$ is identified via $A_\varphi$.
+\end{itemize}
+
+
+
+The manifold $\cD^s$ has a (weak) Riemannian structure given by~(\ref{weak-A-metric}). Thus the gradient of a function $E:\cD^s\to\R$ is
+%
+\begin{equation}
+\nabla E_\varphi =\xi\circ\varphi,\quad \mathrm{for}\quad A\xi=dE(\id)\in T^*_{\id}\cD^s.
+\end{equation}
+%
+
+Thus, if we have a gradient on $\cD$, that is a vector field $\nabla E$ at some point $\varphi\in\cD$, then we have
+%
+\begin{equation}
+G_\varphi(\nabla E_\varphi,V)=G_{\varphi}(\nabla E_{\id}\circ\varphi,\eta\circ\varphi)=G_{\id}(\nabla E_{\id},\eta)=(\nabla E_{\id},\eta).
+\end{equation}
+
+Recall that $J:T^*Q\to T_{\id}^*\cD^s$ with the pairing of Proposition~\ref{prop:Met-momentum-map} is given by
+\[
+\langle J(g,\alpha),\xi\rangle=\int_M \left(2\sqrt{|g|}\Div(\alpha)^\flat\right)(\xi)\,\mu
+\]
+for $Q=\Met^s(M)$, and thus by inserting $AA^{-1},$
+\[
+\int_M \left(2\sqrt{|g|}\Div(\alpha)^\flat\right)(\xi)\,\mu = \int_M \left(A\circ A^{-1}2\sqrt{|g|}\Div(\alpha)^\flat\right)(\xi)\,\mu,
+\]
+we identify $\nabla E_{\id}=A^{-1}2\sqrt{|g|}\Div(\alpha)^\flat,$ or in general 
+%
+\begin{equation}
+\nabla E_{\id}=A^{-1}J(q,\alpha).
+\end{equation}
+%
+
+
+
+
+
+
+
+\subsection{Gradient flow on action orbits}
+%Given a 1-form on $\cD^s$ we may identify a gradient via the inverse of the inertia operator, which is a map $A_\varphi^{-1}:T^*\cD^s\to T \cD^s$, and the pairing $\langle\,,\,\rangle$.
+
+%Let us consider $A_\varphi u=J(g,\alpha_g)$ on $(M,g)$, $\cD^s$ and $\Met^s(M)$. Then~(\ref{def:A-product}) yields
+%
+%\begin{equation}\nabla E_\varphi = A_\varphi^{-1} J(g,\alpha_g).\end{equation}
+
+On orbits of a left group action $\ell: \cD^s\times Q\to Q$, the gradient takes a specific form. Consider the orbit be $\Orb(q)$ for some $q\in Q$ and let $\ell_q$ be the map $\cD^s\ni \varphi\mapsto\varphi.q\in Q$ and let $F:\Orb(q)\to\R$ be a sufficiently smooth function.
+Let $E:\cD\to\R$ be another (sufficiently smooth) function. Recall the notation $\varphi.q=\ell(\varphi,q)$.
+
+\begin{prop}
+ The gradient of $E$ is
+\[
+\nabla E_\varphi = TR_{\varphi}\,\xi,\qquad\mathrm{for}\quad A\xi=J\big(\varphi.q,dF(\varphi.q)\big).
+\]
+\end{prop}
+
+\begin{proof}
+Since $E=F\circ\ell_q$ we have
+ $dE=(dF\circ\ell_q)T\ell_q$ as functionals on $T\cD^s$ via the standard pairing on ?,
+that is,
+%
+\begin{equation}
+\left\langle dE,\dot{\varphi}\right\rangle = 
+\left\langle \left(dF\circ\ell_q\right)T\ell_q,\dot{\varphi}\right\rangle
+\end{equation} 
+%
+where the tangent map $T\ell_q$ is defined via the exponential on $\cD^s$,
+\[
+T\ell_q U = \left.\frac{d}{dt}\right|_{t=0}\ell\big(\overline{\exp}(tU),q\big),\quad \overline{\exp}(V):=\exp\circ V.
+\]
+Since $\dot{\varphi}=\xi\circ\varphi$ for some vector field $\xi$ on $M$ we have
+%
+\begin{equation}
+T\ell_q(\varphi)= \xi_\ell(\ell(\varphi,q)).
+\end{equation}
+%
+ (Use that  $\xi_\ell(q_0)$ is linear in $\xi$ for any fixed $q_0\in Q$.)
+Thus we further calculate
+%
+\begin{equation}
+\langle dF(\varphi.q),T\ell_q(\dot{\varphi})\rangle=\langle dF(\varphi.q),\xi_\ell(\varphi.q)\rangle
+\end{equation}
+%
+By Proposition~\ref{prop:Met-momentum-map},
+%
+\begin{equation}
+\langle dF(\varphi.q),\xi_\ell(\varphi.q)\rangle=\langle J\big(\varphi.q, dF(\varphi.q)\big),\xi\rangle,
+\end{equation}
+%
+We have thus far $\langle dE,\dot{\varphi}\rangle=\langle J(\varphi.q,dF(\varphi.q)),\xi\rangle$ and by the inner product (\ref{def:A-product}),
+%
+\begin{equation}
+\langle J(\varphi.q,dF(\varphi.q)),\xi\rangle = (A^{-1}J(\varphi.q,dF(\varphi.q)),\xi)
+\end{equation}
+%
+which we have defined at every $\varphi\in\cD^s$ by translation, see~(\ref{weak-A-metric}), which here yields
+%
+\begin{equation}
+\langle dE,\dot{\varphi}\rangle = G_\varphi(TR_\varphi\eta,TR_\varphi\xi),\qquad\mathrm{for}\quad \eta=A^{-1}J(\varphi.q,dF(\varphi.q)).
+\end{equation}
+%
+Recall $\dot{\varphi}=\xi\circ\varphi=TR_\varphi\xi$. This completes the proof.
+\end{proof}
+
+
+\begin{prop}
+If $E$ is bounded from below, the gradient flow is a minimization problem.
+\end{prop}
+
+
+
+\subsection{Smoothness of the gradient flow and local solutions}
+Let us fix some $q\in Q$ and 
+consider $\check{J}(\varphi)=2\sqrt{|h|}\mathrm{div}_h(h-g)^{\flat_{h}}$ for $h=\varphi_*g$ 
+as a map from $\cD^{s}$. 
+We use a subscript on $\Div$ to emphasize which metric the covariant derivative in its definition is compatible with, that is, if $\Div_h(\alpha)=\Tr(\xi\mapsto\nabla_\xi \alpha)$ we mean that $\nabla$ is the connection of $h.$
+By counting derivatives, we
+see that $\check{J}$ maps into $T\cD^{s-2}$, because div is a
+first order differential operator and the push-forward map is of first
+order. It does not act on the base manifold,
+so it maps to $T\cD^{s-2}\upharpoonright \cD^{s},$ the
+restriction of $T\cD^{s-2}$ to the base $\cD^{s}$. We write
+%
+\begin{equation}
+\label{eq:B}
+\check{J}:\cD^{s}\ni\varphi\mapsto 2\sqrt{|h|}\mathrm{div}_h(h-g)^{\flat_{h}}\in T\cD^{s-2}\upharpoonright \cD^{s} ,\qquad h=\varphi_*g.
+\end{equation}
+%
+
+Analogous to Lemma 3.4 in Modin \cite{modin2015generalized}, we want to define a bundle
+map
+%
+\begin{equation} 
+\label{eq:bundlemap}
+\tilde{B}:(\varphi,\dot{\varphi})\mapsto(\varphi,\tilde{B}_{\varphi}(\dot{\varphi})),\quad\tilde{B}_{\varphi}:=TR_{\varphi}\circ B\circ TR_{\varphi^{-1}}
+\end{equation}
+%
+for some operator $B.$ In particular, we will study the cases $B=A$ and $B=\check{J}$ as defined in~(\ref{eq:B}). The aim is to prove that both $\tilde{A}$ and $\tilde{J}$ are smooth maps, and then use Banach space theorems to obtain sufficient smoothness
+for the inverse map of $\tilde{A}$.
+
+\begin{rem}
+	The loss of derivatives in~(\ref{eq:B}) is independent of the choice of pairing.
+\end{rem}
+
+In the following, let $\Delta=-d\delta-\delta d$ be the Hodge Laplacian.
+
+\begin{lem}[See Modin, 2015]
+	\label{lem:B-translate}
+Let $B$ be a smooth linear differential operator of order $k$. If $s>d/2+k$ then $\tilde{B}$ as defined in~(\ref{eq:bundlemap}) is a smooth bundle map.
+\end{lem}
+
+\begin{proof}
+Assume first that $B$ is of order 1. In local coordinates, $\tilde{B}(\varphi,\dot{\varphi})$ is a product of rational combinations of $B$, $\varphi$, $\dot{\varphi}$, $d\varphi$ and $d\dot{\varphi}$ in coordinates, where $d$ denotes the differential. Compare \cite{lee2013introduction}, page 62. Thus $\tilde{B}$ is  a multiplication of $B$ and $H^{s-1}$-maps, which is smooth as long as $s>\frac{1}{2}\dim M+1$, since then pointwise multiplications are smooth operations \cite[section 2 and appendix A]{ebin1970groups}.
+
+Explicitly, if $x^1,...,x^n$ are coordinates at $p\in M$ and if $\dot{\varphi}(p)=U^i\frac{\partial}{\partial y^i}$ for a set of coordinates $y^1,...,y^n$ at $\varphi(p)$, then a first order differential operator $B$ yields a bundle map
+$$
+\tilde{B}(\varphi,\dot{\varphi})=\frac{d\varphi^i}{dx^j}B^j_k\frac{dx^k}{d\varphi^l}U^l\frac{\partial}{\partial y^i}
+$$
+where
+$$
+\frac{dx}{d\varphi}=\left(\frac{d\varphi}{dx}\right)^{-1}:T_{\varphi(p)}M\to T_pM.
+$$
+
+If $B$ is  of order $k$ then write $B$ as a product of first order smooth linear differential operators, $B=B_1B_2...B_k$. Then $\tilde{B}=\tilde{B}_1\tilde{B}_2...\tilde{B}_k.$ By the first part of the proof, each $\tilde{B}_i$ (for $i=1,2,...,k$) is smooth and of order 1. Thus, $\tilde{B}$ is a smooth bundle map.
+\end{proof}
+
+\begin{lem}
+	Let $A=\sharp\circ(1-\alpha\Delta)\circ \flat$ for $\alpha>0$, $s>d/2+2$. Furthermore, let $\tilde{A}_\varphi=TR_{\varphi}\circ A\circ TR_{\varphi^{-1}}.$ The operator $\tilde{A}:T\cD^s\to T\cD^{s-2}\upharpoonright \cD^{s}$ given by $(\varphi,\dot{\varphi})\mapsto(\varphi,\tilde{A}_{\varphi}(\dot{\varphi}))$ is a smooth vector bundle isomorphism.	
+\end{lem}
+
+\begin{proof}
+	The operator $A=\sharp\circ(1-\alpha\Delta)\circ \flat$ for $\alpha>0$ is a smooth isomorphism from vector fields of class $H^s$ to vector fields of class $H^{s-2}$.
+	
+	Fix $\varphi\in\cD^s$ and apply lemma~\ref{lem:B-translate}, which says that $\tilde{A}$ is a smooth bundle map. It remains to show that there exists an inverse.
+	
+	At $\varphi\in\cD^s$, the derivative of $\tilde{A}$ is represented by an invertible matrix 
+	%
+	\begin{equation}
+	\label{eq:dA}
+	\begin{bmatrix}
+	  {\id}_{\cD^s} &  0 \\
+	  TR_{\varphi}\nabla(A\xi) & A_\varphi 
+	\end{bmatrix}
+	\end{equation}
+	%
+	where the lower right element is the ``coefficient of the linearlized expression for $TR_{\varphi}\circ A\circ TR_{\varphi^{-1}}$.'' 
+	By the inverse mapping theorem for Banach spaces, see~Appendix~\ref{app:Banach}, $\tilde{A}$ is a smooth isomorphism. Indeed, the inverse of~(\ref{eq:dA}) is a smooth map given by
+	%
+	\begin{equation}
+	\begin{bmatrix}
+	{\id}_{\cD^s} &  0 \\
+	-(A_\varphi)^{-1}\circ TR_{\varphi}\nabla(A\xi) & A_\varphi 
+	\end{bmatrix}
+	\end{equation}
+	%
+	where $(A_\varphi)^{-1}=TR_\varphi\circ A^{-1}\circ TR_{\varphi^{-1}}$.
+\end{proof}
+
+In order to clarify how the inverse mapping theorem for Banach spaces is used here, we quote (a great part of) it:
+%
+\begin{quote}
+Let $E$ and $F$ be Banach spaces, $U$ an open set in $E$ and let
+$f:U\to F$ be a $C^{k}$-morphism with $k\geq1.$ Assume that for
+some point $\varphi\in U$ the derivative $f'(\varphi):E\to F$ is
+an isomorphism which is continuous in the current topology. 
+Then $f$ is a local $C^{k}$-isomorphism at $\varphi\in U.$
+\end{quote}
+%
+We have $E=H^s(M,TM)$ with the open subset $U=T\cD^s$. The map $f=\tilde{A}$ takes vectors of class $H^s$ to vectors of class $H^{s-2}$, so $F=H^{s-2}(M,TM).$
+
+
+We now define% $\check{J}:T\cD^s\ni (\varphi,\dot{\varphi})\mapsto (\varphi,2\sqrt{|\varphi_*g|}\mathrm{div}(\varphi_*g-g)^\flat )\in T^*\cD^{s-2}\upharpoonright \cD^{s},$ and
+\[
+\check{J}: \cD^s\ni\varphi\mapsto 2\sqrt{|\varphi_*g|}\mathrm{div}(\varphi_*g-g)^\flat \in T^*_{\id}\cD^{s-2}
+\]
+and
+\[
+\tilde{J}:T\cD^s\ni(\varphi,\dot{\varphi})\mapsto (\varphi,J_\varphi(\dot{\varphi}))\in  T^*\cD^{s-2}\upharpoonright \cD^{s},\qquad J_\varphi:=TR_\varphi \check{J}.
+\]
+Here, $TR_\varphi \check{J}:\cD^s\to T^*_\varphi \cD^{s-2}$, because right translation of a vector field is a smooth map $T_\psi\cD^s\to T_{\varphi\circ\psi}\cD^s.$ 
+%Notice that this map is on the form~(\ref{eq:bundlemap}) since $\check{J}$ maps from $\cD^s$, and not `only from the identity' but with the exception that there is no differential operator on vector fields (corresponding to $B$).
+
+The following proposition relies on the same foundation as the previous one. As we consider the momentum map, it is in fact easier to show smoothness of the corresponding bundle map, since we do not need the inverse.
+
+\begin{prop}
+	The map $\tilde{J}$ is a smooth bundle map.
+\end{prop}
+
+\begin{proof}
+	The map $\psi_g:\varphi\mapsto \varphi_*g$, see \cite{ebin1970groups}, is a smooth map $\cD^{s}\to\Met^{s-1}(M)$.
+	% and its derivative $T_\varphi\psi_g: v\mapsto -\cL_{v\circ\varphi}(\varphi_*g)$ is a smooth map, since
+	% \[\cL_u = d\iota_u + \iota_u d\]
+	% and the inclusion (or inner product) map $\iota_u$ and the exterior derivative are smooth.
+	Taking determinants in local coordinates amounts to a polynomial expression, so the map $\cM^s\ni h\mapsto \sqrt{|h|}\in\mathbb{R}$ is smooth. Metrics are positive definite, so $|h|\geq0$. 
+	
+	The divergence is defined via the covariant derivative, which in local coordinates $x^1,...,x^{n}$, $n=\dim M$, takes the expression
+	%
+	\begin{equation}
+	\nabla_X s = \left(X^k\partial_k s_{il}-\Gamma^{k}_{\ ji}X^js_{kl}-\Gamma^{k}_{\ jl}X^js_{ik}\right)dx^i\otimes dx^l
+	\end{equation}
+	%
+	on (0,2)-forms $s\in S_2^{s-1}$. Here, $X$ is a vector on $M$ of class $H^s$. We may write 
+	$$
+	\Gamma^i_{\, jk} = \frac{1}{2}g^{il}\left(\frac{\partial g_{jl}}{\partial x^k}+\frac{\partial g_{kl}}{\partial x^j}-\frac{\partial g_{jk}}{\partial x^l}\right)
+	$$ 
+	in local coordinates, so if $g_{ij}\in H^{s-1}(M)$ then $\Gamma^i_{\, jk}$ are of class $H^{s-2}.$ Hence $\nabla_i$ as a map $TS_2^{s-1}\to TS_2^{s-2}$ is also smooth. 
+	For (0,2)-forms, we need that
+	\[ 
+	S^{s-1}_2\ni a\mapsto h^{-1}h^{-1}a\in \{\text{(2,0)-forms of class }H^{s-1}\},\quad h\in\Met^{s-1}(M)
+	\]
+	defines a smooth map. (Compare~(\ref{Met-metric}).) But musical isomorphisms are smooth maps, also for metrics of Sobolev smoothness $s$. 
+	Also the trace of tensors is a smooth operation, so the divergence is a smooth map $S_2^{s-1}\to T\cD^{s-2}$.
+\end{proof}
+
+\begin{question}
+	As we consider $E(\varphi)=G_{\varphi_*g}(\varphi_*g-g,\varphi_*g-g)$, where the metric $G$ is as in~(\ref{Met-metric}), this gives regularity of the first order derivatives, that is, $H^1$-regularity. But even for a 2-dimensional manifold $M$, we do not ensure
+	%
+	\begin{equation}
+	 s>\frac{\dim M}{2}+2,
+	\end{equation}
+	%
+	as is required in the above proposition.
+\end{question}
+
+Let $I:M\to\R$ and $I_0:M\to\R$ be fixed, smooth functions, and let $\lambda\in\R$ be a positive parameter.
+
+\begin{teo}
+There exists $\varepsilon>0$ and a unique $\xi(t)\in T_{\id}\cD^s$ for $t\in(-\varepsilon,\varepsilon)$ such that all $\xi(t)$ solve the gradient flow equation, $\dot{\varphi}=-\xi\circ\varphi,$ for
+$$
+\xi = (I\circ\varphi^{-1}-I_0)\nabla(I\circ\varphi^{-1}) + 2\lambda\sqrt{|\varphi_*g|}\mathrm{div}(\varphi_*g-g)^\flat.
+$$
+\end{teo}
+
+\begin{proof}
+The first term is worked out in [ref.]. From the definition, $\cD^s$ is a Hilbert manifold, and from the above propositions,
+%
+\begin{equation}
+  \varphi\mapsto \left(\varphi,(\tilde{A})^{-1}\tilde{J}(\varphi)\right) 
+\end{equation} 
+%
+defines a smooth vector field on $\cD^s$, that is, a smooth section $\cD^s\to T\cD^s$. The existence and continuous dependence on initial data follows from the existence theorem of local flows on Banach manifolds.
+\end{proof}
+
+
+\bibliographystyle{apalike}
+\bibliography{refs.bib}
+
+\newpage
+\appendix
+\section{The direct method of variational calculus}
+The main theorem
+
+\section[Calculus of variations]{Calculus of variations on diffeomorphisms}
+We fix an open subset $\Omega$ in $\R^d$. Diffeomorphisms on $\Omega$ form a group under composition of functions. We denote this by $\cD(\Omega)$.
+
+If we let $U$ denote an open subset of a Banach space $V$ we may define a class of time dependent vector fields $[0,1]\times \overline{U}\to V$ that vanish on $\partial U$ and are Lipschitz with respect to the Banach space variable. Denote by $C(t)$ this Lipschitz constant. Furthermore, assume that
+\[
+\int_0^1\|v(r,x)\|_Vdr+\int_0^1 C(r)dr<\infty,
+\]
+for some fixed $x\in U$. Assume that $v$ belongs to this class of vector fields. We define the flow of $v$ as the function $(t,x)\mapsto\varphi^v(t)(x)$, where $\varphi^v(t)(x)$ is the solution to 
+\[ \partial_t y=v(t,y),\quad y(0)=x. \]
+The flow of $v$ is a homeomorphism of $U$ at all times. This is a consequence of Grönwall's lemma:
+
+\begin{lem}[Grönwall's]
+	\label{gronwalls}
+	For two functions $u,\alpha:I\to \R$, where $I$ is an interval containing zero and $u$ is bounded, assume that for some integrable function $g$,
+	\[
+	u(t)\leq g(t)+\left|\int_0^t\alpha(s)u(s)ds\right|,\quad \forall t\in I.
+	\]
+	Then, for all $t\in I$,
+	\[
+	u(t)\leq g(t)+\left|\int_0^t g(s)\alpha(s)\exp[\int_0^s\alpha(r)dr]ds\right|.
+	\]
+	If $g$ is constant, then
+	\[
+	u(t)\leq g\,\exp\left[\int_0^t\alpha(s)ds\right].
+	\]
+\end{lem}
+
+\subsection{The analysis of LDDMM}
+
+A Banach space $V$ is called \textit{admissible} if it is embedded in $C_0^1(\Omega,\R^d)$, i.e., 
+\[
+	\exists C>0: \ \forall v\in V\quad \|v\|_V\geq C(\|v\|_\infty+\|Dv\|_\infty).
+\]
+
+We say that a time dependent vector in $V$ belongs to the class $\X_V^p$ on $\Omega$ in the following sense:
+\[
+\X_V^p(\Omega)=\left\{v\in V:\ \int_0^1\|v(t)\|_V^p<\infty\right\}.
+\]
+The flow of $v$ defines a 1-parameter group of diffeomorphisms by the equation $\partial_t\varphi^v(t)=v\circ\varphi^v(t)$ and the following, too, is a group:
+\[
+G_V=\{\varphi\in \cD(M): \varphi=\varphi^v(1)\ \mathrm{for\ some\ } v\in\X_V^1(\Omega)\}.
+\]
+Define a distance $d$ on $G_V$ by
+\[
+d(\psi,\phi)=\inf\{\|v\|_{\X_V^1}:\ \phi=\psi\circ\varphi^v(1)\}.
+\]
+
+\begin{teo}[Trouvé, 1998]
+	$(G_V,d)$ is a complete metric space.
+\end{teo}
+
+
+
+\begin{teo}
+	Let $V$ be an admissible Hilbert space embedded in the space $C_0^{p+1}(\Omega,\R^d)$ and assume that $U:G_V\to\R$ is bounded from below and continuous with respect to uniform convergence on compact sets of derivatives up to order $p$. Then
+	\[
+	\exists \varphi\in G_V:\ E(\varphi)=\min\{E(\phi):\ \phi\in G_V\}\quad \mathrm{for\ } E(\phi)=U(\phi)+d(\id,\phi)^2.
+	\]
+\end{teo}
+
+Continuity for uniform convergence on compact sets means that if $\varphi_n\to\varphi$ uniformly on compact subsets of $\Omega$ and the same is true for all partial derivatives up to order $p$, then $U(\varphi_n)\to U(\varphi)$. This is the reason for requiring that $V$ be embedded in $C_0^p(\Omega)$. 
+The below discussion explains why $V$ needs to be embedded in $C^{p+1}_0(\Omega)$.
+
+
+Define the set $\X_1^t(\Omega)$ of absolutely integrable functions from $[0,t]$ to $C_0^1(\Omega,\R^d)$. An element of $\X_1^t(\Omega)$ is a time dependent vector field $v(t,\cdot)$ such that for each $t$, $v(t):=v(t,\cdot)\in C_0^1(\Omega,\R^d)$ and
+\[
+\|v\|_{\X_1^t}:=\int_0^t\|v(t)\|_{1,\infty}dt<\infty,
+\]
+where $\|v(t)\|_{1,\infty}=\|v(t,\cdot)\|_\infty+\|Dv(t,\cdot)\|_\infty$. Since $\|v\|_{1,\infty}$ is an upper bound for the Lipschitz constant of $v$, the flow of $v$ is defined, and
+%
+\begin{equation}
+|\varphi^v(t)(x)-\varphi^v(t)(y)|\leq |x-y|\exp\left(\int_0^t\|v(s)\|_{1,\infty}ds\right).
+\end{equation}
+
+\begin{lem}\label{pointwise}
+	If $v\in\X_1^T(\Omega)$ and $v^n$ is a bounded sequence in $\X_1^T(\Omega)$ which weakly converges to some element $v\in\X_1^1(\Omega)$, then, for all $t\in[0,T]$ and for all compact subsets $Q$ of $\overline{\Omega}$,
+	\[
+	\lim_{n\to\infty}\max_{x\in Q}\left|\varphi^{v^n}(t)(x)-\varphi^{v}(t)(x)\right|=0.
+	\]
+\end{lem}
+The above lemma can be generalized to higher orders of derivatives by proving the following estimate:
+%
+\begin{equation} 
+\label{eq:estimate}
+\|\varphi^v(t)-\varphi^{u}(t)\|_{p,\infty}\leq C\left(\int_0^1\|u(t)\|_{p+1,\infty}dt\right)\int_0^t\|v-u\|_{p,\infty} dt
+\end{equation}
+%
+That is, the variation in the $(p,\infty)$-norm of diffeomorphisms is controlled by the $(p+1,\infty)$-norm of one of the vector fields and the $(p,\infty)$-norm of both of the vector fields.
+
+\subsubsection{Variation with respect to the vector field}
+Lemma~\ref{pointwise} and~(\ref{eq:estimate}) are justified in this section. We first show that the solution to the equation
+\[
+\partial_t W(t)=\left(Dv\circ \varphi^v(t)\right)W(t)+h\circ \varphi^v(t)
+\]
+is
+\[
+\left.\partial_\varepsilon\right|_{\varepsilon=0}\varphi^{v+\varepsilon h}(t)=\lim_{\varepsilon\to 0}\frac{1}{\varepsilon}\left(\varphi^{v+\varepsilon h}(t)-\varphi^v(t)\right).
+\]
+Define
+\[
+a^\varepsilon(t)=\frac{1}{\varepsilon}\left(\varphi^{v+\varepsilon h}(t)-\varphi^v(t)\right)-W(t).
+\]
+Since $\partial_t\varphi^{v+\varepsilon h}=(v+\varepsilon h)\circ\varphi^{v+\varepsilon h}(t)$, we can express $a^\varepsilon(t)$ in the following way:
+%
+\begin{multline*}
+a^\varepsilon(t)=\int_0^t \frac{1}{\varepsilon}\left(v\circ\varphi^{v+\varepsilon h}(r)-v\circ\varphi^v(r)\right)dr+\int_0^t h\circ \varphi^{v+\varepsilon h}(r)dr \\-\int_0^t\partial_rW(r)dr
+\end{multline*}
+\begin{multline*}
+=\int_0^t \frac{1}{\varepsilon}\left(v\circ\varphi^{v+\varepsilon h}(r)-v\circ\varphi^v(r)\right)dr+\int_0^t h\circ \varphi^{v+\varepsilon h}(r)dr \\-\int_0^t\left(\left(Dv\circ \varphi^v(r)\right)W(r)+h\circ \varphi^v(r)\right)dr
+\end{multline*}
+\begin{multline*}
+=\int_0^t \frac{1}{\varepsilon}\left(v\circ\varphi^{v+\varepsilon h}(r)-v\circ\varphi^v(r)\right)dr\\+\int_0^t \left(h\circ \varphi^{v+\varepsilon h}(r)-h\circ \varphi^v(r)\right)dr \\-\int_0^t\left(Dv\circ \varphi^v(r)\right)W(r)dr
+\end{multline*}
+\begin{multline*}
+=\int_0^t \frac{1}{\varepsilon}\left(v\circ\varphi^{v+\varepsilon h}(r)-v\circ\varphi^v(r)\right)dr\\+\int_0^t \left(h\circ \varphi^{v+\varepsilon h}(r)-h\circ \varphi^v(r)\right)dr \\-\int_0^t\left(Dv\circ \varphi^v(r)\right)\left(\frac{1}{\varepsilon}\left(\varphi^{v+\varepsilon h}(r)-\varphi^v(r)\right)-a^\varepsilon(r)\right)dr
+\end{multline*}
+\begin{multline*}
+=\int_0^t\left(Dv\circ \varphi^v(r)\right)a^\varepsilon(r)dr\\+\frac{1}{\varepsilon}\int_0^t (v+\varepsilon h)\circ\left(\varphi^{v+\varepsilon h}(r)-\varphi^v(r)\right)dr \\-\frac{1}{\varepsilon}\int_0^t\left(Dv\circ \varphi^v(r)\right)\left(\varphi^{v+\varepsilon h}(r)-\varphi^v(r)\right)dr
+\end{multline*}
+%\begin{multline*}
+%=\int_0^t\big(Dv\circ \varphi^v(r)\big)a^\varepsilon(r)dr\\+\frac{1}{\varepsilon}\int_0^t (v+\varepsilon h- Dv\circ \varphi^v(r))\circ\left(\varphi^{v+\varepsilon h}(r)-\varphi^v(r)\right)dr.
+%\end{multline*}
+For $\delta>0$, define $\mu(t,\delta)=\max\{|Dv(t,x)-Dv(t,y)|: |x-y|\leq \delta\}.$ We have
+\[
+|v(t,x)-v(t,y)-Dv(t,x)(x-y)|\leq \mu(t,|x-y|)|x-y|.
+\]
+Then,
+%
+\begin{multline*}
+|a^\varepsilon(t)|\leq \left|\int_0^t\left(Dv\circ \varphi^v(r)\right)a^\varepsilon(r)dr\right|\\+\frac{1}{\varepsilon}\int_0^t \mu(t,|\varphi^{v+\varepsilon h}(r)-\varphi^v(r)|)\left|\varphi^{v+\varepsilon h}(r)-\varphi^v(r)\right|dr 
+\end{multline*}
+\begin{multline*}
+\leq \int_0^t\|v(r)\|_{1,\infty}|a^\varepsilon(r)|dr\\+\frac{1}{\varepsilon}\int_0^t \mu(t,|\varphi^{v+\varepsilon h}(r)-\varphi^v(r)|)\left|\varphi^{v+\varepsilon h}(r)-\varphi^v(r)\right|dr 
+\end{multline*}
+
+To proceed, we show that $|\varphi^{v+\varepsilon h}(t)(x)-\varphi^v(t)(x)|=\mathcal{O}(\varepsilon)$ using Grön\-wall's lemma and the following inequality:
+%
+\begin{multline*}
+|\varphi^{v+\varepsilon h}(t)(x)-\varphi^v(t)(x)|\\ \leq  \varepsilon\int_0^t\|h(r)\|_\infty dr+ \int_0^t\|v(r)\|_{1,\infty}\left|\varphi^{v+\varepsilon h}(r)(x)-\varphi^v(r)(x)\right|dr .
+\end{multline*}
+%
+That is, apply Grönwall's lemma (Lemma~\ref{gronwalls}) with $$u=|\varphi^{v+\varepsilon h}(\cdot)(x)-\varphi^v(\cdot)(x)|.$$
+We obtain
+%
+\begin{multline*}
+|\varphi^{v+\varepsilon h}(t)(x)-\varphi^v(t)(x)|\leq \\  \varepsilon\int_0^t\|h(r)\|_\infty dr 
++ \varepsilon\left|\int_0^t\|v(r)\|_{1,\infty}\left(\int_0^r\|h(s)\|_\infty ds\right)e^{\int_0^r \|v(s)\|_{1,\infty}ds} dr\right|.
+\end{multline*}
+%
+This leads to the estimate
+%
+\begin{equation}
+\label{estimate}
+|a^\varepsilon(t)|\leq \int_0^t\|v(r)\|_{1,\infty}|a^\varepsilon(r)|dr + C\int_0^t\mu(r,C\varepsilon)dr,
+\end{equation}
+%
+where $C$ is independent of $\varepsilon$. Since $\mu(r,\delta)\to 0$ for every fixed $r$ and since $\mu(r,\delta)\leq 2\|v(r)\|_{1,\infty}$, it follows from the dominated convergence theorem that
+\[
+\lim_{\varepsilon\to 0}\int_0^t \mu(r,C\varepsilon)dr=0.
+\]
+Grönwall's lemma on~(\ref{estimate}) therefore implies that $|a^\varepsilon(t)|\to 0$ as $\varepsilon\to 0$, which means that the solution to
+\[
+\partial_t W(t)=\left(Dv\circ \varphi^v(t)\right)W(t)+h\circ \varphi^v(t)
+\]
+(for $W$ unknown) is
+\[
+\left.\partial_\varepsilon\varphi^{v+\varepsilon h}(t)\right|_{\varepsilon=0}.
+\]
+In fact, we can prove the following theorem.
+
+\begin{teo}
+	Let $v,h\in \X_1^1(\Omega)$. Then, for $x\in\Omega$,
+	\[
+	\left.\partial_\varepsilon\varphi^{v+\varepsilon h}(t)\right|_{\varepsilon=0}=D\varphi^v(t)\int_0^t\left(\big(D\varphi^v(-r)\big)h\right)\circ \varphi^v(r) dr.
+	\]
+\end{teo}
+
+\begin{proof}
+	Write $W(t)=D\varphi^v(t)(x)A(t)$, where $A(0)=0$. Then
+	\begin{multline*}
+	\partial_tW(t)=\partial_t\big(D\varphi^v(t)(x)A(t)\big)=D\big(v\circ \varphi^v(t)\big)A(t)+D\varphi^v(t)(x)\partial_tA(t)\\
+	=\big(Dv\circ \varphi^v(t)\big)W(t)+D\varphi^v(t)(x)\partial_tA(t).
+	\end{multline*}
+	%
+	Compare this to the defining equation for $W(t)$, that is, to
+	\[
+	\partial_t W(t)=\left(Dv\circ \varphi^v(t)\right)W(t)+h\circ \varphi^v(t).
+	\]
+	We conclude that
+	\[
+	\partial_tA(t)=\big(D\varphi^v(t)(x)\big)^{-1}h\circ \varphi^v(t)
+	\]
+	Recall that $\varphi^v(-t):\Omega\to\Omega$ is the inverse of $\varphi^v(t)$, and
+	\begin{multline*}
+	\id_\Omega=D\left([\varphi^v(t)]^{-1}\circ\varphi^v(t)\right)=\left(D[\varphi^v(t)]^{-1}\circ \varphi^v(t)\right)D\varphi^v(t) \\
+	\implies \big(D\varphi^v(t)(x)\big)^{-1}=D[\varphi^v(t)]^{-1}\circ \varphi^v(t)=D[\varphi^v(-t)]\circ \varphi^v(t),
+	\end{multline*}
+	which implies that (omitting the square brackets)
+	\[
+	\partial_tA(t)=\big(D\varphi^v(-t)\circ \varphi^v(t)\big)\big(h\circ  \varphi^v(t)\big)=\big(D\varphi^v(-t)h\big)\circ \varphi^v(t)
+	\]
+	or
+	\[
+	A(t)=\int_0^t\big(D\varphi^v(-r)h\big)\circ \varphi^v(r) dr.
+	\]
+	This yields the formula in the theorem.
+\end{proof}
+
+\begin{proof}[Proof of Lemma~\ref{pointwise}]
+	We compute
+	\begin{align*}
+	\left|\varphi^u(t)(x)-\varphi^v(t)(x)\right| =& \left|\int_0^t u\circ \varphi^u(r)(x)-v\circ \varphi^v(r)(x)\ dr\right|\\
+	\leq & \left|\int_0^t u\circ \varphi^u(r)(x)-v\circ \varphi^u(r)(x)\ dr\right|\\
+	&\quad +\int_0^t \left|v\circ \varphi^u(r)(x)-v\circ \varphi^v(r)(x)\right| dr\\
+	\leq & \left|\int_0^t u\circ \varphi^u(r)(x)-v\circ \varphi^u(r)(x)\ dr\right|\\
+	&\quad +\int_0^t\|v(r)\|_{1,\infty} \left|\varphi^u(r)(x)-\varphi^v(r)(x)\right| dr
+	\end{align*}
+	We apply Grönwall's lemma. In the language of Grönwall's lemma, we use
+	\[
+	u(t)=\left|\varphi^u(t)(x)-\varphi^v(t)(x)\right|,\qquad \alpha(t)=\|v(t)\|_{1,\infty}
+	\]
+	and
+	\[
+	g(t)=\left|\int_0^t u\circ \varphi^u(r)(x)-v\circ \varphi^u(r)(x)\ dr\right|.
+	\]
+	Then
+	\[
+	u(t)\leq g(t)+\left|\int_0^t \alpha(s) g(s) e^{\int_0^s\alpha(r)dr}ds\right|.
+	\]
+	Moreover,
+	\[
+	g(t)\leq \int_0^t\|u(r,\cdot)-v(r,\cdot)\|_\infty dr
+	\]
+	This yields
+	\begin{multline*}
+	\left|\varphi^u(t)(x)-\varphi^v(t)(x)\right|\leq\\
+	\left(1+\int_0^t \|v(s)\|_{1,\infty}e^{\int_0^s\|v(r)\|_{1,\infty}dr}ds\right)\int_0^t\|u(r,\cdot)-v(r,\cdot)\|_\infty dr,
+	\end{multline*}
+	which shows that $v\mapsto\varphi^v(t)$ is Lipschitz for $\|\cdot\|_{\X_1^t}$. Next, consider the linear map
+	\[
+	u\mapsto \int_0^t u\circ \varphi^v(r)\,dr,
+	\]
+	which is continuous, because
+	\[
+	\left|\int_0^t u\circ \varphi^v(r)\,dr\right|\leq \int_0^t\|u(r)\|_{1,\infty}dr\leq \|u\|_{\X_1^t}
+	\]
+	[TODO. Younes~L., \textit{Shapes and diffeomorphisms}, 2010, p. 170.]
+\end{proof}
+
+\section{Banach space theory \label{app:Banach}}
+This exposition follows \cite{lang1999} roughly. The inverse function theorem and the existence theorem for differential equations are based on the next result.
+
+\begin{lem}
+	Let M be a complete metric space, with distance function $d$ and let $f:M\to M$ be a mapping of $M$ into itself. Assume that there is a constant $K$ such that $0<K<1$ and
+	\[
+	d\big(f(x),f(y)\big)\leq K d(x,y),\qquad\forall x,y\in M.
+	\]
+	Then $f$ has a unique fixed point (a point such that $f(x) = x$). Given any
+	point $x_0$ in $M$, the fixed point is equal to the limit of $f_n(x_0)=$ (iteration of $f$ repeated $n$ times) as $n$ tends to infinity.
+\end{lem}
+
+Recall that a Banach space is a complete, normed vector space.
+
+\begin{teo}
+	\label{teo:Cpmorphism}
+	Let $E$ and $F$ be Banach spaces, $U$ an open set in $E$ and let
+	$f:U\to F$ be a $C^{k}$-morphism with $k\geq1.$ Assume that for
+	some point $\varphi\in U$ the derivative $f'(\varphi):E\to F$ is
+	a toplinear isomorphism. Then $f$ is a local $C^{k}$-isomorphism
+	at $\varphi\in U.$
+\end{teo}
+
+By a local $C^p$-isomorphism at $x_0$, we mean that there exists an open
+neighborhood $V$ of $x_0$ such that the restriction of $f$ to $V$ establishes a
+$C^p$-isomorphism between $V$ and an open subset of $E.$
+
+\begin{prop}
+	If $f: U\to V$ is a homeomorphism and is of class $C^p$ with $p\geq1$, and if $f$ is a $C^1$-isomorphism, then $f$ is a $C^p$-isomorphism.
+\end{prop}
+
+
+\begin{teo}[Implicit Mapping Theorem]
+	Let $U$ and $V$ be open sets in some Banach spaces $E$ and $F$, respectively, and assume that $f:U\times V\to G$ is a $C^p$-map such that $f(a,b)=0$ for some $(a,b)\in U\times V,$ and assume that $D_2f(a,b): F\to G$ is a toplinear ismorphism. Then there exists a continuous map $g: U_0\to V$ defined on an open neighborhood $U_0$ of $a\in U$ such that $g(a) = b$ and such that $f(x,g(x))=0$ for all $x\in U_0$. If $U_0$ is a sufficiently small ball, then $g$ is unique and of class $C^p.$
+\end{teo}
+
+
+\subsection{Existence theorem for differential equations}
+Let $E$ be a Banach space and $U$ an open subset of $E.$ In this section we consider vector fields locally. The notion will be globalized later, and thus for the moment, we define (the local representation of) a time-dependent vector field on $U$ to be a $C^p$-morphism with $p\geq 0,$
+$$
+f: J\times U\to E
+$$
+where $J$ is an open interval containing $0$ in $\R$. We think of $f$ as assigning to each point $x$ in $U$ a vector $f(t,x)$ in $E$, depending on time $t.$
+
+Let $x_0$ be a point in $U$. An integral curve for $f$ with initial condition $x_0$ is a mapping of class $C^r$ ($r\geq 1$)
+$$
+\alpha: J_0\to U
+$$
+of an open subinterval of $J$ containing $0$, into $U$, such that $\alpha(0)=x_0$ and such that $\alpha'(t)=f(t,\alpha(t))$. 
+
+Let $f:J\times U\to E$ be as above and let $x_0$ be a point of $U$. By a local flow for $f$ at $x_0$ we mean a mapping
+$$
+\alpha:J_0\times U_0\to U
+$$
+where $J_0$ is  a subinterval of $J$ containing $0$ and $U_0$ is an open subset of $U$ containing $x_0$, such that for each $x\in U_0$ the map $\alpha_x(t)=\alpha(t,x)$ is an integral curve for $f$ with initial condition $x$, that is, such that $\alpha(0,x)=x.$
+
+If $f$ is of class $C^l$, it follows at once from the mean value theorem that $f$ is Lipschitz on some open neighborhood $J_0\times U_0$ of a given point $(0, x_0)$ of $U$, and that it is bounded on some such neighborhood. We shall now prove that under a Lipschitz condition, local flows exist and are unique locally. In fact, we prove more, giving a uniformity property for such flows.
+
+\begin{prop}
+Let $J$ be an open interval of $\R$ containing $0$ and let $U$ be an open subset of the Banach space $E.$ Let $x_0$ be  a point of $U$ and let $a\in(0,1)$ be such that the closed ball $\bar{B}_{3a}(x_0)$ lies in $U$. Assume that we have a map 
+$$
+f: J\times U\to E \qquad \text{being continuous}
+$$
+which is bounded by a constant $L\geq 1$ on $J\times U$ and satisfies a Lipschitz condition on $U$ uniformly with respect to $J$, with Lipschitz constant $K\geq 1$. For each $x\in\bar{B}_a(x_0)$, if $b\in \R$ is such that 
+$$
+0<b<\frac{a}{LK} \quad\mathrm{then}\quad \exists!\, \alpha :(-b,b)\times B_a(x_0)\to U
+$$
+that is, a unique flow exists. If $f$ is of class $C^p$ with $p\geq 1$ then so is each integral curve $\alpha_x$.
+\end{prop}
+
+The local flow of this proposition is continuous. Furthermore, the map $x\mapsto \alpha_x$ of $\bar{B}_a(x_0)$ into the space of curves is continuous and satisfies a Lipschitz condition.
+
+We can formulate a uniqueness theorem for integral curves over their whole domain of definition.
+
+\begin{teo}
+Let $U$ be open in $E$ and let $f:U\to E$ be a vector field of class $C^p$ with $p\geq 1$. Let $\alpha_1:J_1\to U$ and $\alpha_2:J_2\to U$ be two integral curves for $f$ with the same initial condition $x_0$. Then $\alpha_1$ and $\alpha_2$ are equal on $J_1\cap J_2.$
+\end{teo}
+
+We shall now give another formulation of the local smoothness of the flow, which depends on a simple application of the implicit mapping theorem in Banach spaces, and was found independently by Pugh and Robbin. One advantage of this proof is that it extends to $H^p$ vector fields, as noted by Ebin and Marsden \cite{ebin1970groups}.
+
+\begin{teo}
+Let $p$ be a positive integer and let $f:U\to E$ be a $C^p$ vector field. Let $x_0\in U$. Then there exists numbers $a,b>0$ such that the local flow $\alpha:(-b,b)\times B_a(x_0)\to U$ is of class $C^p.$
+\end{teo}
+
+\begin{proof}
+	For $a,b$ sufficiently small, we can apply the implicit mapping theorem to conclude that the map $x\mapsto \alpha_x$ is of class $C^p$. See \cite{lang1999}, page 83.
+\end{proof}
+
+\subsection{Second-order vector fields and differential equations}
+Let $X$ be a manifold of class $C^p$ with $p\geq 3.$ Then its tangent bundle $TX$ is of class $C^{p-1}$ and the tangent bundle of the tangent bundle, $TTX$, is of class $C^{p-2}$. Let $\alpha:J\to X$ be a $C^q$ curve, $q\leq p.$ A \textit{lifting} of $\alpha$ is a curve $\beta:J\to TX$ such that $\pi\beta=\alpha$. Assume that $q\geq2,$ so that a lift will be assumed of class $q-1\geq 1.$ Such lifts always exist, for instance the canonical lifting of $\alpha$, see \cite{lang1999}.
+
+A second-order vector field over $X$ is a vector field $F$ on the tangent bundle  $TX$ (of class $C^{p-1}$) such that, if $\pi:TX\to X$ denotes the canonical projection of $TX$ onto $X$, then
+%
+\begin{equation}
+\pi_*\circ F = {\id},
+\end{equation}
+%
+that is, $\pi_*F(v)=v$ for all $v\in TX$. Observe that the succession of symbols makes sense, because $\pi_*:TTX\to TX$ maps the double tangent bundle into $TX.$ A vector field $F$ on $TX$ is a \textit{second-order vector field} on $X$ if and only if it
+satisfies the following condition: Each integral curve $\beta$ of $F$ is equal to the canonical lifting of $\pi\beta$, in other words, $(\pi\beta)'=\beta.$ The proof is immediate from the definitions,
+because $(\pi\beta)'=\pi_*\beta'=\pi_*\circ F\circ \beta$. We then use the fact that given a vector $v\in TX,$ there is an integral curve $\beta=\beta_v$ with initial condition $\beta_v'(0)=v.$
+
+TODO
+
+Let $V$ denote the kernel of the map $TE\to TX.$
+We leave it to the reader to verify in charts that $V$ is a vector subbundle of $TE$ over $E,$ and that the image of $H$ is a complementary subbundle. One calls $V$ the vertical subbundle, canonically defined, and one calls $H$ the horizontal subbundle determined by the connection.
+
+
+
+We shall be interested in special kinds of second-order differential equations. Before we discuss these, we make a few technical remarks.
+
+Let $s$ be a real number, and $\pi: E\to X$ be a vector bundle. If $v$ is in $E$, so is $E_x$ for some $x$ in $X$, then $sv$ is again in $E_x$, since $E_x$ is a vector space. We write $s_E$ for the mapping of $E$ into itself given by this scalarmultiplication. This maping is in fact a VB-morphism, and even a VB-isomorphism is $s\neq 0$. Then
+$$
+T(s_E)={s_E}_* : TE\to TE
+$$
+is the usual induced map on the tangent bundle of $E$.
+
+Now let $E = TX$ be the tangent bundle itself. Then our map $s_{TX}$ satisfies the property
+$$
+(s_{TX})_*\circ s_{TTX} = s_{TTX}\circ (s_{TX})_*
+$$
+which follows from the linearity of $s_{TX}$ on each fiber, and can also be seen directly  from the representation on charts given below.
+
+We define a spray to be a second-order vector field $F$ which satisfies the homogeneous quadratic condition: For all $s\in\R$ and all $v\in TX,$ we have
+$$
+F(sv)=(s_{TX})_* sF(v).
+$$
+It is immediate from the conditions defining sprays (second-order vector field satisfying the above condition) that sprays form a convex set! Hence if we can exhibit sprays over open subsets of Banach spaces, then we can glue them together by means of partitions of unity, and we obtain at once the following global existence theorem.
+
+\begin{teo}
+Let $X$ be a manifold of class $C^{p}$ with $p\geq 3.$ If $X$ admits partitions of unity, then there exists a spray over $X.$
+\end{teo}
+
+
+TODO
+
+The condition we have taken to define a spray is equivalent to other conditions concerning the integral curves of the second-order vector field $F.$ We shall list these conditions systematically. We shall use the following relation. If $\alpha:J\to X$ is a curve and $\alpha_1$ is the curve defined by $\alpha_1(t)=\alpha(st)$ then
+$$
+\alpha_1'(t)=s\alpha'(st),
+$$
+this being the chain rule for differentiation.
+If $v$ is a vector in $TX$, let $\beta_v$ be the unique integral curve of $F$ with initial condition $v$, that is, such that $\beta_v(0)=v.$ For each $v\in TX$, the following conditions are equivalent:
+%
+\begin{enumerate}
+	\item A number $t$ is in the domain of $\beta_{sv}$ iff $st$ is in the domain of $\beta_v$ and $\beta_{sv}(t)=s\beta_v(st).$
+	\item If $s$ and $t$ are numbers, $st$ is in the domain of $\beta_v$ if and only if $s$ is in 	the domain of $\beta_{tv}$, and then $\pi\beta_{tv}(s)=\pi\beta_v(st).$
+	\item A number $t$ is in the domain of $\beta_v$ if and only if $1$ is in the
+	domain of $\beta_{tv}$, and then  $\pi\beta_{v}(s)=\pi\beta_{tv}(1).$
+\end{enumerate}
+
+Next we consider further properties of the integral curves of a spray. Let $F$ be a spray on $X.$ As above, we let $\beta_v$ be the integral curve with initial condition $v$. Let $D$ be the set of vectors $v\in TX$ such that $\beta_v$ is defined at least on the interval $[0, 1].$ We know from Corollary 2.7 in \cite{lang1999} that $D$ is an open set in $TX$, and by Theorem 2.6 in \cite{lang1999} the map $v\mapsto \beta_v(1)$ is a morphism of $D$ into $TX$. We now define the exponential map $\exp: D\to X$ to be
+$$
+\exp(v)=\pi\beta_v(1).
+$$
+Then $\exp$ is a $C^{p-2}$-morphism.  We also call $D$ the domain of the exponential map (associated with F).
+
+We denote by $\exp_x$ the restriction of $\exp$ to the tangent space $T_xX$. We have the following existence theorem:
+
+\begin{teo}
+Let $X$ be a manifold and $F$ a spray on $X.$ Then
+$$ \exp_x:T_xX\to X$$
+induces a local isomorphism at the zero vector $0_x\in TX$, and $(\exp_x)_*$ is the identity tangent map at $0_x$.
+\end{teo}
+
+\begin{proof}
+We prove the second assertion first because the main assertion
+follows from it by the inverse mapping theorem. Furthermore, since $T_xX$ is
+a vector space, it suffices to determine the derivative of $\exp_x$ on rays, in other words, to determine the derivative with respect to t of a curve $\exp_x(tv).$ We find
+$$ \frac{d}{dt}\pi\beta_{tv}=\beta_{tv}.$$
+Evaluating this at $t = 0$ and taking into account that $\beta_w$ has $w$ as initial condition for any $w$ gives us
+$$ (\exp_x)_*(0_x)=\id.$$
+\end{proof}
+
+\begin{prop}
+The images of straight segments through the origin in $T_xX$ under the exponential map $\exp_x$ are geodesics. In other words, if $v\in T_xX$ and we let 
+$$
+\alpha(v,t)=\alpha_v(t)=\exp_x(tv),
+$$
+then $\alpha_v$ is a geodesic. Conversely, let $\alpha:J\to X$ be a $C^2$ geodesic defined on an interval $J$ containing $0$, and such that $\alpha(0)=x$. Let $\alpha'(0)=v$. Then $\alpha(t)=\exp_x(tv).$
+\end{prop}
+
+\begin{proof}
+The first statement by definition means that $\alpha_v'$ is an integral
+curve of the spray $F.$ Indeed, by the spray conditions, we know that
+$$
+\alpha(v,t)=\alpha_v(t)=\pi\beta_{tv}(1)=\pi\beta_v(t),
+$$
+and $(\pi\beta_v)'=\beta_v$ is  indeed an integral curve of the spray. Thus our assertion that curves $t\mapsto \exp(tv)$ are geodesics follows from the definition of the exponential map and the spray conditions.
+
+Conversely, given a geodesic $\alpha: J\to X$, by definition $\alpha'$ satisfies the differential equation $$\alpha''(t)=F\left(\alpha'(t)\right).$$ The two curves $t\mapsto \alpha(t)$ and $t\mapsto\exp_x(tv)$ satisfy the  same differential equation and have the same initial conditions, so the two curves are equal. This finishes the proof.
+\end{proof}
+
+We call the map $(v,t)\mapsto\alpha(v,t)$ the geodesic flow on $X.$ It is defines on an open subset of $TX\times\R$ with $\alpha(v,0)=x$ if $v\in T_xX.$ Note that
+$$
+\alpha(sv,t)=\alpha(v,st)
+$$
+since $\pi\left(s\beta_v(t)\right)=\pi\beta_v(t)$ for $s\in\R$. Precisely, $t$ is in the domain of $\alpha_{sv}$ iff $st$ is in the domain of $\alpha_v$, and in that case the formula holds. We obtain by the above theorem:
+
+\begin{cor}
+Let $F$ be a spray on $X$ and let $x_0\in X$. There exists an open neighborhood $U$ of $x_0$ and an open neighborhood $V$ of $0_{x_0}$ in $TX$ satisfying the following condition: For every $x\in U$ and $v\in V\cap T_xX,$ there exists a unique geodesic $\alpha_v:(-2,2)\to X$ such that 
+$$
+\alpha_v(0)=x,\quad \alpha_v'(0)=v.
+$$
+\end{cor}
+
+Observe that in a chart, we may pick $V$ as a product $V=U\times V_2(0)\subset U\times E$ where $V_2(0)$ is a neighborhood of $0\in E$. Then the geodesic flow is defined on $U\times V_2(0)\times J $ where $J=(-2,2)$. We picked $(-2, 2)$ for concreteness. What we really want is that $0$ and $1$ lie in the interval. Any bounded interval $J$ containing $0$ and $1$ could have been selected in the statement of the corollary. Then of course, $U$ and $V$ (or $V_2(0)$) depend on $J.$
+
+
+
+
+\end{document}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\begin{lem}
+	The adjoint operator to $l_g: T_{\id}\cD^s\to S_2^s$, where $l_g(\xi)=-\frac{1}{2}\cL_\xi g$ is the divergence operator with respect to the weak Riemannian structure~(\ref{weak-metric}).
+\end{lem}
+
+\begin{proof}
+	Let $g$ be a Riemannian metric on $M$. We will write $a$ with upper indices for the corresponding (2,0)-tensor in coordinates given by the musical isomorphism, that is, $a^{ij}=g^{ik}g^{jl}a_{kl}$. Using Einstein summation notation and since any $a\in S_2$ is symmetric,
+	\[
+	G_g(a,l_g(\xi))= -\frac{1}{2}\int_M a^{ij}(\cL_\xi g)_{ij}\mu_g=-\int_M a^{ij}\nabla_i\xi_j \mu_g,
+	\]
+	where $\nabla_i$ is the covariant derivative along the vector field $\partial/\partial x^i$ in local coordinates $x^1,...,x^d$ and $\xi_i=g_{ik}\xi^k.$ By integration by parts 
+	\[
+	G_g(a,l_g(\xi))=\int_M \nabla_i a^{ij}\xi_j \mu_g =G_{\id}((\Div a)^\sharp,\xi),
+	\]
+	and since $\nabla$ is compatible with $g$,
+	\[
+	G_g(a,l_g(v))=\int_M \nabla_i a^{i}_{\ j}v^j \mu_g=\int_M g(\mathrm{div}(\alpha)^\flat, v) \mu_g=G_\varphi(\mathrm{div}(a)^\flat,v).
+	\]
+	TODO: Fill in the gaps. Explain.
+\end{proof}
+
+Fix $(M,g)$ and recall $T\cD^s$ from~(\ref{tangentspace}), namely $T_\varphi\cD^s=\{\xi\circ\varphi:\xi\in T_{\id}\cD^s\},$ and construct its metric as
+%
+\begin{equation}
+\label{weak-metric-later}
+G_\varphi(u,v)=\int_M g_{\varphi(m)}\big( \xi(m),\eta(m)\big)\mu(m),\quad u=\xi\circ\varphi,\ v=\eta\circ\varphi,
+\end{equation}
+%
+where $\mu$ is the Riemannian volume form induced by the metric on $M$. Notice that $u=(R_\varphi)_*\xi=TR_\varphi\xi$.
+
+\begin{proof}
+	Fix $g\in\Met^s(M)$. We will write $a$ with upper indices for the corresponding (2,0)-tensor in coordinates given by the musical isomorphism, that is, $a^{ij}=g^{ik}g^{jl}a_{kl}$. If $\nabla_i$ is the covariant derivative along the vector field $\partial/\partial x^i$ in local coordinates $x^1,...,x^d$ of $M,$ and further chosen via the Levi-Cività connection $\nabla$, respecting $g$, then
+	\[
+	(\cL_Xg)_{ij}=\nabla_iX_j+\nabla_jX_i, \qquad X\in TM.
+	\]
+	
+	Recall that $\xi(m)\in TM$ for $\xi\in T\cD^s$. Using Einstein summation notation and since any $a\in S_2^s$ is symmetric,
+	\[
+	G_g(a,\xi_\ell(g))= -\int_M a^{ij}(\cL_\xi g)_{ij}\mu_g=-2\int_M a^{ij}(m)\nabla_i\xi_j(m) \mu_g(m),
+	\]
+	where $\xi_i(m)=g_{ik}\xi^k(m).$ By integration by parts 
+	\[
+	G_g(a,\xi_\ell(g))=2\int_M \nabla_i a^{ij}(m)\xi_j(m) \mu_g(m),
+	\]
+	and since $\nabla$ is compatible with $g$ we may lower and raise indices, which yields
+	%
+	\begin{multline}
+	G_g(a,\xi_\ell(g))=\int_M 2\nabla_i a^{i}_{\ j}(m)\xi^j(m) \mu_g(m)\\=\int_M g_{m}(\Div(a),\xi)\mu_g(m)
+	=G_{\id}(2\Div(a),\xi).
+	\end{multline}
+	TODO: Fill in the gaps. Explain.
+\end{proof}
+
+\begin{rem}
+	The right invariance of $G$ on $T\cD^s$ gives
+	\[
+	G_{\id}(2\Div(a),\xi)=
+	G_{\varphi}(2\mathrm{div}(a)\circ\varphi,\xi\circ\varphi)
+	\]
+\end{rem}
+
+Let the pairings in $\langle J(q,\alpha_q),\xi\rangle = \langle \alpha_q, \xi_\ell(q)\rangle $ of Theorem~\ref{teo:cotangent-momentum-map} be 
+\[
+\langle f,\xi\rangle=\int_M f(\xi)\mu 
+\]
+and
+\[
+\langle \alpha,h\rangle =\int_M \alpha^{ij}h_{ij}\mu
+\]
+respectively. The above lemma lets us identify the momentum map
+\[
+J(g,\alpha_g)=2g\big(\Div(\alpha_g),\,\cdot\big)=2\Div(\alpha_g)^\flat.
+\]
