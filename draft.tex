@@ -1,7 +1,11 @@
+% online version document size
 %\documentclass{article}
-\documentclass[a5paper,10pt,twoside]{article}
-\usepackage[lmargin=0.5in,rmargin=0.5in,bmargin=0.3in,tmargin=0.7in]{geometry}
 
+% print version document size
+\documentclass[a5paper,10pt,twoside]{article}
+\usepackage[lmargin=0.5in,rmargin=0.8in,bmargin=0.3in,tmargin=0.7in]{geometry}
+
+% packages
 \usepackage{mathtools,amssymb,amsthm}
 \usepackage{tikz-cd,hyperref}
 
@@ -60,6 +64,7 @@
 \endgroup 
 
 \hypersetup{colorlinks=true,allcolors=black}
+\renewcommand{\theequation}{\thesection.\arabic{equation}}
 
 % header appearance 
 \usepackage{fancyhdr}
@@ -1409,13 +1414,57 @@ That is, the variation in the $(p,\infty)$-norm of diffeomorphisms is controlled
 	for all $n\in\N$ and for all $x,y\in\Omega$. Therefore, $\left\{\varphi^{v^n}(t)\right\}$ is equicontinuous, and a similar argument shows that it is bounded. Ascoli's theorem thus implies that $\left\{\varphi^{v^n}(t)\right\},\ n=0,1,2,...$ is relatively compact w.r.t. uniform convergence. The subsequence that convergence uniformly must be $\varphi^{v}(t)$ since that is the pointwise limit. If $\Omega$ is not bounded, this argument holds on compact subsets.
 \end{proof}
 
+The second lemma that we need is the following:
+
+\begin{lem}
+Minimizing $E(\varphi)=U(\varphi)+d_V^2(\varphi,\id)$ is equivalent to minimizing
+$$ \tilde{E}:\X_V^2(\Omega)\ni v\mapsto U(\varphi^v(1))+\int_0^1\|v(t)\|_V^2dt\in\R. $$
+\end{lem}
+
+\begin{proof}
+By the definition of the distance $d_V$,
+$$
+d_V(\varphi^v(1),\id)\leq \int_0^1 \|v(t)\|_V^2 dt,
+$$
+which implies $\inf E\leq \inf \tilde{E}$. Conversely, if $\varphi\in G_V$ is such that $E(\varphi)\leq \inf E +\varepsilon$ for some arbitrary $\varepsilon>0$ then
+$$
+\exists v\in \X^2_V : \quad \int_0^1\|v(t)\|_V^2dt\leq d_V(\varphi,\id)+\varepsilon.
+$$
+Hence $\inf \tilde{E}\leq \inf E$.
+
+If there is a $v\in\X_V^2$ such that $\tilde{E}(v)=\inf E$ then $E(\varphi^v(1))=\inf E$ since $E(\varphi^v(1))\leq \tilde{E}(v)$. Conversely, if $E(\varphi)=\inf E$ then we apply the technique of minimizing sequences (the direct method) and Lemma~\ref{pointwise}. Since $\X_V^2$ is a Hilbert space we can fix a minimizing sequence
+$$
+\{v^n\}\subset\X_V^2\quad\mathrm{for}\ d_V(\eta,\psi)
+$$
+for some $\eta,\psi\in G_V.$ That is, $\|v^n\|_{\X_V^2}\to d_V(\eta,\psi)$ as $n\to\infty$ and $\psi=\varphi^v(1)\circ \eta.$ Thus, $\{\|v^n\|_{\X_V^2}\}$ is bounded and since bounded sets in Hilbert spaces are weakly compact we can extract a subsequence (also denoted by $v^n$) such that $v^n\rightharpoonup v$ weakly in $\X_V^2$ and 
+$$
+\|v\|_{\X_V^2}\leq \liminf \|v^n\|_{\X_V^2} =d_V(\eta,\psi)
+$$
+Weak convergence in $\X_V^2$ implies weak convergence in the bigger space $\X^1(T,\Omega)$ so by Lemma~\ref{pointwise}
+$$
+\varphi^{v^n}\to\varphi^v
+$$
+uniformly on compact subsets of $\Omega,$ and $\psi=\varphi^v(1)\circ\eta.$ Thus there exists a $v\in\X_V^2$ such that $d_V(\eta,\psi)=\|v\|_{\X_V^2}.$
+
+\end{proof}
+
 \begin{proof}[Proof of Theorem \ref{teo:minimizerLDDMM}]
 See page 254 of Younes, \textit{Shapes and diffeomorphisms}, 2010, Springer.
+
+Since $E$ is bounded from below there exists an infimum, $\inf E$, on $G_V$. Using the above lemma, we can find a minimizer of $E$ by finding a vector field $v\in\X_V^2$ such that $\tilde{E}(v)=\inf \tilde{E}.$ Again we take a subsequence of a minimizing sequence $\{v^n\}$ in $\X_V^2$ which converges weakly to $v\in\X_V^2$. My its minimizing property, 
+$$
+\liminf \int_0^1\|v^n(t)\|_V^2dt\geq \int_0^1\|v(t)\|_V^2dt.
+$$
+By Lemma~\ref{pointwise}, weak convergence in $\X_V^2$ implies convergence of the flow and its derivatives up to order $p$. Since $U$ is assumed to be continuous with respect to uniform convergence on compact sets, 
+$$
+U(\varphi^{v^n}(1))\to U(\varphi^v(1))\quad \mathrm{as}\quad n\to \infty
+$$ 
+and we conclude that $\tilde{E}(v)=\inf E,$ that is, $v$ is a  minimizer.
 \end{proof}
 
 
 \subsection{Variations with respect to the vector field}
-Lemma~\ref{pointwise} and~(\ref{eq:estimate}) are justified in this section. We first show that the solution to the equation
+We show that the solution to the equation
 \[
 \partial_t W(t)=\left(Dv\circ \varphi^v(t)\right)W(t)+h\circ \varphi^v(t)
 \]
@@ -1537,6 +1586,15 @@ In fact, we can prove the following theorem.
 
 
 \section{Banach space theory \label{app:Banach}}
+The Banach–Alaoglu theorem, the crucial compactness result of functional analysis, was proved by L. Alaoglu  on the basis of Tychonoff’s theorem. It can be stated as follows.
+
+\begin{teo}
+For every normed space $X$, the closed unit ball of the dual space $X^*$, is compact in the weak*-topology.
+\end{teo}
+
+If $X$ is a reflexive Banach space then the weak and weak* topologies agree on its dual space, hence the closed unit ball in $X^*$ is weakly compact by the Banach–Alaoglu Theorem, and so the closed unit ball in $X$ is also weakly compact.  The Eberlein–Šmulyan Theorem asserts that this property characterizes reflexivity.  It also asserts that weak compactness of the closed unit ball is equivalent to sequential weak compactness.
+
+\subsection{The implicit mapping theorem}
 This exposition follows \cite{lang1999} roughly. The inverse function theorem and the existence theorem for differential equations are based on the next result.
 
 \begin{lem}

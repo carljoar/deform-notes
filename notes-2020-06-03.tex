@@ -21,6 +21,7 @@
 \begingroup
 \newtheorem{teo}{Theorem}[section]
 \newtheorem{prop}[teo]{Proposition}
+\newtheorem{conjec}[teo]{Conjecture}
 \newtheorem{cor}[teo]{Corollary}
 \newtheorem{lem}[teo]{Lemma}
 \endgroup
@@ -28,8 +29,10 @@
 \newcommand{\N}{\ensuremath{\mathbb{N}}}
 \newcommand{\R}{\ensuremath{\mathbb{R}}}
 \newcommand{\X}{\ensuremath{\mathfrak{X}}}
+\newcommand{\cD}{\ensuremath{\mathcal{D}}}
 \newcommand{\Diff}{\ensuremath{\mathrm{Diff}}}
 \newcommand{\Met}{\ensuremath{\mathrm{Met}}}
+\newcommand{\dvol}{\ensuremath{\,\mathrm{dvol}}}
 \newcommand{\id}{\operatorname{id}}
 
 \theoremstyle{definition}
@@ -80,7 +83,9 @@ u(t)\leq g\,\exp\left[\int_0^t\alpha(s)ds\right].
 \]
 \end{lem}
 
-\subsection{The analysis of LDDMM}
+
+
+\subsection{The analysis of LDDMM \label{sec:LDDMM}}
 
 \begin{defin}
 	A Banach space $V$ is called \textit{admissible} if it is embedded in $C_0^1(\Omega,\R^d)$, i.e., 
